@@ -6,17 +6,18 @@ import { prisma } from '../../server/db/client';
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   // get the session
   const session = await getSession({ req });
-  let newAssessmentName = '';
+  //   let newAssessmentName = '';
   const { assessmentId } = req.body;
-  const { assessmentName } = req.body;
-  if (req.body.assessmentName) newAssessmentName = assessmentName;
+  const { chatLog } = req.body;
+  console.log('CHATLOG', chatLog);
+  //   if (req.body.assessmentName) newAssessmentName = assessmentName;
   if (session?.user?.id) {
     const assessmentName = await prisma.assessment.update({
       where: {
         id: assessmentId,
       },
       data: {
-        assessmentName: newAssessmentName,
+        chatLog,
       },
     });
     res.status(200).json(assessmentName);

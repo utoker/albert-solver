@@ -1,8 +1,13 @@
 import { type NextApiRequest, type NextApiResponse } from 'next';
 import { OpenAIApi } from 'openai';
-import { configuration } from '../../../utils/constants';
 // import { prisma } from '../../server/db/client';
 
+import { Configuration } from 'openai';
+import { env } from '../../env/server.mjs';
+
+const configuration = new Configuration({
+  apiKey: env.OPENAI_API_KEY,
+});
 const openai = new OpenAIApi(configuration);
 
 type Data = {

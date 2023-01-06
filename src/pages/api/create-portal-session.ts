@@ -26,9 +26,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
   if (!authSession) {
     res.send({ error: 'Not authenticated' });
-  } else {
-    res.setHeader('Allow', 'POST');
-    res.status(405).end('Method Not Allowed');
   }
 };
 

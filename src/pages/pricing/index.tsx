@@ -1,4 +1,12 @@
-import { Card, Container, Row, Spacer, Switch, Text } from '@nextui-org/react';
+import {
+  Card,
+  Container,
+  Grid,
+  Row,
+  Spacer,
+  Switch,
+  Text,
+} from '@nextui-org/react';
 import { type GetServerSideProps, type NextPage } from 'next';
 import { useSession } from 'next-auth/react';
 import React, { useEffect, useState } from 'react';
@@ -25,13 +33,19 @@ const NextStripePricingTable: NextPage<Props> = ({ plans }) => {
   const [isMonthly, setIsMonthly] = useState(true);
   const [proButton, setProButton] = useState('');
   const [basicButton, setBasicButton] = useState('');
+  const monthlyProPlan = plans.find(
+    (plan) => plan.interval === 'month' && plan.active === true
+  );
+  const yearlyProPlan = plans.find(
+    (plan) => plan.interval === 'year' && plan.active === true
+  );
 
   useEffect(() => {
     if (
       status === 'authenticated' &&
       authSession.user?.subscription === 'basic'
     ) {
-      setBasicButton('Manage Subscription');
+      setBasicButton('Start Studying');
       setProButton('Subscribe');
     }
     if (
@@ -50,7 +64,7 @@ const NextStripePricingTable: NextPage<Props> = ({ plans }) => {
   return (
     <div>
       <Spacer y={2} />
-      <Container xs>
+      <Container>
         <Row justify="center" align="center">
           <Text
             h1
@@ -64,75 +78,101 @@ const NextStripePricingTable: NextPage<Props> = ({ plans }) => {
           </Text>
         </Row>
         {/* <Spacer y={2} /> */}
-        <Row justify="center" align="center">
-          <Card>
-            <Card.Body>
-              <Text
-                hideIn={'sm'}
-                size={'$xl'}
-                h2
-                css={{
-                  textAlign: 'center',
-                  textGradient: '45deg, $purple600 -20%, $pink600 100%',
-                }}
-              >
-                Enjoy 40% off with the promo code 40OFF Only available for the
-                first 100 customers! 🔥
-              </Text>
-            </Card.Body>
-          </Card>
-        </Row>
-        <Spacer y={2} />
-        <Row justify="center">
-          <Text h3>Monthly</Text>
-          <Spacer x={0.5} />
-          <Switch
-            size="xl"
-            checked={isMonthly}
-            onChange={() => setIsMonthly((e) => !e)}
-          />
-        </Row>
-        <Spacer y={0.5} />
-        <Row>
-          <PriceCard
-            buttonText={basicButton}
-            name="Basic"
-            price={0}
-            currency="usd"
-            interval="month"
-            description=""
-          />
-          <Spacer x={2} />
-          {isMonthly
-            ? plans
-                .filter((plan) => plan.interval === 'month' && plan.active)
-                .map((plan) => (
+        <Container md>
+          <Row justify="center" align="center">
+            <Card css={{ mw: 'max-content', px: '10px' }}>
+              <Card.Body>
+                <Text
+                  size={'$xl'}
+                  h2
+                  css={{
+                    textAlign: 'center',
+                    textGradient: '45deg, $purple600 -20%, $pink600 100%',
+                  }}
+                >
+                  Enjoy 40% off with the promo code 40OFF Only available for the
+                  first 100 customers! 🔥
+                </Text>
+              </Card.Body>
+            </Card>
+          </Row>
+          <Spacer y={1} />
+          <Row justify="center">
+            <Text h3>Monthly</Text>
+            <Spacer x={0.5} />
+            <Switch
+              size="xl"
+              checked={isMonthly}
+              onChange={() => setIsMonthly((e) => !e)}
+            />
+          </Row>
+          <Spacer y={0.5} />
+          <Grid.Container justify="space-evenly">
+            {isMonthly && (
+              <>
+                <Grid>
                   <PriceCard
-                    buttonText={proButton}
-                    currency={plan.currency}
-                    interval={plan.interval}
-                    price={plan.price}
-                    description={plan.description}
-                    name={plan.name}
-                    key={plan.id}
-                    planId={plan.id}
+                    buttonText={basicButton}
+                    currency="usd"
+                    interval="month"
+                    price={0.0}
+                    description1="4 questions per day"
+                    description2="400 characters per question"
+                    name="Basic"
+                    planId={'basic'}
                   />
-                ))
-            : plans
-                .filter((plan) => plan.interval === 'year' && plan.active)
-                .map((plan) => (
+                  <Spacer y={1.5} />
+                </Grid>
+              </>
+            )}
+
+            {isMonthly && monthlyProPlan && (
+              <Grid key={monthlyProPlan.id}>
+                <PriceCard
+                  buttonText={proButton}
+                  currency={monthlyProPlan.currency}
+                  interval={monthlyProPlan.interval}
+                  price={monthlyProPlan.price}
+                  description1="40 questions per day"
+                  description2="4000 characters per question"
+                  name={monthlyProPlan.name}
+                  planId={monthlyProPlan.id}
+                />
+              </Grid>
+            )}
+            {!isMonthly && (
+              <>
+                <Grid>
                   <PriceCard
-                    buttonText={proButton}
-                    currency={plan.currency}
-                    interval={plan.interval}
-                    price={plan.price}
-                    description={plan.description}
-                    name={plan.name}
-                    key={plan.id}
-                    planId={plan.id}
+                    buttonText={basicButton}
+                    currency="usd"
+                    interval="year"
+                    price={0.0}
+                    description1="4 questions per day"
+                    description2="400 characters per question"
+                    name="Basic"
+                    planId={'basic'}
                   />
-                ))}
-        </Row>
+                </Grid>
+              </>
+            )}
+            {!isMonthly && yearlyProPlan && (
+              <Grid key={yearlyProPlan.id}>
+                <PriceCard
+                  buttonText={proButton}
+                  currency={yearlyProPlan.currency}
+                  interval={yearlyProPlan.interval}
+                  price={yearlyProPlan.price}
+                  description1="40 questions per day"
+                  description2="4000 characters per question"
+                  name={yearlyProPlan.name}
+                  key={yearlyProPlan.id}
+                  planId={yearlyProPlan.id}
+                />
+              </Grid>
+            )}
+          </Grid.Container>
+        </Container>
       </Container>
       <Spacer y={2} />
     </div>

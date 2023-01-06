@@ -1,7 +1,7 @@
 import NextAuth, { type NextAuthOptions } from 'next-auth';
 import DiscordProvider from 'next-auth/providers/discord';
-import GoogleProvider from 'next-auth/providers/google';
-import EmailProvider from 'next-auth/providers/email';
+// import GoogleProvider from 'next-auth/providers/google';
+// import EmailProvider from 'next-auth/providers/email';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 
 import { env } from '../../../env/server.mjs';
@@ -20,12 +20,20 @@ export const authOptions: NextAuthOptions = {
       }
       return session;
     },
+    async redirect({ url, baseUrl }) {
+      // Allows relative callback URLs
+      if (url.startsWith('/')) return `${baseUrl}${url}`;
+      // Allows callback URLs on the same origin
+      else if (new URL(url).origin === baseUrl) return url;
+      return baseUrl;
+    },
   },
   events: {
     createUser: async ({ user }) => {
       const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
         apiVersion: '2022-11-15',
       });
+
       if (user.email) {
         const customer = await stripe.customers.create({
           email: user.email,
@@ -38,6 +46,15 @@ export const authOptions: NextAuthOptions = {
             stripe_customer: customer.id,
           },
         });
+        await prisma.assessment.create({
+          data: {
+            userId: user.id,
+            assessmentName: 'Assessment 1',
+            chatLog: JSON.stringify([
+              { user: 'AI', message: 'Hi, how can I help you today?' },
+            ]),
+          },
+        });
       }
     },
   },
@@ -48,14 +65,14 @@ export const authOptions: NextAuthOptions = {
       clientId: env.DISCORD_CLIENT_ID,
       clientSecret: env.DISCORD_CLIENT_SECRET,
     }),
-    GoogleProvider({
-      clientId: env.GOOGLE_CLIENT_ID,
-      clientSecret: env.GOOGLE_CLIENT_SECRET,
-    }),
-    EmailProvider({
-      server: env.EMAIL_SERVER,
-      from: env.EMAIL_FROM,
-    }),
+    // GoogleProvider({
+    //   clientId: env.GOOGLE_CLIENT_ID,
+    //   clientSecret: env.GOOGLE_CLIENT_SECRET,
+    // }),
+    // EmailProvider({
+    //   server: env.EMAIL_SERVER,
+    //   from: env.EMAIL_FROM,
+    // }),
 
     // ...add more providers here
   ],

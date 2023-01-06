@@ -1,11 +1,21 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Input, Spacer, User } from '@nextui-org/react';
+import {
+  Button,
+  Container,
+  Input,
+  Loading,
+  Row,
+  Spacer,
+  // Textarea,
+  User,
+} from '@nextui-org/react';
 import axios from 'axios';
 import { type GetServerSideProps, type NextPage } from 'next';
 import { getSession, useSession } from 'next-auth/react';
 import React, { type FC, useState } from 'react';
 import {
   faCheck,
+  faPaperPlane,
   faPen,
   faPlus,
   faTrash,
@@ -13,29 +23,59 @@ import {
 import { prisma } from '../../server/db/client';
 import styles from './study-room.module.css';
 import { faDiscord } from '@fortawesome/free-brands-svg-icons';
+import { type Assessment } from '@prisma/client';
 
 type PageProps = {
-  assessments: string[][];
+  assessmentsFromDB: string;
 };
 
-const StudyRoom: NextPage<PageProps> = ({ assessments: assessmentsFromDB }) => {
+const StudyRoom: NextPage<PageProps> = ({ assessmentsFromDB }) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const assessments: any = JSON.parse(assessmentsFromDB);
+  const assessmentValue = () => {
+    if (assessments[0]?.chatLog) return JSON.parse(assessments[0]?.chatLog);
+    else return [];
+  };
   const [loading, setLoading] = useState(false);
   const [input, setInput] = useState('');
-  const [chatLog, setChatLog] = useState([
-    { user: 'AI', message: 'Hello, I am AI. How can I help you?' },
-  ]);
-  const [assessments, setAssessments] = useState([chatLog]);
+  const [chatLog, setChatLog] = useState(assessmentValue());
+  console.log('ASSESSMENT VALUE', assessmentValue());
+  console.log('CHATLOG', chatLog);
+  const { data: authSession } = useSession();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     setLoading(true);
-    setChatLog((prev) => [...prev, { user: 'Student', message: input }]);
     const messages = [...chatLog, { user: 'Student', message: `${input}` }];
+    if (authSession?.user?.subscription === 'basic' && input.length > 400) {
+      setLoading(false);
+      return alert('Message too long! (max 400 characters)');
+    }
+    if (input.length < 8) {
+      setLoading(false);
+      return alert('Message too short! (min 8 characters)');
+    }
+
     try {
       const res = await axios.post('/api/generate', {
         messages: messages.map((message) => message.message).join('\n'),
       });
-      setChatLog([...messages, { user: 'AI', message: res.data.result }]);
+      const chatLogArray = [
+        ...chatLog,
+        { user: 'Student', message: input },
+        { user: 'AI', message: res.data.result },
+      ];
+      const chatLogJson = JSON.stringify(chatLogArray);
+      await axios.post('/api/chatlog', {
+        chatLog: chatLogJson,
+        assessmentId: assessments[0].id,
+      });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      setChatLog((prev: any) => [
+        ...prev,
+        { user: 'Student', message: input },
+        { user: 'AI', message: res.data.result },
+      ]);
     } catch (error) {
       console.log(error);
     } finally {
@@ -44,25 +84,28 @@ const StudyRoom: NextPage<PageProps> = ({ assessments: assessmentsFromDB }) => {
     }
   };
   const handleNewAssessment = () => {
-    setAssessments((prev) => [...prev, [...chatLog]]);
+    // setAssessments((prev) => [...prev, [...chatLog]]);
     setChatLog([]);
     console.log('assessments', assessments);
   };
   const handleChangeAssessment = (i: number) => {
+    console.log(i);
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    setChatLog(assessments[i]!);
+    // setChatLog(assessments[i]);
+    // console.log('assessments[i]', assessments[i]);
   };
   // delete a assesment
   const handleDeleteAssessment = (i: number) => {
-    const newAssessments = assessments.filter((assessment, index) => {
-      return index !== i;
-    });
-    setAssessments(newAssessments);
+    console.log(i);
+    // const newAssessments = assessments.filter((assessment, index) => {
+    //   return index !== i;
+    // });
+    // setAssessments(newAssessments);
   };
-  const { data: AuthSession } = useSession();
 
   return (
-    <div className={styles.App}>
+    <Container xl className={styles.App}>
+      {/* <div className={styles.App}> */}
       <aside className={styles.sidemenu}>
         <div>
           <Button
@@ -74,11 +117,11 @@ const StudyRoom: NextPage<PageProps> = ({ assessments: assessmentsFromDB }) => {
           >
             New Assessment
           </Button>
-          {assessments.map((assessment, i) => (
+          {assessments.map((_assessment: string[][], i: number) => (
             <div key={i}>
               <Spacer y={0.5} />
               <AssessmentButton
-                assessments={assessmentsFromDB}
+                assessments={assessments}
                 i={i}
                 changeAssessment={(i) => handleChangeAssessment(i)}
                 deleteAssessment={(i) => handleDeleteAssessment(i)}
@@ -105,9 +148,10 @@ const StudyRoom: NextPage<PageProps> = ({ assessments: assessmentsFromDB }) => {
       </aside>
       <section className={styles.chatbox}>
         <div className={styles.chatLog}>
-          {chatLog.map((message, i) => (
-            <ChatMessage message={message} key={i} />
-          ))}
+          {chatLog &&
+            chatLog.map((message, i) => (
+              <ChatMessage message={message} key={i} />
+            ))}
         </div>
         <div className={styles.chatInputHolder}>
           <form
@@ -119,21 +163,35 @@ const StudyRoom: NextPage<PageProps> = ({ assessments: assessmentsFromDB }) => {
                 : handleSubmit
             }
           >
-            {AuthSession && (
-              <Input
-                autoFocus
-                value={input}
-                tabIndex={0}
-                onChange={(e) => setInput(e.target.value)}
-                aria-label="question"
-                id="question"
-                fullWidth
-              />
+            {authSession && (
+              <Row>
+                <Input
+                  ref={focus}
+                  // minRows={1}
+                  // maxRows={5}
+                  autoFocus
+                  value={input}
+                  tabIndex={0}
+                  onChange={(e) => setInput(e.target.value)}
+                  aria-label="question"
+                  id="question"
+                  fullWidth
+                />
+                <Spacer x={0.5} />
+                <Button auto ghost type="submit" id="submit">
+                  {loading ? (
+                    <Loading type="points" color="currentColor" size="sm" />
+                  ) : (
+                    <FontAwesomeIcon icon={faPaperPlane} />
+                  )}
+                </Button>
+              </Row>
             )}
           </form>
         </div>
       </section>
-    </div>
+      {/* </div> */}
+    </Container>
   );
 };
 
@@ -141,33 +199,42 @@ const AssessmentButton: FC<{
   i: number;
   changeAssessment: (i: number) => void;
   deleteAssessment: (i: number) => void;
-  assessments: string[][];
+  assessments: Assessment[];
 }> = ({ i, changeAssessment, deleteAssessment, assessments }) => {
   const [isEditMode, setIsEditMode] = useState(false);
-  const [assessmentName, setAssessmentName] = useState('');
-  const changeAssessmentName = async (e: string) => {
+  const assessmentName = assessments[i]?.assessmentName;
+  const [newAssessmentName, setNewAssessmentName] = useState(
+    assessmentName || ''
+  );
+  const changeAssessmentName = (e: string) => {
     if (e.length <= 19) {
-      setAssessmentName(e);
-      // axios post to update assessment name url /api/assessment-name with assessmentName in body
-      // const res = await axios.post('/api/assessment-name', {
-      //   assessmentName: assessmentName,
-      //   assessmentId: assessments[i].id,
-      // });
-      console.log('assessments', JSON.parse(assessments));
+      setNewAssessmentName(e);
     }
+  };
+  const handleEditAssessmentName = async () => {
+    if (isEditMode) {
+      const res = await axios.post('/api/assessment-name', {
+        assessmentName: newAssessmentName,
+        assessmentId: assessments[i]?.id,
+      });
+      console.log('res', res);
+    }
+    setIsEditMode((prev) => !prev);
+    console.log(isEditMode);
   };
 
   return (
-    <Button.Group ghost css={{ maxWidth: '210px', margin: '0' }}>
-      <Button
-        onPress={() => setIsEditMode((prev) => !prev)}
-        css={{ padding: '8px' }}
-      >
+    <Button.Group
+      ghost
+      color="secondary"
+      css={{ maxWidth: '210px', margin: '0' }}
+    >
+      <Button onPress={handleEditAssessmentName} css={{ padding: '8px' }}>
         <FontAwesomeIcon icon={isEditMode ? faCheck : faPen} />
       </Button>
       {isEditMode ? (
         <Input
-          value={assessmentName}
+          value={newAssessmentName}
           onChange={(e) => changeAssessmentName(e.target.value)}
           autoFocus
           aria-label="edit"
@@ -183,7 +250,7 @@ const AssessmentButton: FC<{
         />
       ) : (
         <Button onPress={() => changeAssessment(i)} css={{ minWidth: '156px' }}>
-          {assessmentName || `Assessment ${i + 1}`}
+          {newAssessmentName}
         </Button>
       )}
       <Button
@@ -202,7 +269,7 @@ type ChatMessageProps = {
 };
 const ChatMessage: FC<ChatMessageProps> = ({ message }) => {
   const { data: AuthSession } = useSession();
-
+  console.log('MASSAGE', message);
   return (
     <div
       className={
@@ -238,33 +305,24 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       redirect: {
         destination: '/api/auth/signin',
         permanent: false,
+        callback: '/study-room',
       },
     };
   }
   if (session.user?.id) {
-    const assessments = await prisma.assessment.findMany({
+    const assessments: Assessment[] = await prisma.assessment.findMany({
       where: {
         userId: session.user.id,
       },
     });
-
-    if (assessments.length === 0) {
-      await prisma.assessment.create({
-        data: {
-          userId: session.user.id,
-          assessmentName: 'Assessment 1',
-        },
-      });
-    }
-    // console.log('ASSESSMENTS', assessments);
-    const Jsn = JSON.stringify(assessments);
-    // console.log('JsnJsnJsnJsn', Jsn);
+    console.log('ASESSMENTS', assessments);
+    const jsonAsessments = JSON.stringify(assessments);
     return {
-      props: { session, assessments: Jsn },
+      props: { assessmentsFromDB: jsonAsessments },
     };
   }
 
   return {
-    props: { session },
+    props: {},
   };
 };

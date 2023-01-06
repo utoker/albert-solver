@@ -2,6 +2,7 @@ import { Container, Row, Spacer, Text } from '@nextui-org/react';
 import { type NextPage } from 'next';
 import Head from 'next/head';
 import Ai from '../components/Ai';
+import Footer from '../components/Footer';
 
 const Home: NextPage = () => {
   //red, blue, green, yellow, and purple.
@@ -26,6 +27,7 @@ const Home: NextPage = () => {
             Ace Your Homework
           </Text>
         </Row>
+        <Spacer />
         <Row justify="center" align="center">
           <Text
             hideIn={'sm'}
@@ -43,6 +45,7 @@ const Home: NextPage = () => {
           <Ai />
         </Row>
       </Container>
+      <Footer />
     </>
   );
 };

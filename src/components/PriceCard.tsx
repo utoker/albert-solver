@@ -1,6 +1,9 @@
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Card, Col, Row, Button, Text, Spacer } from '@nextui-org/react';
 import { type NextPage } from 'next';
 import { signIn } from 'next-auth/react';
+import NextLink from 'next/link';
 import type Stripe from 'stripe';
 
 type Props = {
@@ -11,11 +14,15 @@ type Props = {
   currency: string;
   interval: Stripe.Price.Recurring.Interval | undefined;
   //   interval_count: number | undefined;
-  description?: string | null;
+  description1?: string | null;
+  description2?: string | null;
+
   //   metadata: Stripe.Metadata;
 };
 
 const PriceCard: NextPage<Props> = ({
+  description1,
+  description2,
   name,
   price,
   interval,
@@ -23,7 +30,7 @@ const PriceCard: NextPage<Props> = ({
   planId,
 }) => {
   return (
-    <Card css={{ w: '100%', h: '400px' }}>
+    <Card css={{ mw: '320px' }}>
       <Card.Header css={{ padding: '$10 $10 0 $10' }}>
         <Col>
           <Text h3 color="black" size="$5xl">
@@ -48,6 +55,26 @@ const PriceCard: NextPage<Props> = ({
         </Row>
         <Spacer y={1} />
         <Row>
+          {buttonText === 'Start Studying' && (
+            <NextLink href="/study-room" passHref>
+              <Button
+                auto
+                color="secondary"
+                css={{ width: '100%' }}
+                type="submit"
+              >
+                <Text
+                  css={{ color: 'inherit' }}
+                  size="$lg"
+                  weight="bold"
+                  transform="uppercase"
+                >
+                  {buttonText}
+                </Text>
+              </Button>
+            </NextLink>
+          )}
+
           {buttonText === 'Subscribe' && (
             <form
               action={`/api/subscriptions/${planId}`}
@@ -113,10 +140,36 @@ const PriceCard: NextPage<Props> = ({
             </Button>
           )}
         </Row>
+        <Spacer y={2} />
       </Card.Body>
-      <Card.Footer>
-        <Text>includes 14 days free trial</Text>
-        <Text>includes 14 days free trial</Text>
+      <Card.Footer
+        css={{
+          borderTop: '$borderWeights$light solid $colors$border',
+        }}
+      >
+        <Col>
+          <Row wrap="wrap" justify="space-between" align="center">
+            <Text b>This includes:</Text>
+          </Row>
+          <Row wrap="wrap" justify="space-between" align="center">
+            <Text>
+              <FontAwesomeIcon
+                icon={faCheck}
+                style={{ paddingRight: '4px', color: '#7828c8' }}
+              />
+              {description1}
+            </Text>
+          </Row>
+          <Row wrap="wrap" justify="space-between" align="center">
+            <Text>
+              <FontAwesomeIcon
+                icon={faCheck}
+                style={{ paddingRight: '4px', color: '#7828c8' }}
+              />
+              {description2}
+            </Text>
+          </Row>
+        </Col>
       </Card.Footer>
     </Card>
   );

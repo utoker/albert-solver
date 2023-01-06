@@ -28,6 +28,7 @@ export const serverSchema = z.object({
   STRIPE_SINGIN_SECRET: z.string(),
   EMAIL_SERVER: z.string(),
   EMAIL_FROM: z.string(),
+  OPENAI_API_KEY: z.string(),
 });
 
 /**

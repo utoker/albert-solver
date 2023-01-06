@@ -10,7 +10,9 @@ const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const authSession = await unstable_getServerSession(req, res, authOptions);
-
+  if (!authSession) {
+    res.send({ error: 'Not authenticated' });
+  }
   if (
     req.method === 'POST' &&
     !!authSession &&
@@ -24,8 +26,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         mode: 'subscription',
         payment_method_types: ['card'],
         line_items: lineItems,
-        success_url: `${env.NEXTAUTH_URL}/api/subscription/success?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${env.NEXTAUTH_URL}/api/subscription/cancel`,
+        success_url: `${env.NEXTAUTH_URL}/pricing`,
+        cancel_url: `${env.NEXTAUTH_URL}/`,
       });
       if (!stripeSession.url) throw new Error('No stripe session url found');
       res.redirect(303, stripeSession.url);
@@ -33,12 +35,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     } catch (err: any) {
       res.status(err.statusCode || 500).json(err.message);
     }
-  }
-  if (!authSession) {
-    res.send({ error: 'Not authenticated' });
-  } else {
-    res.setHeader('Allow', 'POST');
-    res.status(405).end('Method Not Allowed');
   }
 };
 

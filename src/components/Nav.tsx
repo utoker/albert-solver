@@ -8,7 +8,7 @@ import {
   Navbar,
   Text,
 } from '@nextui-org/react';
-import { signOut, useSession } from 'next-auth/react';
+import { signIn, signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import React, { type Key } from 'react';
 import { Logo } from './Logo';
@@ -26,8 +26,11 @@ const Nav = () => {
           callbackUrl: '/',
         });
         break;
-      case 'settings':
-        router.push('/settings');
+      case 'pro':
+        router.push('/api/create-portal-session');
+        break;
+      case 'upgrade':
+        router.push('/pricing');
         break;
     }
   };
@@ -67,26 +70,36 @@ const Nav = () => {
         <Navbar.Link isActive={router.route === '/'} href="/">
           Home
         </Navbar.Link>
-        <Navbar.Link
-          isActive={router.route === '/study-room'}
-          href="/study-room"
-        >
-          Study Room
-        </Navbar.Link>
+
         <Navbar.Link isActive={router.route === '/features'} href="/features">
           Features
         </Navbar.Link>
         <Navbar.Link href="/pricing" isActive={router.route === '/pricing'}>
           Pricing
         </Navbar.Link>
+        <Navbar.Link
+          isActive={router.route === '/study-room'}
+          href="/study-room"
+        >
+          Study Room
+        </Navbar.Link>
       </Navbar.Content>
       {authStatus === 'unauthenticated' ? (
         <Navbar.Content>
-          <Navbar.Link href="/api/auth/signin" color="inherit">
+          <Navbar.Link
+            onClick={() => signIn(undefined, { callbackUrl: '/study-room' })}
+            color="inherit"
+          >
             Login
           </Navbar.Link>
           <Navbar.Item>
-            <Button auto flat as={Link} href="/api/auth/signin">
+            <Button
+              auto
+              flat
+              onClick={() =>
+                signIn(undefined, { callbackUrl: '/study-room  ' })
+              }
+            >
               Sign Up
             </Button>
           </Navbar.Item>
@@ -118,17 +131,27 @@ const Nav = () => {
               color="secondary"
               onAction={(actionKey) => handleActionKey(actionKey)}
             >
-              <Dropdown.Item key="profile" css={{ height: '$18' }}>
+              <Dropdown.Item
+                textValue="signed in"
+                key="profile"
+                css={{ height: '$18' }}
+              >
                 <Text b color="inherit" css={{ d: 'flex' }}>
                   Signed in as
                 </Text>
                 <Text b color="inherit" css={{ d: 'flex' }}>
-                  {authData?.user?.email!}
+                  {authData?.user?.email}
                 </Text>
               </Dropdown.Item>
-              <Dropdown.Item key="settings" withDivider>
-                Settings
-              </Dropdown.Item>
+              <Dropdown.Section
+                title={` ${authData?.user?.subscription.toUpperCase()} USER`}
+              >
+                {authData?.user?.subscription === 'pro' ? (
+                  <Dropdown.Item key={'pro'}>Manage Subscription</Dropdown.Item>
+                ) : (
+                  <Dropdown.Item key={'upgrade'}>Upgrade to Pro</Dropdown.Item>
+                )}
+              </Dropdown.Section>
               {/* <Dropdown.Item key="help_and_feedback" withDivider>
               Help & Feedback
             </Dropdown.Item> */}
