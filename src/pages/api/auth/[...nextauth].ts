@@ -50,9 +50,7 @@ export const authOptions: NextAuthOptions = {
           data: {
             userId: user.id,
             assessmentName: 'Assessment 1',
-            chatLog: JSON.stringify([
-              { user: 'AI', message: 'Hi, how can I help you today?' },
-            ]),
+            chatLog: '[{"user":"AI","message":"Hi, how can I help you?"}]',
           },
         });
       }

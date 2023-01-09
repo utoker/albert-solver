@@ -6,18 +6,13 @@ import { prisma } from '../../server/db/client';
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   // get the session
   const session = await getSession({ req });
-  const { assessmentId } = req.body;
-  const { chatLog } = req.body;
   if (session?.user?.id) {
-    const assessmentName = await prisma.assessment.update({
+    await prisma.assessment.delete({
       where: {
-        id: assessmentId,
-      },
-      data: {
-        chatLog,
+        id: req.body.assessmentId,
       },
     });
-    res.status(200).json(assessmentName);
+    res.status(200).json('deleted');
   }
 };
 

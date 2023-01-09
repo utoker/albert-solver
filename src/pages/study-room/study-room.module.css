@@ -1,13 +1,12 @@
 .App {
   display: flex;
   padding: 0;
-  /* flex-direction: row;
-  height: 100vh;
-  width: 100vw; */
-  height: 90vh;
+  margin: 0;
+  height: calc(100vh - 76px);
 }
 /* SideMenu */
 .sidemenu {
+  margin: 0;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -32,12 +31,13 @@
 .sidemenuBottom {
   border-top: 1px solid black;
 }
-/* Chat */
+/* ChatBox */
 .chatbox {
   flex: 1;
   position: relative;
 }
 .chatInputHolder {
+  width: 100%;
   padding: 24px;
   position: absolute;
   bottom: 0;
@@ -50,21 +50,16 @@
   border: 1px solid black;
   border-radius: 6px;
 }
-/* .chatInputHolder button {
-  border: 1px solid black;
-  border-radius: 5px;
-  position: absolute;
-  right: 24px;
-  bottom: 24px;
-} */
+
 .chatLog {
   height: 75vh;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
 }
+/* chat message */
 .chatMessageAI {
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: #f1f3f5;
 }
 .chatMessageCenter {
   max-width: 640px;
@@ -86,8 +81,4 @@
   border-radius: 6px;
   min-width: 40px;
   height: 40px;
-}
-.message {
-  padding-left: 40px;
-  padding-right: 40px;
 }
