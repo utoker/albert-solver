@@ -22,7 +22,7 @@ const Footer = () => {
             },
           }}
         >
-          <Text>HomeworkAI &copy; 2023</Text>
+          <Text>Albert Solver &copy; 2023</Text>
         </Row>
 
         <Row
@@ -40,6 +40,13 @@ const Footer = () => {
             },
           }}
         >
+          <Text>
+            <Link href="/features" color="text">
+              Features
+            </Link>
+          </Text>
+
+          <Text className="dot-divider"> • </Text>
           <Text>
             <Link
               target="_blank"

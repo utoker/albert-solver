@@ -32,7 +32,6 @@ const SideMenu: FC<SideMenuProps> = ({
   setChatLog,
 }) => {
   const router = useRouter();
-
   const handleNewAssessment = async () => {
     router.push('/study-room');
   };
@@ -108,7 +107,7 @@ const SideMenu: FC<SideMenuProps> = ({
           css={{ width: '100%' }}
           icon={<FontAwesomeIcon icon={faDiscord} />}
         >
-          HomeworkAI Discord
+          Albert Solver Discord
         </Button>
       </div>
     </Container>

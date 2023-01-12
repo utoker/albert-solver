@@ -1,6 +1,6 @@
 import { type NextApiRequest, type NextApiResponse } from 'next';
 import { OpenAIApi } from 'openai';
-// import { prisma } from '../../server/db/client';
+import { prisma } from '../../server/db/client';
 
 import { Configuration } from 'openai';
 import { env } from '../../env/server.mjs';
@@ -17,11 +17,26 @@ type Data = {
 
 const generate = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   const { messages } = req.body;
+  const { userId } = req.body;
+  // prisma get postCounter
+  const postCounter = await prisma.postCounter.findUnique({
+    where: {
+      userId: userId as string,
+    },
+  });
+
+  const counter = postCounter?.counter;
+  if (counter === undefined) {
+    res.status(500).json({ error: 'Something went wrong' });
+  }
+  if (counter && counter > 9) {
+    res.status(200).json({ result: 'You have reached your limit of 10 posts' });
+  }
 
   const response = await openai.createCompletion({
     model: 'text-davinci-003',
     prompt: `You are a super intelligent AI made for helping students with their homework and assessments. \n${messages}`,
-    max_tokens: 64,
+    max_tokens: 2048,
     temperature: 0.7,
     top_p: 1,
     n: 1,
@@ -32,8 +47,18 @@ const generate = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   if (response === undefined) {
     res.status(500).json({ error: 'Something went wrong' });
   }
+  // prisma update postCounter +1
+  if (counter !== undefined) {
+    await prisma.postCounter.update({
+      where: {
+        userId: userId as string,
+      },
+      data: {
+        counter: counter + 1,
+      },
+    });
+  }
   const result = response?.data?.choices[0]?.text;
-  // prisma create assessment
   res.status(200).json({ result });
 };
 

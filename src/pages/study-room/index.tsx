@@ -4,7 +4,6 @@ import {
   Container,
   type FormElement,
   Grid,
-  Input,
   Loading,
   Row,
   Spacer,
@@ -13,27 +12,44 @@ import {
 import axios from 'axios';
 import { type GetServerSideProps, type NextPage } from 'next';
 import { getSession, useSession } from 'next-auth/react';
-import React, { type FC, useState, useCallback, useRef } from 'react';
-import {
-  faCheck,
-  faPaperPlane,
-  faPen,
-  faPlus,
-  faTrash,
-} from '@fortawesome/free-solid-svg-icons';
+import React, { useState, useCallback, useRef } from 'react';
+import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import { prisma } from '../../server/db/client';
 import styles from './study-room.module.css';
-import { faDiscord } from '@fortawesome/free-brands-svg-icons';
 import { type Assessment } from '@prisma/client';
 import { useRouter } from 'next/router';
+import SideMenu from '../../components/SideMenu';
+import dynamic from 'next/dynamic';
+
+// This is a workaround for hydration issues with Next.js
+const StudyNav = dynamic(() => import('../../components/StudyNav'), {
+  ssr: false,
+});
 
 type PageProps = {
   assessmentsFromDB: string;
 };
 
 const StudyRoom: NextPage<PageProps> = ({ assessmentsFromDB }) => {
+  type chatLog = {
+    user: string;
+    message: string;
+  }[];
+  type chatLogsObject = {
+    [key: string]: chatLog;
+  };
   const assessmentsParsed: Assessment[] = JSON.parse(assessmentsFromDB);
   const [assessments, setAssessments] = useState(assessmentsParsed);
+  const logs = useCallback(() => {
+    const chatLogsObject: chatLogsObject = {};
+    assessments.forEach((assessment) => {
+      chatLogsObject[assessment.id] = JSON.parse(assessment.chatLog);
+    });
+    return chatLogsObject;
+  }, [assessments]);
+
+  const [chatLogs] = useState(logs());
+  const [chatLog, setChatLog] = useState([] as chatLog);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const { data: authSession } = useSession();
@@ -73,21 +89,7 @@ const StudyRoom: NextPage<PageProps> = ({ assessmentsFromDB }) => {
       reset();
     }
   };
-  const handleNewAssessment = async () => {
-    router.push('/study-room');
-  };
-  const handleChangeAssessment = (assessmentId: string) => {
-    router.push(`/study-room/${assessmentId}`);
-  };
-  const handleDeleteAssessment = async (assessmentId: string) => {
-    await axios.post('/api/assessment-delete', {
-      assessmentId,
-    });
-    setAssessments((prev) =>
-      prev.filter((assessment) => assessment.id !== assessmentId)
-    );
-    if (router.query.assessmentId === assessmentId) router.push('/study-room');
-  };
+
   const formRef = useRef<HTMLFormElement>(null);
   const onTextareaKeyDown = useCallback(
     (e: React.KeyboardEvent<FormElement>) => {
@@ -106,48 +108,21 @@ const StudyRoom: NextPage<PageProps> = ({ assessmentsFromDB }) => {
   }, [formRef]);
 
   return (
-    <Container xl className={styles.App}>
-      <Grid.Container>
+    <>
+      <StudyNav
+        assessments={assessments}
+        chatLogs={chatLogs}
+        setAssessments={(x) => setAssessments(x)}
+        setChatLog={(x) => setChatLog(x)}
+      />
+      <Grid.Container css={{ height: 'calc(100vh - 76px)' }}>
         <Grid xs={0} sm={3} md={2}>
-          <Container className={styles.sidemenu}>
-            <div>
-              <Button
-                onPress={handleNewAssessment}
-                ghost
-                css={{ width: '100%' }}
-                icon={<FontAwesomeIcon icon={faPlus} />}
-              >
-                New Assessment
-              </Button>
-              {assessments.map((assessment) => (
-                <div key={assessment.id}>
-                  <Spacer y={0.5} />
-                  <AssessmentButton
-                    assessmentName={assessment.assessmentName}
-                    assessmentId={assessment.id}
-                    changeAssessment={(id) => handleChangeAssessment(id)}
-                    deleteAssessment={(id) => handleDeleteAssessment(id)}
-                  />
-                </div>
-              ))}
-            </div>
-            <div className={styles.sidemenuBottom}>
-              <Button
-                light
-                css={{ width: '100%' }}
-                icon={<FontAwesomeIcon icon={faTrash} />}
-              >
-                Delete All Assessments
-              </Button>
-              <Button
-                light
-                css={{ width: '100%' }}
-                icon={<FontAwesomeIcon icon={faDiscord} />}
-              >
-                HomeworkAI Discord
-              </Button>
-            </div>
-          </Container>
+          <SideMenu
+            assessments={assessments}
+            chatLogs={chatLogs}
+            setAssessments={(x) => setAssessments(x)}
+            setChatLog={(x) => setChatLog(x)}
+          />
         </Grid>
         <Grid xs={12} sm={9} md={10}>
           <Container className={styles.chatbox}>
@@ -191,81 +166,7 @@ const StudyRoom: NextPage<PageProps> = ({ assessmentsFromDB }) => {
           </Container>
         </Grid>
       </Grid.Container>
-    </Container>
-  );
-};
-
-const AssessmentButton: FC<{
-  changeAssessment: (id: string) => void;
-  deleteAssessment: (id: string) => void;
-  assessmentName: Assessment['assessmentName'];
-  assessmentId: Assessment['id'];
-}> = ({ changeAssessment, deleteAssessment, assessmentName, assessmentId }) => {
-  const [isEditMode, setIsEditMode] = useState(false);
-  const [isDeleteMode, setIsDeleteMode] = useState(false);
-  const [newAssessmentName, setNewAssessmentName] = useState(assessmentName);
-  const changeAssessmentName = (e: React.ChangeEvent<FormElement>) => {
-    if (e.target.value.length <= 19) {
-      setNewAssessmentName(e.target.value);
-    }
-  };
-
-  const handleDeleteAssessment = () => {
-    if (isDeleteMode) {
-      deleteAssessment(assessmentId);
-    }
-    setIsDeleteMode((prev) => !prev);
-  };
-
-  const handleEditAssessmentName = async () => {
-    if (isEditMode) {
-      await axios.post('/api/assessment-name', {
-        assessmentName: newAssessmentName,
-        assessmentId,
-      });
-    }
-    setIsEditMode((prev) => !prev);
-  };
-
-  const onChangeAssessment = () => {
-    setIsDeleteMode(false);
-    changeAssessment(assessmentId);
-  };
-  return (
-    <Button.Group
-      ghost
-      color="secondary"
-      css={{ maxWidth: '220px', margin: '0' }}
-    >
-      <Button onPress={handleEditAssessmentName} css={{ padding: '8px' }}>
-        <FontAwesomeIcon icon={isEditMode ? faCheck : faPen} />
-      </Button>
-      {isEditMode ? (
-        <Input
-          initialValue={newAssessmentName}
-          onChange={(e) => changeAssessmentName(e)}
-          autoFocus
-          aria-label="edit"
-          id="edit"
-          underlined
-          color="secondary"
-          size="md"
-          css={{
-            h: '40px',
-            border: '2px solid $primary',
-            borderRadius: '0px',
-            minWidth: '156px',
-          }}
-        />
-      ) : (
-        <Button onPress={onChangeAssessment} css={{ minWidth: '156px' }}>
-          {newAssessmentName}
-        </Button>
-      )}
-      <Button onPress={handleDeleteAssessment} css={{ padding: '8px' }}>
-        <FontAwesomeIcon icon={isDeleteMode ? faCheck : faTrash} />
-      </Button>
-    </Button.Group>
+    </>
   );
 };
 

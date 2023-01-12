@@ -53,6 +53,12 @@ export const authOptions: NextAuthOptions = {
             chatLog: '[{"user":"AI","message":"Hi, how can I help you?"}]',
           },
         });
+        await prisma.postCounter.create({
+          data: {
+            userId: user.id,
+            counter: 0,
+          },
+        });
       }
     },
   },

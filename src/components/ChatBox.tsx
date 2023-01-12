@@ -35,9 +35,9 @@ const ChatBox: FC<ChatBoxProps> = ({
   setChatLog,
   setChatLogs,
 }) => {
+  const { data: authSession } = useSession();
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
-  const { data: authSession } = useSession();
   const formRef = useRef<HTMLFormElement>(null);
 
   const onTextareaKeyDown = useCallback(
@@ -59,7 +59,7 @@ const ChatBox: FC<ChatBoxProps> = ({
     if (!input || loading) return;
     setLoading(true);
     const messages = [...chatLog, { user: 'Student', message: input }];
-    if (authSession?.user?.subscription === 'basic' && input.length > 400) {
+    if (authSession?.user?.subscription === 'basic' && input.length > 4000) {
       setLoading(false);
       return alert('Message too long! (max 400 characters)');
     }
@@ -70,6 +70,7 @@ const ChatBox: FC<ChatBoxProps> = ({
 
     try {
       const res = await axios.post('/api/generate', {
+        userId: authSession?.user?.id,
         messages: messages.map((message) => message.message).join('\n'),
       });
       const chatLogArray = [

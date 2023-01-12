@@ -8,13 +8,29 @@ import {
   Text,
 } from '@nextui-org/react';
 import { type GetServerSideProps, type NextPage } from 'next';
-import { useSession } from 'next-auth/react';
+import { type BuiltInProviderType } from 'next-auth/providers';
+import {
+  type ClientSafeProvider,
+  type LiteralUnion,
+  useSession,
+  getProviders,
+} from 'next-auth/react';
+import dynamic from 'next/dynamic';
 import React, { useEffect, useState } from 'react';
 import Stripe from 'stripe';
+import Footer from '../../components/Footer';
 import PriceCard from '../../components/PriceCard';
 import { env } from '../../env/server.mjs';
 
+const Nav = dynamic(() => import('../../components/Nav'), {
+  ssr: false,
+});
+
 type Props = {
+  providers: Record<
+    LiteralUnion<BuiltInProviderType, string>,
+    ClientSafeProvider
+  >;
   plans: {
     id: string;
     name: string;
@@ -28,7 +44,7 @@ type Props = {
   }[];
 };
 
-const NextStripePricingTable: NextPage<Props> = ({ plans }) => {
+const NextStripePricingTable: NextPage<Props> = ({ plans, providers }) => {
   const { data: authSession, status } = useSession();
   const [isMonthly, setIsMonthly] = useState(true);
   const [proButton, setProButton] = useState('');
@@ -63,6 +79,7 @@ const NextStripePricingTable: NextPage<Props> = ({ plans }) => {
 
   return (
     <div>
+      <Nav providers={providers} />
       <Spacer y={2} />
       <Container>
         <Row justify="center" align="center">
@@ -175,6 +192,7 @@ const NextStripePricingTable: NextPage<Props> = ({ plans }) => {
         </Container>
       </Container>
       <Spacer y={2} />
+      <Footer />
     </div>
   );
 };
@@ -186,7 +204,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
   const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
     apiVersion: '2022-11-15',
   });
-
+  const providers = await getProviders();
   const { data: prices } = await stripe.prices.list();
 
   const plans = await Promise.all(
@@ -213,6 +231,6 @@ export const getServerSideProps: GetServerSideProps = async () => {
   });
 
   return {
-    props: { plans: sortPlans },
+    props: { plans: sortPlans, providers },
   };
 };

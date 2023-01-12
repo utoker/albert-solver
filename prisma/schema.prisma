@@ -64,7 +64,7 @@ model User {
   stripe_customer String?      @unique
   subscriptionEnd Int?
   assessments     Assessment[]
-  assessmentId    String?
+  postCounter     PostCounter?
 
   @@index([id])
 }
@@ -79,6 +79,15 @@ model Assessment {
   chatLog        String   @db.MediumText()
 
   @@index([userId])
+}
+
+model PostCounter {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  counter   Int      @default(0)
 }
 
 model VerificationToken {

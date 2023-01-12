@@ -6,6 +6,12 @@ import { prisma } from '../../server/db/client';
 import { type Assessment } from '@prisma/client';
 import SideMenu from '../../components/SideMenu';
 import ChatBox from '../../components/ChatBox';
+import dynamic from 'next/dynamic';
+
+// This is a workaround for hydration issues with Next.js
+const StudyNav = dynamic(() => import('../../components/StudyNav'), {
+  ssr: false,
+});
 
 type PageProps = {
   assessmentsFromDB: string;
@@ -23,38 +29,46 @@ const StudyRoom: NextPage<PageProps> = ({
   type chatLogsObject = {
     [key: string]: chatLog;
   };
-
   const assessmentsParsed: Assessment[] = JSON.parse(assessmentsFromDB);
   const [assessments, setAssessments] = useState(assessmentsParsed);
-  const chatLogsObject: chatLogsObject = {};
-  useCallback(() => {
+  const logs = useCallback(() => {
+    const chatLogsObject: chatLogsObject = {};
     assessments.forEach((assessment) => {
       chatLogsObject[assessment.id] = JSON.parse(assessment.chatLog);
     });
-  }, [assessments, chatLogsObject]);
+    return chatLogsObject;
+  }, [assessments]);
 
-  const [chatLog, setChatLog] = useState(chatLogsObject[assessmentId] || []);
-  const [chatLogs, setChatLogs] = useState(chatLogsObject);
+  const [chatLogs, setChatLogs] = useState(logs());
+  const [chatLog, setChatLog] = useState(chatLogs[assessmentId] || []);
 
   return (
-    <Grid.Container css={{ height: 'calc(100vh - 76px)' }}>
-      <Grid xs={0} sm={3} md={2}>
-        <SideMenu
-          assessments={assessments}
-          chatLogs={chatLogs}
-          setAssessments={(x) => setAssessments(x)}
-          setChatLog={(x) => setChatLog(x)}
-        />
-      </Grid>
-      <Grid xs={12} sm={9} md={10}>
-        <ChatBox
-          assessmentId={assessmentId}
-          chatLog={chatLog}
-          setChatLog={(x) => setChatLog(x)}
-          setChatLogs={(x) => setChatLogs(x)}
-        />
-      </Grid>
-    </Grid.Container>
+    <>
+      <StudyNav
+        assessments={assessments}
+        chatLogs={chatLogs}
+        setAssessments={(x) => setAssessments(x)}
+        setChatLog={(x) => setChatLog(x)}
+      />
+      <Grid.Container css={{ height: 'calc(100vh - 76px)' }}>
+        <Grid xs={0} sm={3} md={2}>
+          <SideMenu
+            assessments={assessments}
+            chatLogs={chatLogs}
+            setAssessments={(x) => setAssessments(x)}
+            setChatLog={(x) => setChatLog(x)}
+          />
+        </Grid>
+        <Grid xs={12} sm={9} md={10}>
+          <ChatBox
+            assessmentId={assessmentId}
+            chatLog={chatLog}
+            setChatLog={(x) => setChatLog(x)}
+            setChatLogs={(x) => setChatLogs(x)}
+          />
+        </Grid>
+      </Grid.Container>
+    </>
   );
 };
 
@@ -103,6 +117,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   return {
-    props: {},
+    redirect: {
+      destination: '/api/auth/signin',
+      permanent: false,
+      callback: '/study-room',
+    },
   };
 };
