@@ -18,7 +18,7 @@ type Data = {
 const generate = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   const { messages } = req.body;
   const { userId } = req.body;
-  // prisma get postCounter
+  console.log('USER ID', userId, messages);
   const postCounter = await prisma.postCounter.findUnique({
     where: {
       userId: userId as string,

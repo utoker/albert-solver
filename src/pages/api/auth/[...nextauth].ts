@@ -1,7 +1,7 @@
 import NextAuth, { type NextAuthOptions } from 'next-auth';
 import DiscordProvider from 'next-auth/providers/discord';
-// import GoogleProvider from 'next-auth/providers/google';
-// import EmailProvider from 'next-auth/providers/email';
+import GoogleProvider from 'next-auth/providers/google';
+import EmailProvider from 'next-auth/providers/email';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 
 import { env } from '../../../env/server.mjs';
@@ -46,13 +46,13 @@ export const authOptions: NextAuthOptions = {
             stripe_customer: customer.id,
           },
         });
-        await prisma.assessment.create({
-          data: {
-            userId: user.id,
-            assessmentName: 'Assessment 1',
-            chatLog: '[{"user":"AI","message":"Hi, how can I help you?"}]',
-          },
-        });
+        // await prisma.assessment.create({
+        //   data: {
+        //     userId: user.id,
+        //     assessmentName: 'Assessment 1',
+        //     chatLog: '[{"user":"AI","message":"Hi, how can I help you?"}]',
+        //   },
+        // });
         await prisma.postCounter.create({
           data: {
             userId: user.id,
@@ -69,14 +69,14 @@ export const authOptions: NextAuthOptions = {
       clientId: env.DISCORD_CLIENT_ID,
       clientSecret: env.DISCORD_CLIENT_SECRET,
     }),
-    // GoogleProvider({
-    //   clientId: env.GOOGLE_CLIENT_ID,
-    //   clientSecret: env.GOOGLE_CLIENT_SECRET,
-    // }),
-    // EmailProvider({
-    //   server: env.EMAIL_SERVER,
-    //   from: env.EMAIL_FROM,
-    // }),
+    GoogleProvider({
+      clientId: env.GOOGLE_CLIENT_ID,
+      clientSecret: env.GOOGLE_CLIENT_SECRET,
+    }),
+    EmailProvider({
+      server: env.EMAIL_SERVER,
+      from: env.EMAIL_FROM,
+    }),
 
     // ...add more providers here
   ],

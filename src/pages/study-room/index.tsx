@@ -70,6 +70,7 @@ const StudyRoom: NextPage<PageProps> = ({ assessmentsFromDB }) => {
     }
     try {
       const res = await axios.post('/api/generate', {
+        userId: authSession?.user?.id,
         messages: messages.map((message) => message.message).join('\n'),
       });
       const newAssres = await axios.post('/api/assessment-create', {
@@ -104,7 +105,6 @@ const StudyRoom: NextPage<PageProps> = ({ assessmentsFromDB }) => {
     // reset to the initial values by using form ref
     // or button type="reset" https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#attr-type
     formRef.current?.reset();
-    console.log(formRef.current);
   }, [formRef]);
 
   return (

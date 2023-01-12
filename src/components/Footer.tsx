@@ -48,11 +48,7 @@ const Footer = () => {
 
           <Text className="dot-divider"> • </Text>
           <Text>
-            <Link
-              target="_blank"
-              href="https://app.termly.io/document/terms-of-use-for-online-marketplace/"
-              color="text"
-            >
+            <Link target="_blank" href="/terms" color="text">
               Terms of Service
             </Link>
           </Text>
@@ -60,11 +56,7 @@ const Footer = () => {
           <Text className="dot-divider"> • </Text>
 
           <Text>
-            <Link
-              target="_blank"
-              href="https://app.termly.io/document/privacy-policy/"
-              color="text"
-            >
+            <Link target="_blank" href="/privacy" color="text">
               Privacy Policy
             </Link>
           </Text>

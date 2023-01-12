@@ -67,7 +67,7 @@ const ChatBox: FC<ChatBoxProps> = ({
       setLoading(false);
       return alert('Message too short! (min 8 characters)');
     }
-
+    console.log('USERIDIDID', authSession?.user?.id);
     try {
       const res = await axios.post('/api/generate', {
         userId: authSession?.user?.id,

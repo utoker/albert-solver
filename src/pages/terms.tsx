@@ -89,32 +89,30 @@ const Terms: NextPage = () => {
         to you or to any third-party for any modification, price change,
         suspension or discontinuance of the Service.
       </Text>{' '}
-      <Text h2>SECTION 5 - PRODUCTS OR SERVICES (if applicable)</Text>{' '}
+      <Text h2>SECTION 5 - FEES AND PAYMENT</Text>{' '}
       <Text>
-        {' '}
-        Certain products or Services may be available exclusively online through
-        the website. These products or Services may have limited quantities and
-        are subject to return or exchange only according to our Return Policy.
-        To view our Return Policy, please visit [LINK TO RETURN POLICY] We have
-        made every effort to display as accurately as possible the colors and
-        images of our products that appear at the store. We cannot guarantee
-        that your computer monitor&apos;s display of any color will be accurate.
-        We reserve the right, but are not obligated, to limit the sales of our
-        products or Services to any person, geographic region or jurisdiction.
-        We may exercise this right on a case-by-case basis. We reserve the right
-        to limit the quantities of any products or Services that we offer. All
-        descriptions of products or product pricing are subject to change at
-        anytime without notice, at the sole discretion of us. We reserve the
-        right to discontinue any product at any time. Any offer for any product
-        or service made on this site is void where prohibited. We do not warrant
-        that the quality of any products, Services, information, or other
-        material purchased or obtained by you will meet your expectations, or
-        that any errors in the Service will be corrected.
+        We accept the following forms of payment: -  Visa -  American Express -
+         Mastercard -  Discover You may be required to purchase or pay a fee to
+        access some of our services. You agree to provide current, complete, and
+        accurate purchase and account information for all purchases made via the
+        Site. You further agree to promptly update account and payment
+        information, including email address, payment method, and payment card
+        expiration date, so that we can complete your transactions and contact
+        you as needed. We bill you through an online billing account for
+        purchases made via the Site. Sales tax will be added to the price of
+        purchases as deemed required by us. We may change prices at any time.
+        All payments shall be in U.S. dollars. You agree to pay all charges or
+        fees at the prices then in effect for your purchases, and you authorize
+        us to charge your chosen payment provider for any such amounts upon
+        making your purchase. If your purchase is subject to recurring charges,
+        then you consent to our charging your payment method on a recurring
+        basis without requiring your prior approval for each recurring charge,
+        until you notify us of your cancellation. We reserve the right to
+        correct any errors or mistakes in pricing, even if we have already
+        requested or received payment. We also reserve the right to refuse any
+        order placed through the Site.
       </Text>{' '}
-      <Text h2>
-        {' '}
-        SECTION 6 - ACCURACY OF BILLING AND ACCOUNT INFORMATION
-      </Text>{' '}
+      <Text h2> SECTION 6 - ACCURACY OF BILLING AND ACCOUNT INFORMATION</Text>{' '}
       <Text>
         We reserve the right to refuse any order you place with us. We may, in
         our sole discretion, limit or cancel quantities purchased per person,
@@ -340,10 +338,9 @@ const Terms: NextPage = () => {
       <Text h2> SECTION 20 - CONTACT INFORMATION </Text>{' '}
       <Text>
         Questions about the Terms of Service should be sent to us at
-        hello@albertsolver.com. Our contact information is posted below: [INSERT
-        TRADING NAME] [INSERT EMAIL ADDRESS] [INSERT BUSINESS ADDRESS] [INSERT
-        BUSINESS PHONE NUMBER] [INSERT BUSINESS REGISTRATION NUMBER] [INSERT VAT
-        NUMBER]
+        hello@albertsolver.com. Our contact information is posted below: UTOKER
+        CORP. 67 Pinewoods Crescent, Middle Island, NY, 11953, United States
+        (631) 392-8146
       </Text>
     </Container>
   );
