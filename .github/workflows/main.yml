@@ -1,0 +1,17 @@
+name: Example REST API Post
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  post-request:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Send REST API POST request
+      uses: http-client/action@v2
+      with:
+        url: https://example.com/api/resource
+        method: POST
+        headers: 'Content-Type: application/json'
+        data: '{ "key1": "value1", "key2": "value2" }'
