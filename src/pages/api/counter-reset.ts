@@ -5,7 +5,7 @@ import { prisma } from '../../server/db/client';
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   await prisma.postCounter.updateMany({
     data: {
-      counter: 0,
+      count: 0,
     },
   });
   res.status(200).json('deleted');
