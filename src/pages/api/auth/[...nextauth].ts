@@ -15,8 +15,8 @@ export const authOptions: NextAuthOptions = {
     session({ session, user }) {
       if (session.user) {
         session.user.id = user.id;
-        session.user.subscription = user.subscription;
         session.user.stripe_customer = user.stripe_customer;
+        session.user.subscription = user.subscription;
       }
       return session;
     },

@@ -7,7 +7,7 @@ declare module 'next-auth' {
   interface Session {
     user?: {
       stripe_customer?: string;
-      subscription: string;
+      subscription?: string;
       id: string;
     } & DefaultSession['user'];
   }
