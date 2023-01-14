@@ -11,6 +11,7 @@ import Stripe from 'stripe';
 export const authOptions: NextAuthOptions = {
   secret: env.NEXTAUTH_SECRET,
   // Include user.id on session
+
   callbacks: {
     session({ session, user }) {
       if (session.user) {
