@@ -4,7 +4,7 @@ import { env } from '../../env/server.mjs';
 import { buffer } from 'micro';
 import { prisma } from '../../server/db/client';
 
-// export const config = { api: { bodyParser: false } };
+export const config = { api: { bodyParser: false } };
 //to start listening to stripe events
 //stripe listen --forward-to localhost:3000/api/stripe-hook
 
