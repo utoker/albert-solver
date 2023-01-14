@@ -116,7 +116,8 @@ const Nav: FC<Props> = ({ providers }) => {
           </Row>
           <Row>
             <Text size="$xs">
-              Please use the same provider to login to your account in future.
+              Please use the same provider to login into your account in the
+              future.
             </Text>
           </Row>
         </Modal.Footer>
