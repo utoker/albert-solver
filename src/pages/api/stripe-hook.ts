@@ -1,7 +1,7 @@
 import { type NextApiRequest, type NextApiResponse } from 'next';
 import Stripe from 'stripe';
 import { env } from '../../env/server.mjs';
-import { buffer } from 'micro';
+// import { buffer } from 'micro';
 import { prisma } from '../../server/db/client';
 
 export const config = { api: { bodyParser: false } };
@@ -14,16 +14,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   });
   const signature = req.headers['stripe-signature'];
   const singinSecret = env.STRIPE_SINGIN_SECRET;
-  const reqBuffer = await buffer(req);
+  // const reqBuffer = await buffer(req);
 
   let event;
   if (!!signature) {
     try {
-      event = stripe.webhooks.constructEvent(
-        reqBuffer,
-        signature,
-        singinSecret
-      );
+      event = stripe.webhooks.constructEvent(req.body, signature, singinSecret);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.log('stripe-hook error', error);
