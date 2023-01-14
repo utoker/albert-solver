@@ -46,13 +46,6 @@ export const authOptions: NextAuthOptions = {
             stripe_customer: customer.id,
           },
         });
-        // await prisma.assessment.create({
-        //   data: {
-        //     userId: user.id,
-        //     assessmentName: 'Assessment 1',
-        //     chatLog: '[{"user":"AI","message":"Hi, how can I help you?"}]',
-        //   },
-        // });
         await prisma.postCounter.create({
           data: {
             userId: user.id,

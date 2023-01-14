@@ -1,6 +1,11 @@
 /* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { faDiscord } from '@fortawesome/free-brands-svg-icons';
+import {
+  faDiscord,
+  faGithub,
+  faGoogle,
+} from '@fortawesome/free-brands-svg-icons';
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Avatar,
@@ -57,8 +62,17 @@ const Nav: FC<Props> = ({ providers }) => {
   const modalHandler = () => setVisible(true);
   const closeHandler = () => {
     setVisible(false);
-    console.log('closed');
   };
+  const loginIcon = (providerName: string) => {
+    if (providerName === 'Discord') return <FontAwesomeIcon icon={faDiscord} />;
+
+    if (providerName === 'Google') return <FontAwesomeIcon icon={faGoogle} />;
+
+    if (providerName === 'Github') return <FontAwesomeIcon icon={faGithub} />;
+
+    if (providerName === 'Email') return <FontAwesomeIcon icon={faEnvelope} />;
+  };
+
   return (
     <>
       <Modal
@@ -69,9 +83,9 @@ const Nav: FC<Props> = ({ providers }) => {
         onClose={closeHandler}
       >
         <Modal.Header>
-          <Text id="login" size={18}>
+          <Text id="login" size="$xl">
             Welcome to{' '}
-            <Text b size={18}>
+            <Text b size="$2xl">
               Albert Solver
             </Text>
           </Text>
@@ -81,10 +95,11 @@ const Nav: FC<Props> = ({ providers }) => {
             {Object.values(providers).map((provider) => (
               <Row justify="center" key={provider.name}>
                 <Button
+                  size="lg"
                   onPress={() =>
                     signIn(provider.id, { callbackUrl: '/study-room' })
                   }
-                  iconRight={<FontAwesomeIcon icon={faDiscord} />}
+                  iconRight={loginIcon(provider.name)}
                 >
                   Sign in with {provider.name}
                 </Button>
@@ -92,6 +107,19 @@ const Nav: FC<Props> = ({ providers }) => {
             ))}
           </>
         </Modal.Body>
+        <Modal.Footer>
+          <Row>
+            <Text size="$xs">
+              If you don&apos;t have an account, one will be created for you
+              automatically.
+            </Text>
+          </Row>
+          <Row>
+            <Text size="$xs">
+              Please use the same provider to login to your account in future.
+            </Text>
+          </Row>
+        </Modal.Footer>
       </Modal>
 
       <Navbar maxWidth={'fluid'} variant={'sticky'}>
