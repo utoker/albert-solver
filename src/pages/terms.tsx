@@ -10,47 +10,48 @@ const Terms: NextPage = () => {
       <Text>
         These Terms of Service constitute a legally binding agreement made
         between you, whether personally or on behalf of an entity (“you”) and
-        UTOKER CORP. ("Company", “we”, “us”, or “our”), concerning your access
-        to and use of the http://albertsolver.com website as well as any other
-        media form, media channel, mobile website or mobile application related,
-        linked, or otherwise connected thereto (collectively, the “Site”). We
-        are registered in New York, United States and have our registered office
-        at 67 Pinewoods cres, Middle Island, NY,11953, Middle Island, NY 11953.
-        You agree that by accessing the Site, you have read, understood, and
-        agree to be bound by all of these Terms of Service. IF YOU DO NOT AGREE
-        WITH ALL OF THESE TERMS OF SERVICE, THEN YOU ARE EXPRESSLY PROHIBITED
-        FROM USING THE SITE AND YOU MUST DISCONTINUE USE IMMEDIATELY.
-        Supplemental terms and conditions or documents that may be posted on the
-        Site from time to time are hereby expressly incorporated herein by
-        reference. We reserve the right, in our sole discretion, to make changes
-        or modifications to these Terms of Service from time to time. We will
-        alert you about any changes by updating the “Last updated” date of these
-        Terms of Service, and you waive any right to receive specific notice of
-        each such change. Please ensure that you check the applicable Terms
-        every time you use our Site so that you understand which Terms apply.
-        You will be subject to, and will be deemed to have been made aware of
-        and to have accepted, the changes in any revised Terms of Service by
-        your continued use of the Site after the date such revised Terms of
-        Service are posted. The information provided on the Site is not intended
-        for distribution to or use by any person or entity in any jurisdiction
-        or country where such distribution or use would be contrary to law or
-        regulation or which would subject us to any registration requirement
-        within such jurisdiction or country. Accordingly, those persons who
-        choose to access the Site from other locations do so on their own
-        initiative and are solely responsible for compliance with local laws, if
-        and to the extent local laws are applicable. The Site is not tailored to
-        comply with industry-specific regulations (Health Insurance Portability
-        and Accountability Act (HIPAA), Federal Information Security Management
-        Act (FISMA), etc.), so if your interactions would be subjected to such
-        laws, you may not use this Site. You may not use the Site in a way that
-        would violate the Gramm-Leach-Bliley Act (GLBA). All users who
-        are minors in the jurisdiction in which they reside (generally under the
-        age of 18) must have the permission of, and be directly supervised by,
-        their parent or guardian to use the Site. If you are a minor, you must
-        have your parent or guardian read and agree to these Terms of Service
-        prior to you using the Site.
-      </Text>{' '}
-      <Text h2>2. INTELLECTUAL PROPERTY RIGHTS</Text>{' '}
+        UTOKER CORP. (&quot;Company&quot;, “we”, “us”, or “our”), concerning
+        your access to and use of the http://albertsolver.com website as well as
+        any other media form, media channel, mobile website or mobile
+        application related, linked, or otherwise connected thereto
+        (collectively, the “Site”). We are registered in New York, United States
+        and have our registered office at 67 Pinewoods cres, Middle Island,
+        NY,11953, Middle Island, NY 11953. You agree that by accessing the Site,
+        you have read, understood, and agree to be bound by all of these Terms
+        of Service. IF YOU DO NOT AGREE WITH ALL OF THESE TERMS OF SERVICE, THEN
+        YOU ARE EXPRESSLY PROHIBITED FROM USING THE SITE AND YOU MUST
+        DISCONTINUE USE IMMEDIATELY. Supplemental terms and conditions or
+        documents that may be posted on the Site from time to time are hereby
+        expressly incorporated herein by reference. We reserve the right, in our
+        sole discretion, to make changes or modifications to these Terms of
+        Service from time to time. We will alert you about any changes by
+        updating the “Last updated” date of these Terms of Service, and you
+        waive any right to receive specific notice of each such change. Please
+        ensure that you check the applicable Terms every time you use our Site
+        so that you understand which Terms apply. You will be subject to, and
+        will be deemed to have been made aware of and to have accepted, the
+        changes in any revised Terms of Service by your continued use of the
+        Site after the date such revised Terms of Service are posted. The
+        information provided on the Site is not intended for distribution to or
+        use by any person or entity in any jurisdiction or country where such
+        distribution or use would be contrary to law or regulation or which
+        would subject us to any registration requirement within such
+        jurisdiction or country. Accordingly, those persons who choose to access
+        the Site from other locations do so on their own initiative and are
+        solely responsible for compliance with local laws, if and to the extent
+        local laws are applicable. The Site is not tailored to comply with
+        industry-specific regulations (Health Insurance Portability and
+        Accountability Act (HIPAA), Federal Information Security Management Act
+        (FISMA), etc.), so if your interactions would be subjected to such laws,
+        you may not use this Site. You may not use the Site in a way that would
+        violate the Gramm-Leach-Bliley Act (GLBA). All users who are minors in
+        the jurisdiction in which they reside (generally under the age of 18)
+        must have the permission of, and be directly supervised by, their parent
+        or guardian to use the Site. If you are a minor, you must have your
+        parent or guardian read and agree to these Terms of Service prior to you
+        using the Site.
+      </Text>
+      <Text h2>2. INTELLECTUAL PROPERTY RIGHTS</Text>
       <Text>
         Unless otherwise indicated, the Site is our proprietary property and all
         source code, databases, functionality, software, website designs, audio,
@@ -75,21 +76,21 @@ const Terms: NextPage = () => {
       </Text>
       <Text h2>3. USER REPRESENTATIONS</Text>
       <Text>
-        By using the Site, you represent and warrant that: (1) all registration
+        By using the Site, you represent and warrant that: (1) all registration
         information you submit will be true, accurate, current, and complete;
         (2) you will maintain the accuracy of such information and promptly
-        update such registration information as necessary; (3) you have the
+        update such registration information as necessary; (3) you have the
         legal capacity and you agree to comply with these Terms of Service; (4)
-        you are not a minor in the jurisdiction in which you reside, or if a
-        minor, you have received parental permission to use the Site; (5) you
+        you are not a minor in the jurisdiction in which you reside, or if a
+        minor, you have received parental permission to use the Site; (5) you
         will not access the Site through automated or non-human means, whether
-        through a bot, script or otherwise; (6) you will not use the Site for
+        through a bot, script or otherwise; (6) you will not use the Site for
         any illegal or unauthorized purpose; and (7) your use of the Site will
         not violate any applicable law or regulation. If you provide any
         information that is untrue, inaccurate, not current, or incomplete, we
         have the right to suspend or terminate your account and refuse any and
         all current or future use of the Site (or any portion thereof).
-      </Text>{' '}
+      </Text>
       <Text h2>4. USER REGISTRATION</Text>
       <Text>
         You may be required to register with the Site. You agree to keep your
@@ -100,8 +101,8 @@ const Terms: NextPage = () => {
       </Text>
       <Text h2> 5. FEES AND PAYMENT</Text>{' '}
       <Text>
-        We accept the following forms of payment: -  Visa -  American Express -
-         Mastercard -  Discover You may be required to purchase or pay a fee to
+        We accept the following forms of payment: - Visa - American Express -
+        Mastercard - Discover You may be required to purchase or pay a fee to
         access some of our services. You agree to provide current, complete, and
         accurate purchase and account information for all purchases made via the
         Site. You further agree to promptly update account and payment
@@ -113,7 +114,7 @@ const Terms: NextPage = () => {
         All payments shall be in U.S. dollars. You agree to pay all charges or
         fees at the prices then in effect for your purchases, and you authorize
         us to charge your chosen payment provider for any such amounts upon
-        making your purchase. If your purchase is subject to recurring charges,
+        making your purchase. If your purchase is subject to recurring charges,
         then you consent to our charging your payment method on a recurring
         basis without requiring your prior approval for each recurring charge,
         until you notify us of your cancellation. We reserve the right to
@@ -123,13 +124,13 @@ const Terms: NextPage = () => {
       </Text>{' '}
       <Text h2>6. CANCELLATION</Text>{' '}
       <Text>
-        All purchases are non-refundable. You can cancel your subscription at
-        any time by logging into your account. Your cancellation will take
+        All purchases are non-refundable. You can cancel your subscription at
+        any time by logging into your account. Your cancellation will take
         effect at the end of the current paid term. If you are unsatisfied with
-        our services, please email us at hello@albertsolver.com or call us
-        at (+1)6313928146.
+        our services, please email us at hello@albertsolver.com or call us at
+        (+1)6313928146.
       </Text>{' '}
-      <Text h2> 7. PROHIBITED ACTIVITIES</Text>{' '}
+      <Text h2> 7. PROHIBITED ACTIVITIES</Text>
       <Text>
         You may not access or use the Site for any purpose other than that for
         which we make the Site available. The Site may not be used in connection
@@ -186,15 +187,15 @@ const Terms: NextPage = () => {
         Use the Site as part of any effort to compete with us or otherwise use
         the Site and/or the Content for any revenue-generating endeavor or
         commercial enterprise.
-      </Text>{' '}
-      <Text h2> 8. USER GENERATED CONTRIBUTIONS</Text>{' '}
+      </Text>
+      <Text h2> 8. USER GENERATED CONTRIBUTIONS</Text>
       <Text>
         The Site does not offer users to submit or post content. We may provide
         you with the opportunity to create, submit, post, display, transmit,
         perform, publish, distribute, or broadcast content and materials to us
         or on the Site, including but not limited to text, writings, video,
         audio, photographs, graphics, comments, suggestions, or personal
-        information or other material (collectively, "Contributions").
+        information or other material (collectively, &quot;Contributions&quot;).
         Contributions may be viewable by other users of the Site and through
         third-party websites. As such, any Contributions you transmit may be
         treated in accordance with the Site Privacy Policy. When you create or
@@ -233,8 +234,8 @@ const Terms: NextPage = () => {
         any applicable law or regulation. Any use of the Site in violation of
         the foregoing violates these Terms of Service and may result in, among
         other things, termination or suspension of your rights to use the Site.
-      </Text>{' '}
-      <Text h2>9. CONTRIBUTION LICENSE</Text>{' '}
+      </Text>
+      <Text h2>9. CONTRIBUTION LICENSE</Text>
       <Text>
         You and the Site agree that we may access, store, process, and use any
         information and personal data that you provide following the terms of
@@ -250,7 +251,7 @@ const Terms: NextPage = () => {
         agree to exonerate us from any and all responsibility and to refrain
         from any legal action against us regarding your Contributions.
       </Text>
-      <Text h2>10. SOCIAL MEDIA</Text>{' '}
+      <Text h2>10. SOCIAL MEDIA</Text>
       <Text>
         As part of the functionality of the Site, you may link your account with
         online accounts you have with third-party service providers (each such
@@ -301,50 +302,51 @@ const Terms: NextPage = () => {
       <Text h2>11. SUBMISSIONS</Text>{' '}
       <Text>
         You acknowledge and agree that any questions, comments, suggestions,
-        ideas, feedback, or other information regarding the Site ("Submissions")
-        provided by you to us are non-confidential and shall become our sole
-        property. We shall own exclusive rights, including all intellectual
-        property rights, and shall be entitled to the unrestricted use and
-        dissemination of these Submissions for any lawful purpose, commercial or
-        otherwise, without acknowledgment or compensation to you. You hereby
-        waive all moral rights to any such Submissions, and you hereby warrant
-        that any such Submissions are original with you or that you have the
-        right to submit such Submissions. You agree there shall be no recourse
-        against us for any alleged or actual infringement or misappropriation of
-        any proprietary right in your Submissions.
+        ideas, feedback, or other information regarding the Site
+        (&quot;Submissions&quot;) provided by you to us are non-confidential and
+        shall become our sole property. We shall own exclusive rights, including
+        all intellectual property rights, and shall be entitled to the
+        unrestricted use and dissemination of these Submissions for any lawful
+        purpose, commercial or otherwise, without acknowledgment or compensation
+        to you. You hereby waive all moral rights to any such Submissions, and
+        you hereby warrant that any such Submissions are original with you or
+        that you have the right to submit such Submissions. You agree there
+        shall be no recourse against us for any alleged or actual infringement
+        or misappropriation of any proprietary right in your Submissions.
       </Text>{' '}
       <Text h2>12. THIRD-PARTY WEBSITES AND CONTENT</Text>{' '}
       <Text>
         The Site may contain (or you may be sent via the Site) links to other
-        websites ("Third-Party Websites") as well as articles, photographs,
-        text, graphics, pictures, designs, music, sound, video, information,
-        applications, software, and other content or items belonging to or
-        originating from third parties ("Third-Party Content"). Such Third-Party
-        Websites and Third-Party Content are not investigated, monitored, or
-        checked for accuracy, appropriateness, or completeness by us, and we are
-        not responsible for any Third-Party Websites accessed through the Site
-        or any Third-Party Content posted on, available through, or installed
-        from the Site, including the content, accuracy, offensiveness, opinions,
-        reliability, privacy practices, or other policies of or contained in the
-        Third-Party Websites or the Third-Party Content. Inclusion of, linking
-        to, or permitting the use or installation of any Third-Party Websites or
-        any Third-Party Content does not imply approval or endorsement thereof
-        by us. If you decide to leave the Site and access the Third-Party
-        Websites or to use or install any Third-Party Content, you do so at your
-        own risk, and you should be aware these Terms of Service no longer
-        govern. You should review the applicable terms and policies, including
-        privacy and data gathering practices, of any website to which you
-        navigate from the Site or relating to any applications you use or
-        install from the Site. Any purchases you make through Third-Party
-        Websites will be through other websites and from other companies, and we
-        take no responsibility whatsoever in relation to such purchases which
-        are exclusively between you and the applicable third party. You agree
-        and acknowledge that we do not endorse the products or services offered
-        on Third-Party Websites and you shall hold us harmless from any harm
-        caused by your purchase of such products or services. Additionally, you
-        shall hold us harmless from any losses sustained by you or harm caused
-        to you relating to or resulting in any way from any Third-Party Content
-        or any contact with Third-Party Websites.
+        websites (&quot;Third-Party Websites&quot;) as well as articles,
+        photographs, text, graphics, pictures, designs, music, sound, video,
+        information, applications, software, and other content or items
+        belonging to or originating from third parties (&quot;Third-Party
+        Content&quot;). Such Third-Party Websites and Third-Party Content are
+        not investigated, monitored, or checked for accuracy, appropriateness,
+        or completeness by us, and we are not responsible for any Third-Party
+        Websites accessed through the Site or any Third-Party Content posted on,
+        available through, or installed from the Site, including the content,
+        accuracy, offensiveness, opinions, reliability, privacy practices, or
+        other policies of or contained in the Third-Party Websites or the
+        Third-Party Content. Inclusion of, linking to, or permitting the use or
+        installation of any Third-Party Websites or any Third-Party Content does
+        not imply approval or endorsement thereof by us. If you decide to leave
+        the Site and access the Third-Party Websites or to use or install any
+        Third-Party Content, you do so at your own risk, and you should be aware
+        these Terms of Service no longer govern. You should review the
+        applicable terms and policies, including privacy and data gathering
+        practices, of any website to which you navigate from the Site or
+        relating to any applications you use or install from the Site. Any
+        purchases you make through Third-Party Websites will be through other
+        websites and from other companies, and we take no responsibility
+        whatsoever in relation to such purchases which are exclusively between
+        you and the applicable third party. You agree and acknowledge that we do
+        not endorse the products or services offered on Third-Party Websites and
+        you shall hold us harmless from any harm caused by your purchase of such
+        products or services. Additionally, you shall hold us harmless from any
+        losses sustained by you or harm caused to you relating to or resulting
+        in any way from any Third-Party Content or any contact with Third-Party
+        Websites.
       </Text>{' '}
       <Text h2>13. ADVERTISERS</Text>{' '}
       <Text>
@@ -356,7 +358,7 @@ const Terms: NextPage = () => {
         advertisements. Further, as an advertiser, you warrant and represent
         that you possess all rights and authority to place advertisements on the
         Site, including, but not limited to, intellectual property rights,
-        publicity rights, and contractual rights. We simply provide the space to
+        publicity rights, and contractual rights. We simply provide the space to
         place such advertisements, and we have no other relationship with
         advertisers.
       </Text>
@@ -401,7 +403,7 @@ const Terms: NextPage = () => {
         States. If you access the Site from any other region of the world with
         laws or other requirements governing personal data collection, use, or
         disclosure that differ from applicable laws in the United States, then
-        through your continued use of the Site, you are transferring your data
+        through your continued use of the Site, you are transferring your data
         to the United States, and you agree to have your data transferred to and
         processed in the United States.
       </Text>
@@ -415,7 +417,7 @@ const Terms: NextPage = () => {
         REASON, INCLUDING WITHOUT LIMITATION FOR BREACH OF ANY REPRESENTATION,
         WARRANTY, OR COVENANT CONTAINED IN THESE TERMS OF SERVICE OR OF ANY
         APPLICABLE LAW OR REGULATION. WE MAY TERMINATE YOUR USE OR PARTICIPATION
-        IN THE SITE OR DELETE YOUR ACCOUNT AND ANY CONTENT OR INFORMATION THAT
+        IN THE SITE OR DELETE YOUR ACCOUNT AND ANY CONTENT OR INFORMATION THAT
         YOU POSTED AT ANY TIME, WITHOUT WARNING, IN OUR SOLE DISCRETION. If we
         terminate or suspend your account for any reason, you are prohibited
         from registering and creating a new account under your name, a fake or
@@ -448,14 +450,14 @@ const Terms: NextPage = () => {
       <Text h2> 19. GOVERNING LAW </Text>
       <Text>
         These Terms of Service and your use of the Site are governed by and
-        construed in accordance with the laws of the State of New
-        York applicable to agreements made and to be entirely performed within
-        the State of New York, without regard to its conflict of law principles.
+        construed in accordance with the laws of the State of New York
+        applicable to agreements made and to be entirely performed within the
+        State of New York, without regard to its conflict of law principles.
       </Text>
-      <Text h2> 20. DISPUTE RESOLUTION</Text>{' '}
+      <Text h2> 20. DISPUTE RESOLUTION</Text>
       <Text h3> Informal Negotiations</Text>
       To expedite resolution and control the cost of any dispute, controversy,
-      or claim related to these Terms of Service (each "Dispute" and
+      or claim related to these Terms of Service (each &quot;Dispute&quot; and
       collectively, the “Disputes”) brought by either you or us (individually, a
       “Party” and collectively, the “Parties”), the Parties agree to first
       attempt to negotiate any Dispute (except those Disputes expressly provided
@@ -469,37 +471,37 @@ const Terms: NextPage = () => {
       UNDERSTAND THAT WITHOUT THIS PROVISION, YOU WOULD HAVE THE RIGHT TO SUE IN
       COURT AND HAVE A JURY TRIAL. The arbitration shall be commenced and
       conducted under the Commercial Arbitration Rules of the American
-      Arbitration Association ("AAA") and, where appropriate, the AAA’s
-      Supplementary Procedures for Consumer Related Disputes ("AAA Consumer
-      Rules"), both of which are available at the AAA website www.adr.org. Your
-      arbitration fees and your share of arbitrator compensation shall be
-      governed by the AAA Consumer Rules and, where appropriate, limited by the
-      AAA Consumer Rules. The arbitration may be conducted in person, through
-      the submission of documents, by phone, or online. The arbitrator will make
-      a decision in writing, but need not provide a statement of reasons unless
-      requested by either Party. The arbitrator must follow applicable law, and
-      any award may be challenged if the arbitrator fails to do so. Except where
-      otherwise required by the applicable AAA rules or applicable law, the
-      arbitration will take place in Suffolk, New York. Except as otherwise
-      provided herein, the Parties may litigate in court to compel arbitration,
-      stay proceedings pending arbitration, or to confirm, modify, vacate, or
-      enter judgment on the award entered by the arbitrator. If for any reason,
-      a Dispute proceeds in court rather than arbitration, the Dispute shall be
-      commenced or prosecuted in the state and federal courts located in
-      Suffolk, New York, and the Parties hereby consent to, and waive all
-      defenses of lack of personal jurisdiction, and forum non conveniens with
-      respect to venue and jurisdiction in such state and federal courts.
-      Application of the United Nations Convention on Contracts for the
-      International Sale of Goods and the Uniform Computer Information
-      Transaction Act (UCITA) are excluded from these Terms of Service. In no
-      event shall any Dispute brought by either Party related in any way to the
-      Site be commenced more than one (1) years after the cause of action arose.
-      If this provision is found to be illegal or unenforceable, then neither
-      Party will elect to arbitrate any Dispute falling within that portion of
-      this provision found to be illegal or unenforceable and such Dispute shall
-      be decided by a court of competent jurisdiction within the courts listed
-      for jurisdiction above, and the Parties agree to submit to the personal
-      jurisdiction of that court.
+      Arbitration Association (&quot;AAA&quot;) and, where appropriate, the
+      AAA’s Supplementary Procedures for Consumer Related Disputes (&quot;AAA
+      Consumer Rules&quot;), both of which are available at the AAA website
+      www.adr.org. Your arbitration fees and your share of arbitrator
+      compensation shall be governed by the AAA Consumer Rules and, where
+      appropriate, limited by the AAA Consumer Rules. The arbitration may be
+      conducted in person, through the submission of documents, by phone, or
+      online. The arbitrator will make a decision in writing, but need not
+      provide a statement of reasons unless requested by either Party. The
+      arbitrator must follow applicable law, and any award may be challenged if
+      the arbitrator fails to do so. Except where otherwise required by the
+      applicable AAA rules or applicable law, the arbitration will take place in
+      Suffolk, New York. Except as otherwise provided herein, the Parties may
+      litigate in court to compel arbitration, stay proceedings pending
+      arbitration, or to confirm, modify, vacate, or enter judgment on the award
+      entered by the arbitrator. If for any reason, a Dispute proceeds in court
+      rather than arbitration, the Dispute shall be commenced or prosecuted in
+      the state and federal courts located in Suffolk, New York, and the Parties
+      hereby consent to, and waive all defenses of lack of personal
+      jurisdiction, and forum non conveniens with respect to venue and
+      jurisdiction in such state and federal courts. Application of the United
+      Nations Convention on Contracts for the International Sale of Goods and
+      the Uniform Computer Information Transaction Act (UCITA) are excluded from
+      these Terms of Service. In no event shall any Dispute brought by either
+      Party related in any way to the Site be commenced more than one (1) years
+      after the cause of action arose. If this provision is found to be illegal
+      or unenforceable, then neither Party will elect to arbitrate any Dispute
+      falling within that portion of this provision found to be illegal or
+      unenforceable and such Dispute shall be decided by a court of competent
+      jurisdiction within the courts listed for jurisdiction above, and the
+      Parties agree to submit to the personal jurisdiction of that court.
       <Text h3>Restrictions</Text>
       The Parties agree that any arbitration shall be limited to the Dispute
       between the Parties individually. To the full extent permitted by law, (a)
@@ -537,9 +539,9 @@ const Terms: NextPage = () => {
         IMPLIED, IN CONNECTION WITH THE SITE AND YOUR USE THEREOF, INCLUDING,
         WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS
         FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. WE MAKE NO WARRANTIES OR
-        REPRESENTATIONS ABOUT THE ACCURACY OR COMPLETENESS OF THE SITE’S CONTENT
-        OR THE CONTENT OF ANY WEBSITES LINKED TO THE SITE AND WE WILL ASSUME NO
-        LIABILITY OR RESPONSIBILITY FOR ANY (1) ERRORS, MISTAKES, OR
+        REPRESENTATIONS ABOUT THE ACCURACY OR COMPLETENESS OF THE SITE&apos;S
+        CONTENT OR THE CONTENT OF ANY WEBSITES LINKED TO THE SITE AND WE WILL
+        ASSUME NO LIABILITY OR RESPONSIBILITY FOR ANY (1) ERRORS, MISTAKES, OR
         INACCURACIES OF CONTENT AND MATERIALS, (2) PERSONAL INJURY OR PROPERTY
         DAMAGE, OF ANY NATURE WHATSOEVER, RESULTING FROM YOUR ACCESS TO AND USE
         OF THE SITE, (3) ANY UNAUTHORIZED ACCESS TO OR USE OF OUR SECURE SERVERS
@@ -566,9 +568,9 @@ const Terms: NextPage = () => {
         EXEMPLARY, INCIDENTAL, SPECIAL, OR PUNITIVE DAMAGES, INCLUDING LOST
         PROFIT, LOST REVENUE, LOSS OF DATA, OR OTHER DAMAGES ARISING FROM YOUR
         USE OF THE SITE, EVEN IF WE HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH
-        DAMAGES. NOTWITHSTANDING ANYTHING TO THE CONTRARY CONTAINED HEREIN, OUR
+        DAMAGES. NOTWITHSTANDING ANYTHING TO THE CONTRARY CONTAINED HEREIN, OUR
         LIABILITY TO YOU FOR ANY CAUSE WHATSOEVER AND REGARDLESS OF THE FORM OF
-        THE ACTION, WILL AT ALL TIMES BE LIMITED TO THE AMOUNT PAID, IF ANY, BY
+        THE ACTION, WILL AT ALL TIMES BE LIMITED TO THE AMOUNT PAID, IF ANY, BY
         YOU TO US DURING THE SIX (6) MONTH PERIOD PRIOR TO ANY CAUSE OF ACTION
         ARISING. CERTAIN US STATE LAWS AND INTERNATIONAL LAWS DO NOT ALLOW
         LIMITATIONS ON IMPLIED WARRANTIES OR THE EXCLUSION OR LIMITATION OF
@@ -581,9 +583,9 @@ const Terms: NextPage = () => {
         You agree to defend, indemnify, and hold us harmless, including our
         subsidiaries, affiliates, and all of our respective officers, agents,
         partners, and employees, from and against any loss, damage, liability,
-        claim, or demand, including reasonable attorneys’ fees and expenses,
-        made by any third party due to or arising out of: (1) use of the Site;
-        (2) breach of these Terms of Service; (3) any breach of your
+        claim, or demand, including reasonable attorneys&apos; fees and
+        expenses, made by any third party due to or arising out of: (1) use of
+        the Site; (2) breach of these Terms of Service; (3) any breach of your
         representations and warranties set forth in these Terms of Service; (4)
         your violation of the rights of a third party, including but not limited
         to intellectual property rights; or (5) any overt harmful act toward any
