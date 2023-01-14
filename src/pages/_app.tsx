@@ -5,6 +5,7 @@ import { NextUIProvider } from '@nextui-org/react';
 import { SSRProvider } from 'react-aria';
 import { config } from '@fortawesome/fontawesome-svg-core';
 import '@fortawesome/fontawesome-svg-core/styles.css';
+import AppHead from '../components/AppHead';
 config.autoAddCss = false;
 
 const MyApp: AppType<{ session: Session | null }> = ({
@@ -15,6 +16,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
     <SSRProvider>
       <SessionProvider session={session}>
         <NextUIProvider>
+          <AppHead />
           <Component {...pageProps} />
         </NextUIProvider>
       </SessionProvider>
