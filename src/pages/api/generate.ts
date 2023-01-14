@@ -4,6 +4,7 @@ import { prisma } from '../../server/db/client';
 
 import { Configuration } from 'openai';
 import { env } from '../../env/server.mjs';
+import { getSession } from 'next-auth/react';
 
 const configuration = new Configuration({
   apiKey: env.OPENAI_API_KEY,
@@ -16,21 +17,27 @@ type Data = {
 };
 
 const generate = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
+  const session = await getSession({ req });
   const { messages } = req.body;
   const { userId } = req.body;
-  console.log('USER ID', userId, messages);
+  const subscription = session?.user?.subscription;
   const postCounter = await prisma.postCounter.findUnique({
     where: {
       userId: userId as string,
     },
   });
 
-  const counter = postCounter?.counter;
-  if (counter === undefined) {
+  const count = postCounter?.count;
+  if (count === undefined) {
     res.status(500).json({ error: 'Something went wrong' });
   }
-  if (counter && counter > 9) {
+  if (subscription === 'basic' && count && count > 9) {
     res.status(200).json({ result: 'You have reached your limit of 10 posts' });
+  }
+  if (subscription === 'pro' && count && count > 99) {
+    res
+      .status(200)
+      .json({ result: 'You have reached your limit of 100 posts' });
   }
 
   const response = await openai.createCompletion({
@@ -48,13 +55,13 @@ const generate = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     res.status(500).json({ error: 'Something went wrong' });
   }
   // prisma update postCounter +1
-  if (counter !== undefined) {
+  if (count !== undefined) {
     await prisma.postCounter.update({
       where: {
         userId: userId as string,
       },
       data: {
-        counter: counter + 1,
+        count: count + 1,
       },
     });
   }

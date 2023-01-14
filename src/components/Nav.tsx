@@ -53,7 +53,6 @@ const Nav: FC<Props> = ({ providers }) => {
     }
   };
 
-  const collapseItems = ['Help & Feedback', 'Log Out'];
   const [visible, setVisible] = useState(false);
   const modalHandler = () => setVisible(true);
   const closeHandler = () => {
@@ -109,7 +108,7 @@ const Nav: FC<Props> = ({ providers }) => {
           />
           <Logo />
           <Text b color="inherit" hideIn="xs">
-            Albert AI
+            Albert Solver
           </Text>
         </Navbar.Brand>
         <Navbar.Content
@@ -207,26 +206,48 @@ const Nav: FC<Props> = ({ providers }) => {
         )}
 
         <Navbar.Collapse>
-          {collapseItems.map((item, index) => (
-            <Navbar.CollapseItem
-              key={item}
-              activeColor="secondary"
+          <Navbar.CollapseItem
+            activeColor="secondary"
+            isActive={router.route === '/'}
+          >
+            <Link
+              href="/"
+              color="inherit"
               css={{
-                color: index === collapseItems.length - 1 ? '$error' : '',
+                minWidth: '100%',
               }}
-              isActive={index === 2}
             >
-              <Link
-                href="#"
-                color="inherit"
-                css={{
-                  minWidth: '100%',
-                }}
-              >
-                {item}
-              </Link>
-            </Navbar.CollapseItem>
-          ))}
+              Home
+            </Link>
+          </Navbar.CollapseItem>
+          <Navbar.CollapseItem
+            activeColor="secondary"
+            isActive={router.route === '/pricing'}
+          >
+            <Link
+              href="/pricing"
+              color="inherit"
+              css={{
+                minWidth: '100%',
+              }}
+            >
+              Pricing
+            </Link>
+          </Navbar.CollapseItem>
+          <Navbar.CollapseItem
+            activeColor="secondary"
+            isActive={router.route === '/study-room'}
+          >
+            <Link
+              href="/study-room"
+              color="inherit"
+              css={{
+                minWidth: '100%',
+              }}
+            >
+              Study Room
+            </Link>
+          </Navbar.CollapseItem>
         </Navbar.Collapse>
       </Navbar>
     </>

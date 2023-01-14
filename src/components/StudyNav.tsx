@@ -86,7 +86,7 @@ const StudyNav: FC<Props> = ({
           Albert Solver
         </Text>
       </Navbar.Brand>
-      <Navbar.Content enableCursorHighlight hideIn="sm" activeColor="secondary">
+      <Navbar.Content enableCursorHighlight activeColor="secondary">
         <Navbar.Link href="/">Home</Navbar.Link>
         <Navbar.Link href="/pricing">Pricing</Navbar.Link>
         <Navbar.Link isActive href="/study-room">

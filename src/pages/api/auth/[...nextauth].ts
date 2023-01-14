@@ -56,7 +56,7 @@ export const authOptions: NextAuthOptions = {
         await prisma.postCounter.create({
           data: {
             userId: user.id,
-            counter: 0,
+            count: 0,
           },
         });
       }

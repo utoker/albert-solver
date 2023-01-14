@@ -8,6 +8,7 @@ import {
   Row,
   Spacer,
   Textarea,
+  Text,
 } from '@nextui-org/react';
 import axios from 'axios';
 import { type GetServerSideProps, type NextPage } from 'next';
@@ -20,6 +21,7 @@ import { type Assessment } from '@prisma/client';
 import { useRouter } from 'next/router';
 import SideMenu from '../../components/SideMenu';
 import dynamic from 'next/dynamic';
+import ErrorModal from '../../components/ErrorModal';
 
 // This is a workaround for hydration issues with Next.js
 const StudyNav = dynamic(() => import('../../components/StudyNav'), {
@@ -28,9 +30,13 @@ const StudyNav = dynamic(() => import('../../components/StudyNav'), {
 
 type PageProps = {
   assessmentsFromDB: string;
+  messageCountFromDB: number;
 };
 
-const StudyRoom: NextPage<PageProps> = ({ assessmentsFromDB }) => {
+const StudyRoom: NextPage<PageProps> = ({
+  assessmentsFromDB,
+  messageCountFromDB,
+}) => {
   type chatLog = {
     user: string;
     message: string;
@@ -47,26 +53,40 @@ const StudyRoom: NextPage<PageProps> = ({ assessmentsFromDB }) => {
     });
     return chatLogsObject;
   }, [assessments]);
-
   const [chatLogs] = useState(logs());
   const [chatLog, setChatLog] = useState([] as chatLog);
   const [input, setInput] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [messageCount, setMessageCount] = useState(messageCountFromDB);
   const { data: authSession } = useSession();
   const router = useRouter();
+  const subscription = authSession?.user?.subscription;
+  const basicInputLimit = 500;
+  const proInputLimit = 5000;
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     if (!input || loading) return;
     setLoading(true);
     const messages = [{ user: 'Student', message: input }];
-    if (authSession?.user?.subscription === 'basic' && input.length > 400) {
+    if (subscription === 'basic' && input.length > basicInputLimit) {
       setLoading(false);
-      return alert('Message too long! (max 400 characters)');
+      setErrorMessage('Message too long! (max 500 characters)');
+      modalHandler();
+      return;
+    }
+    if (subscription === 'pro' && input.length > proInputLimit) {
+      setLoading(false);
+      setErrorMessage('Message too long! (max 5000 characters)');
+      modalHandler();
+      return;
     }
     if (input.length < 8) {
       setLoading(false);
-      return alert('Message too short! (min 8 characters)');
+      setErrorMessage('Message too short! (min 8 characters)');
+      modalHandler();
+      return;
     }
     try {
       const res = await axios.post('/api/generate', {
@@ -83,6 +103,7 @@ const StudyRoom: NextPage<PageProps> = ({ assessmentsFromDB }) => {
       });
       setAssessments((prev) => [...prev, newAssres.data.newAssessment]);
       router.push(`/study-room/${newAssres.data.newAssessment.id}`);
+      setMessageCount((prev) => prev++);
     } catch (error) {
       console.log(error);
     } finally {
@@ -107,6 +128,13 @@ const StudyRoom: NextPage<PageProps> = ({ assessmentsFromDB }) => {
     formRef.current?.reset();
   }, [formRef]);
 
+  const [visible, setVisible] = React.useState(false);
+  const modalHandler = () => setVisible(true);
+  const ModalCloseHandler = () => {
+    setVisible(false);
+    console.log('closed');
+  };
+
   return (
     <>
       <StudyNav
@@ -114,6 +142,11 @@ const StudyRoom: NextPage<PageProps> = ({ assessmentsFromDB }) => {
         chatLogs={chatLogs}
         setAssessments={(x) => setAssessments(x)}
         setChatLog={(x) => setChatLog(x)}
+      />
+      <ErrorModal
+        errorMessage={errorMessage}
+        ModalCloseHandler={() => ModalCloseHandler()}
+        visible={visible}
       />
       <Grid.Container css={{ height: 'calc(100vh - 76px)' }}>
         <Grid xs={0} sm={3} md={2}>
@@ -162,6 +195,12 @@ const StudyRoom: NextPage<PageProps> = ({ assessmentsFromDB }) => {
                   </Row>
                 )}
               </form>
+              {subscription === 'basic' && (
+                <Text size="$sm" css={{ ta: 'center' }}>
+                  Basic users can only send 10 messages per day. Remeinig
+                  messages today: {10 - messageCount}
+                </Text>
+              )}
             </div>
           </Container>
         </Grid>
@@ -191,10 +230,23 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         userId: session.user.id,
       },
     });
-
+    const messageCount = await prisma.postCounter.findUnique({
+      where: {
+        userId: session.user.id,
+      },
+    });
+    if (!messageCount) {
+      await prisma.postCounter.create({
+        data: {
+          userId: session.user.id,
+          count: 0,
+        },
+      });
+    }
     return {
       props: {
         assessmentsFromDB: JSON.stringify(assessments),
+        messageCountFromDB: messageCount?.count,
       },
     };
   }

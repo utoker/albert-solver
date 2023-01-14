@@ -16,11 +16,13 @@ const StudyNav = dynamic(() => import('../../components/StudyNav'), {
 type PageProps = {
   assessmentsFromDB: string;
   assessmentId: string;
+  messageCountFromDB: number;
 };
 
 const StudyRoom: NextPage<PageProps> = ({
   assessmentId,
   assessmentsFromDB,
+  messageCountFromDB,
 }) => {
   type chatLog = {
     user: string;
@@ -61,6 +63,7 @@ const StudyRoom: NextPage<PageProps> = ({
         </Grid>
         <Grid xs={12} sm={9} md={10}>
           <ChatBox
+            messageCount={messageCountFromDB}
             assessmentId={assessmentId}
             chatLog={chatLog}
             setChatLog={(x) => setChatLog(x)}
@@ -107,11 +110,17 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         },
       };
     }
+    const messageCount = await prisma.postCounter.findUnique({
+      where: {
+        userId: session.user.id,
+      },
+    });
 
     return {
       props: {
         assessmentsFromDB: JSON.stringify(assessments),
         assessmentId,
+        messageCountFromDB: messageCount?.count,
       },
     };
   }
