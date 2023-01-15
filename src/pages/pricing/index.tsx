@@ -13,7 +13,6 @@ import {
   type ClientSafeProvider,
   type LiteralUnion,
   useSession,
-  getProviders,
 } from 'next-auth/react';
 import dynamic from 'next/dynamic';
 import React, { useEffect, useState } from 'react';
@@ -44,7 +43,7 @@ type Props = {
   }[];
 };
 
-const NextStripePricingTable: NextPage<Props> = ({ plans, providers }) => {
+const NextStripePricingTable: NextPage<Props> = ({ plans }) => {
   const { data: authSession, status } = useSession();
   const [isMonthly, setIsMonthly] = useState(true);
   const [proButton, setProButton] = useState('');
@@ -79,7 +78,7 @@ const NextStripePricingTable: NextPage<Props> = ({ plans, providers }) => {
 
   return (
     <div>
-      <Nav providers={providers} />
+      <Nav />
       <Spacer y={2} />
       <Container>
         <Row justify="center" align="center">
@@ -94,8 +93,7 @@ const NextStripePricingTable: NextPage<Props> = ({ plans, providers }) => {
             Affordable Pricing
           </Text>
         </Row>
-        {/* <Spacer y={2} /> */}
-        <Container md>
+        <Container xs>
           <Row justify="center" align="center">
             <Card css={{ mw: 'max-content', px: '10px' }}>
               <Card.Body>
@@ -124,7 +122,7 @@ const NextStripePricingTable: NextPage<Props> = ({ plans, providers }) => {
             />
           </Row>
           <Spacer y={0.5} />
-          <Grid.Container justify="space-evenly">
+          <Grid.Container justify="space-between">
             {isMonthly && (
               <>
                 <Grid>
@@ -133,8 +131,8 @@ const NextStripePricingTable: NextPage<Props> = ({ plans, providers }) => {
                     currency="usd"
                     interval="month"
                     price={0.0}
-                    description1="4 questions per day"
-                    description2="400 characters per question"
+                    description1="10 questions per day"
+                    description2="500 characters per question"
                     name="Basic"
                     planId={'basic'}
                   />
@@ -150,8 +148,8 @@ const NextStripePricingTable: NextPage<Props> = ({ plans, providers }) => {
                   currency={monthlyProPlan.currency}
                   interval={monthlyProPlan.interval}
                   price={monthlyProPlan.price}
-                  description1="40 questions per day"
-                  description2="4000 characters per question"
+                  description1="50 questions per day"
+                  description2="5000 characters per question"
                   name={monthlyProPlan.name}
                   planId={monthlyProPlan.id}
                 />
@@ -204,7 +202,6 @@ export const getServerSideProps: GetServerSideProps = async () => {
   const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
     apiVersion: '2022-11-15',
   });
-  const providers = await getProviders();
   const { data: prices } = await stripe.prices.list();
 
   const plans = await Promise.all(
@@ -231,6 +228,6 @@ export const getServerSideProps: GetServerSideProps = async () => {
   });
 
   return {
-    props: { plans: sortPlans, providers },
+    props: { plans: sortPlans },
   };
 };

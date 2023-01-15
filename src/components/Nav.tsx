@@ -1,42 +1,26 @@
 /* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import {
-  faDiscord,
-  faGithub,
-  faGoogle,
-} from '@fortawesome/free-brands-svg-icons';
+import { faDiscord, faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Avatar,
   Button,
   Dropdown,
+  Input,
   Link,
   Modal,
   Navbar,
   Row,
+  Spacer,
   Text,
 } from '@nextui-org/react';
-import { type BuiltInProviderType } from 'next-auth/providers';
-import {
-  type ClientSafeProvider,
-  type LiteralUnion,
-  signIn,
-  signOut,
-  useSession,
-} from 'next-auth/react';
+import { signIn, signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import React, { type FC, useState, type Key } from 'react';
 import { Logo } from './Logo';
 
-type Props = {
-  providers: Record<
-    LiteralUnion<BuiltInProviderType, string>,
-    ClientSafeProvider
-  >;
-};
-
-const Nav: FC<Props> = ({ providers }) => {
+const Nav: FC = () => {
   const { data: authData, status: authStatus } = useSession();
 
   const router = useRouter();
@@ -63,14 +47,13 @@ const Nav: FC<Props> = ({ providers }) => {
   const closeHandler = () => {
     setVisible(false);
   };
-  const loginIcon = (providerName: string) => {
-    if (providerName === 'Discord') return <FontAwesomeIcon icon={faDiscord} />;
 
-    if (providerName === 'Google') return <FontAwesomeIcon icon={faGoogle} />;
+  const [email, setEmail] = useState('');
+  const sendLoginVerification = (e: React.SyntheticEvent) => {
+    e.preventDefault();
 
-    if (providerName === 'Github') return <FontAwesomeIcon icon={faGithub} />;
-
-    if (providerName === 'Email') return <FontAwesomeIcon icon={faEnvelope} />;
+    // Notice, we are also redirecting users to the protected route instead of the homepage after signing in.
+    signIn('email', { callbackUrl: '/protected', email });
   };
 
   return (
@@ -91,21 +74,50 @@ const Nav: FC<Props> = ({ providers }) => {
           </Text>
         </Modal.Header>
         <Modal.Body>
-          <>
-            {Object.values(providers).map((provider) => (
-              <Row justify="center" key={provider.name}>
-                <Button
-                  size="lg"
-                  onPress={() =>
-                    signIn(provider.id, { callbackUrl: '/study-room' })
-                  }
-                  iconRight={loginIcon(provider.name)}
-                >
-                  Sign in with {provider.name}
-                </Button>
-              </Row>
-            ))}
-          </>
+          <Row justify="center">
+            <Button
+              size="lg"
+              onPress={() => signIn('discord', { callbackUrl: '/study-room' })}
+              iconRight={<FontAwesomeIcon icon={faDiscord} />}
+            >
+              Sign in with Discord
+            </Button>
+          </Row>
+          <Row justify="center">
+            <Button
+              size="lg"
+              onPress={() => signIn('google', { callbackUrl: '/study-room' })}
+              iconRight={<FontAwesomeIcon icon={faGoogle} />}
+            >
+              Sign in with Google
+            </Button>
+          </Row>
+          {/* 🪄 */}
+          <Row justify="center">
+            <form
+              onSubmit={sendLoginVerification}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+              }}
+            >
+              <Input
+                label="Email"
+                type="email"
+                required
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <Spacer y={0.5} />
+              <Button
+                auto
+                size="lg"
+                type="submit"
+                iconRight={<FontAwesomeIcon icon={faEnvelope} />}
+              >
+                Sign in with Email
+              </Button>
+            </form>
+          </Row>
         </Modal.Body>
         <Modal.Footer>
           <Row>

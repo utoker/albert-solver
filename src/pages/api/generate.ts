@@ -34,10 +34,8 @@ const generate = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   if (subscription === 'basic' && count && count > 9) {
     res.status(200).json({ result: 'You have reached your limit of 10 posts' });
   }
-  if (subscription === 'pro' && count && count > 99) {
-    res
-      .status(200)
-      .json({ result: 'You have reached your limit of 100 posts' });
+  if (subscription === 'pro' && count && count > 49) {
+    res.status(200).json({ result: 'You have reached your limit of 50 posts' });
   }
 
   const response = await openai.createCompletion({
