@@ -1,23 +1,10 @@
 import { Card, Container, Row, Spacer, Text } from '@nextui-org/react';
-import { type GetServerSideProps, type NextPage } from 'next';
-import { type BuiltInProviderType } from 'next-auth/providers';
-import {
-  type ClientSafeProvider,
-  getProviders,
-  type LiteralUnion,
-} from 'next-auth/react';
+import { type NextPage } from 'next';
 import React from 'react';
 import Footer from '../../components/Footer';
 import Nav from '../../components/Nav';
 
-type Props = {
-  providers: Record<
-    LiteralUnion<BuiltInProviderType, string>,
-    ClientSafeProvider
-  >;
-};
-
-const Features: NextPage<Props> = ({ providers }) => {
+const Features: NextPage = () => {
   const features = [
     {
       title: 'Achieve success with an AI that adapts to you',
@@ -37,7 +24,7 @@ const Features: NextPage<Props> = ({ providers }) => {
   ];
   return (
     <>
-      <Nav providers={providers} />
+      <Nav />
       <Spacer y={2} />
       <Container>
         <Row justify="center" align="center">
@@ -88,10 +75,3 @@ const Features: NextPage<Props> = ({ providers }) => {
 };
 
 export default Features;
-
-export const getServerSideProps: GetServerSideProps = async () => {
-  const providers = await getProviders();
-  return {
-    props: { providers },
-  };
-};

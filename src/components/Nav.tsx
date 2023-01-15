@@ -77,19 +77,19 @@ const Nav: FC = () => {
           <Row justify="center">
             <Button
               size="lg"
-              onPress={() => signIn('discord', { callbackUrl: '/study-room' })}
-              iconRight={<FontAwesomeIcon icon={faDiscord} />}
+              onPress={() => signIn('google', { callbackUrl: '/study-room' })}
+              iconRight={<FontAwesomeIcon icon={faGoogle} />}
             >
-              Sign in with Discord
+              Sign in with Google
             </Button>
           </Row>
           <Row justify="center">
             <Button
               size="lg"
-              onPress={() => signIn('google', { callbackUrl: '/study-room' })}
-              iconRight={<FontAwesomeIcon icon={faGoogle} />}
+              onPress={() => signIn('discord', { callbackUrl: '/study-room' })}
+              iconRight={<FontAwesomeIcon icon={faDiscord} />}
             >
-              Sign in with Google
+              Sign in with Discord
             </Button>
           </Row>
           {/* 🪄 */}
