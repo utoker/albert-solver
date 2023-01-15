@@ -50,7 +50,7 @@ const generate = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     // stop: "\n",
   });
   if (response === undefined) {
-    res.status(500).json({ error: 'Something went wrong' });
+    res.status(500).json({ result: 'Something went wrong' });
   }
   // prisma update postCounter +1
   if (count !== undefined) {

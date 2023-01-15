@@ -1,17 +1,15 @@
-name: Example REST API Post
+name: Daily Cron
 
 on:
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '0 0 * * *' # runs once a day at 00:00 UTC
+  workflow_dispatch:
 
 jobs:
-  post-request:
+  daily-job:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Send REST API POST request
-        uses: http-client/action@v2
-        with:
-          url: https://www.albertsolver.com/api/counter-reset
-          method: POST
-          headers: 'Content-Type: application/json'
-          data: '{ "key1": "value1", "key2": "value2" }'
+      - name: Make HTTP POST request
+        run: |
+          curl -X POST -H "Content-Type: application/json" -d '{"key":"value"}' https://albertsolver.com/api/counter-reset
