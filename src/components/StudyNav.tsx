@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Avatar, Button, Dropdown, Navbar, Text } from '@nextui-org/react';
@@ -110,7 +108,11 @@ const StudyNav: FC<Props> = ({
                 as="button"
                 color="secondary"
                 size="md"
-                src={authData?.user?.image!}
+                src={
+                  authData?.user?.image
+                    ? authData.user.image
+                    : '../userLogo.png'
+                }
               />
             </Dropdown.Trigger>
           </Navbar.Item>
