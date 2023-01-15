@@ -1,11 +1,5 @@
 import { Container, Row, Spacer, Text } from '@nextui-org/react';
-import { type GetServerSideProps, type NextPage } from 'next';
-import { type BuiltInProviderType } from 'next-auth/providers';
-import {
-  type ClientSafeProvider,
-  getProviders,
-  type LiteralUnion,
-} from 'next-auth/react';
+import { type NextPage } from 'next';
 import dynamic from 'next/dynamic';
 import Footer from '../components/Footer';
 
@@ -14,17 +8,10 @@ const Nav = dynamic(() => import('../components/Nav'), {
   ssr: false,
 });
 
-type Props = {
-  providers: Record<
-    LiteralUnion<BuiltInProviderType, string>,
-    ClientSafeProvider
-  >;
-};
-
-const Home: NextPage<Props> = ({ providers }) => {
+const Home: NextPage = () => {
   return (
     <>
-      <Nav providers={providers} />
+      <Nav />
       <Spacer y={2} />
       <Container lg>
         <Row justify="center" align="center">
@@ -65,10 +52,3 @@ const Home: NextPage<Props> = ({ providers }) => {
 };
 
 export default Home;
-
-export const getServerSideProps: GetServerSideProps = async () => {
-  const providers = await getProviders();
-  return {
-    props: { providers },
-  };
-};
