@@ -201,6 +201,7 @@ const StudyRoom: NextPage<PageProps> = ({
                   messages today: {10 - messageCount}
                 </Text>
               )}
+              <Spacer y={1} />
             </div>
           </Container>
         </Grid>

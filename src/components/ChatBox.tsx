@@ -206,6 +206,7 @@ const ChatBox: FC<ChatBoxProps> = ({
               today: {10 - messageCount}
             </Text>
           )}
+          <Spacer y={1} />
         </div>
       </Container>
     </>
