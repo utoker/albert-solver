@@ -4,7 +4,6 @@ import { getSession } from 'next-auth/react';
 import { prisma } from '../../server/db/client';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  // get the session
   const session = await getSession({ req });
   let newAssessmentName = '';
   const { assessmentId } = req.body;

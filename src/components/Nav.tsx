@@ -53,7 +53,7 @@ const Nav: FC = () => {
     e.preventDefault();
 
     // Notice, we are also redirecting users to the protected route instead of the homepage after signing in.
-    signIn('email', { callbackUrl: '/protected', email });
+    signIn('email', { callbackUrl: '/study-room', email });
   };
 
   return (
