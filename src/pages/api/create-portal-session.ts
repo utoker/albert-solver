@@ -9,7 +9,7 @@ const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await getSession({ req });
-  if (req.method === 'POST' && !!session?.user?.stripe_customer) {
+  if (!!session?.user?.stripe_customer) {
     try {
       const stripeSession = await stripe.billingPortal.sessions.create({
         customer: session.user.stripe_customer,

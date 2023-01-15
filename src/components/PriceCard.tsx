@@ -6,6 +6,8 @@ import { signIn } from 'next-auth/react';
 import NextLink from 'next/link';
 import type Stripe from 'stripe';
 
+//todo - add modal for signing in
+
 type Props = {
   planId?: string;
   buttonText: string;
@@ -13,11 +15,8 @@ type Props = {
   price: number | null;
   currency: string;
   interval: Stripe.Price.Recurring.Interval | undefined;
-  //   interval_count: number | undefined;
   description1?: string | null;
   description2?: string | null;
-
-  //   metadata: Stripe.Metadata;
 };
 
 const PriceCard: NextPage<Props> = ({
