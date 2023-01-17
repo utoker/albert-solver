@@ -2,6 +2,7 @@ import { Container, Row, Spacer, Text } from '@nextui-org/react';
 import { type NextPage } from 'next';
 import dynamic from 'next/dynamic';
 import Footer from '../components/Footer';
+// import video from './video.mp4';
 
 // This is a workaround for hydration issues with Next.js
 const Nav = dynamic(() => import('../components/Nav'), {
@@ -12,7 +13,7 @@ const Home: NextPage = () => {
   return (
     <>
       <Nav />
-      <Spacer y={2} />
+      <Spacer y={1} />
       <Container lg>
         <Row justify="center" align="center">
           <Text
@@ -26,7 +27,7 @@ const Home: NextPage = () => {
             Ace Your Homework
           </Text>
         </Row>
-        <Spacer />
+        <Spacer y={0.5} />
         <Row justify="center" align="center">
           <Text
             hideIn={'sm'}
@@ -39,12 +40,12 @@ const Home: NextPage = () => {
             Our advanced technology takes the stress out of homework!
           </Text>
         </Row>
-        <Spacer y={2} />
-        <Row
-          justify="center"
-          align="center"
-          css={{ justifyContent: 'center' }}
-        ></Row>
+        <Spacer y={0.5} />
+        <Row justify="center" align="center" css={{ justifyContent: 'center' }}>
+          <video width={775} height={735} loop autoPlay muted>
+            <source src="./video.mp4" type="video/mp4" />
+          </video>
+        </Row>
       </Container>
       <Footer />
     </>

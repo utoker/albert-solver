@@ -1,7 +1,6 @@
 import { type NextApiRequest, type NextApiResponse } from 'next';
 import { OpenAIApi } from 'openai';
 import { prisma } from '../../server/db/client';
-
 import { Configuration } from 'openai';
 import { env } from '../../env/server.mjs';
 import { getSession } from 'next-auth/react';
@@ -48,7 +47,7 @@ const generate = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
       logprobs: null,
       // stop: "\n",
     });
-    if (response === undefined) {
+    if (response.status !== 200) {
       res.status(500).json({ result: 'Something went wrong' });
     }
     // prisma update postCounter +1
