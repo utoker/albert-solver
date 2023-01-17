@@ -18,8 +18,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       },
     });
     res.status(200).json({ newAssessment });
-
-    // res.redirect(307, `/study-room/${newAssessment.id}`);
   }
 };
 

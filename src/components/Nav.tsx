@@ -17,7 +17,6 @@ import {
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import React, { type FC, useState, type Key } from 'react';
-import { Logo } from './Logo';
 
 const Nav: FC = () => {
   const { data: authData, status: authStatus } = useSession();
@@ -161,7 +160,6 @@ const Nav: FC = () => {
           {/* <Navbar.Link isActive={router.route === '/'} href="/">
             Home
           </Navbar.Link> */}
-
           <Navbar.Link href="/pricing" isActive={router.route === '/pricing'}>
             Pricing
           </Navbar.Link>
