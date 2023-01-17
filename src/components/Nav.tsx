@@ -5,6 +5,7 @@ import {
   Avatar,
   Button,
   Dropdown,
+  Image,
   Input,
   Link,
   Modal,
@@ -145,19 +146,21 @@ const Nav: FC = () => {
             aria-label="toggle-navigation"
             id="toggle-navigation"
           />
-          <Logo />
-          <Text b color="inherit" hideIn="xs">
-            Albert Solver
-          </Text>
+          <Link href="/" color="inherit">
+            <Image src="/logoAA.png" alt="Logo" height={36} width={36} />
+            <Text b color="inherit" hideIn="xs">
+              Albert Solver
+            </Text>
+          </Link>
         </Navbar.Brand>
         <Navbar.Content
           enableCursorHighlight
           hideIn="sm"
           activeColor="secondary"
         >
-          <Navbar.Link isActive={router.route === '/'} href="/">
+          {/* <Navbar.Link isActive={router.route === '/'} href="/">
             Home
-          </Navbar.Link>
+          </Navbar.Link> */}
 
           <Navbar.Link href="/pricing" isActive={router.route === '/pricing'}>
             Pricing

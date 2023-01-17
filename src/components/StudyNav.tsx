@@ -1,13 +1,20 @@
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Avatar, Button, Dropdown, Navbar, Text } from '@nextui-org/react';
+import {
+  Avatar,
+  Button,
+  Dropdown,
+  Image,
+  Link,
+  Navbar,
+  Text,
+} from '@nextui-org/react';
 import { type Assessment } from '@prisma/client';
 import axios from 'axios';
 import { signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import React, { type FC, type Key } from 'react';
 import AssessmentButton from './AssessmentButton';
-import { Logo } from './Logo';
 
 type chatLog = {
   user: string;
@@ -79,13 +86,15 @@ const StudyNav: FC<Props> = ({
           aria-label="toggle-navigation"
           id="toggle-navigation"
         />
-        <Logo />
-        <Text b color="inherit" hideIn="xs">
-          Albert Solver
-        </Text>
+        <Link href="/" color="inherit">
+          <Image src="/logoAA.png" alt="Logo" height={36} width={36} />
+          <Text b hideIn="xs">
+            Albert Solver
+          </Text>
+        </Link>
       </Navbar.Brand>
       <Navbar.Content enableCursorHighlight activeColor="secondary">
-        <Navbar.Link href="/">Home</Navbar.Link>
+        {/* <Navbar.Link href="/">Home</Navbar.Link> */}
         <Navbar.Link href="/pricing">Pricing</Navbar.Link>
         <Navbar.Link isActive href="/study-room">
           Study Room
