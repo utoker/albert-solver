@@ -66,56 +66,63 @@ const StudyRoom: NextPage<PageProps> = ({
   const basicInputLimit = 500;
   const proInputLimit = 5000;
   const inputRef = useRef<HTMLTextAreaElement>(null);
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    if (!input || loading) return;
-    setLoading(true);
-    const messages = [{ user: 'Student', message: input }];
-    if (subscription === 'basic' && input.length > basicInputLimit) {
-      setLoading(false);
-      setErrorMessage('Message too long! (max 500 characters)');
-      modalHandler();
-      return;
-    }
-    if (subscription === 'pro' && input.length > proInputLimit) {
-      setLoading(false);
-      setErrorMessage('Message too long! (max 5000 characters)');
-      modalHandler();
-      return;
-    }
-    if (input.length < 8) {
-      setLoading(false);
-      setErrorMessage('Message too short! (min 8 characters)');
-      modalHandler();
-      return;
-    }
-    try {
-      const res = await axios.post('/api/generate', {
-        userId: authSession?.user?.id,
-        messages: messages.map((message) => message.message).join('\n'),
-      });
-      const newAssres = await axios.post('/api/assessment-create', {
-        // first 18 characters of the question
-        assessmentName: input.slice(0, 18),
-        chatLog: JSON.stringify([
-          { user: 'Student', message: input },
-          { user: 'AI', message: res.data.result },
-        ]),
-      });
-      setAssessments((prev) => [...prev, newAssres.data.newAssessment]);
-      router.push(`/study-room/${newAssres.data.newAssessment.id}`);
-      setMessageCount((prev) => prev++);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-      reset();
-    }
-  };
-
   const formRef = useRef<HTMLFormElement>(null);
+  const reset = useCallback(() => {
+    // reset to the initial values by using form ref
+    // or button type="reset" https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#attr-type
+    formRef.current?.reset();
+  }, [formRef]);
+  const handleSubmit = useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    async (e: any) => {
+      e.preventDefault();
+      if (!input || loading) return;
+      setLoading(true);
+      const messages = [{ user: 'Student', message: input }];
+      if (subscription === 'basic' && input.length > basicInputLimit) {
+        setLoading(false);
+        setErrorMessage('Message too long! (max 500 characters)');
+        modalHandler();
+        return;
+      }
+      if (subscription === 'pro' && input.length > proInputLimit) {
+        setLoading(false);
+        setErrorMessage('Message too long! (max 5000 characters)');
+        modalHandler();
+        return;
+      }
+      if (input.length < 8) {
+        setLoading(false);
+        setErrorMessage('Message too short! (min 8 characters)');
+        modalHandler();
+        return;
+      }
+      try {
+        const res = await axios.post('/api/generate', {
+          userId: authSession?.user?.id,
+          messages: messages.map((message) => message.message).join('\n'),
+        });
+        const newAssres = await axios.post('/api/assessment-create', {
+          // first 18 characters of the question
+          assessmentName: input.slice(0, 18),
+          chatLog: JSON.stringify([
+            { user: 'Student', message: input },
+            { user: 'AI', message: res.data.result },
+          ]),
+        });
+        setAssessments((prev) => [...prev, newAssres.data.newAssessment]);
+        router.push(`/study-room/${newAssres.data.newAssessment.id}`);
+        setMessageCount((prev) => prev++);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+        reset();
+      }
+    },
+    [input, loading, subscription, authSession, router, reset]
+  );
+
   const onTextareaKeyDown = useCallback(
     (e: React.KeyboardEvent<FormElement>) => {
       if (e.keyCode === 13 && e.shiftKey === false) {
@@ -125,11 +132,6 @@ const StudyRoom: NextPage<PageProps> = ({
     },
     [formRef]
   );
-  const reset = useCallback(() => {
-    // reset to the initial values by using form ref
-    // or button type="reset" https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#attr-type
-    formRef.current?.reset();
-  }, [formRef]);
 
   const [visible, setVisible] = useState(false);
   const modalHandler = () => setVisible(true);
