@@ -197,11 +197,11 @@ const StudyRoom: NextPage<PageProps> = ({
               </form>
               {subscription === 'basic' && (
                 <Text size="$sm" css={{ ta: 'center' }}>
-                  Basic users can only send 10 messages per day. Remeinig
+                  Basic users can only send 10 messages per day. Remaining
                   messages today: {10 - messageCount}
                 </Text>
               )}
-              <Spacer y={1} />
+              <Spacer y={subscription === 'pro' ? 1 : 0} />
             </div>
           </Container>
         </Grid>
