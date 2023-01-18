@@ -1,6 +1,7 @@
 import { Container, Row, Spacer, Text } from '@nextui-org/react';
 import { type NextPage } from 'next';
 import dynamic from 'next/dynamic';
+import { useRef } from 'react';
 import Footer from '../components/Footer';
 
 // This is a workaround for hydration issues with Next.js
@@ -9,6 +10,7 @@ const Nav = dynamic(() => import('../components/Nav'), {
 });
 
 const Home: NextPage = () => {
+  const video = useRef<HTMLVideoElement>(null);
   return (
     <>
       <Nav />
@@ -26,7 +28,6 @@ const Home: NextPage = () => {
             Ace Your Homework
           </Text>
         </Row>
-        <Spacer y={0.5} />
         <Row justify="center" align="center">
           <Text
             hideIn={'sm'}
@@ -41,17 +42,36 @@ const Home: NextPage = () => {
         </Row>
         <Spacer y={0.5} />
         <Row justify="center" align="center">
-          <video
-            loop
-            autoPlay
-            muted
-            style={{
-              width: '100%',
-              maxWidth: '772px',
-            }}
-          >
-            <source src="./video.mp4" type="video/mp4" />
-          </video>
+          <div style={{ position: 'relative' }}>
+            <video
+              ref={video}
+              loop
+              autoPlay
+              playsInline
+              muted
+              style={{
+                width: '100%',
+                maxWidth: '772px',
+                height: 'auto',
+              }}
+            >
+              <source src="./video.mp4" type="video/mp4" />
+            </video>
+            {/* <div
+              onClick={() => {
+                video.current?.play();
+                console.log('clicked');
+              }}
+              style={{
+                position: 'absolute',
+                width: '50px',
+                height: '50px',
+                backgroundColor: 'black',
+                bottom: '50%',
+                left: '50%',
+              }}
+            ></div> */}
+          </div>
         </Row>
       </Container>
       <Footer />
