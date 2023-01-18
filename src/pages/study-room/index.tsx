@@ -163,7 +163,7 @@ const StudyRoom: NextPage<PageProps> = ({
         visible={visible}
       />
       <Grid.Container css={{ height: 'calc(100vh - 76px)' }}>
-        <Grid xs={0} sm={1.5}>
+        <Grid xs={0} sm={2} md={1.5}>
           <SideMenu
             assessments={assessments}
             chatLogs={chatLogs}
@@ -171,7 +171,7 @@ const StudyRoom: NextPage<PageProps> = ({
             setChatLog={(x) => setChatLog(x)}
           />
         </Grid>
-        <Grid xs={12} sm={10.5}>
+        <Grid xs={12} sm={10} md={10.5}>
           <Container className={styles.chatbox}>
             <div className={styles.chatLog}>
               <Examples examplePress={examplePress} />
@@ -190,6 +190,7 @@ const StudyRoom: NextPage<PageProps> = ({
                 {authSession && (
                   <Row>
                     <Textarea
+                      css={{ ml: '$18' }}
                       ref={inputRef}
                       onKeyDown={(event) => onTextareaKeyDown(event)}
                       initialValue=""
@@ -202,7 +203,13 @@ const StudyRoom: NextPage<PageProps> = ({
                       fullWidth
                     />
                     <Spacer x={0.5} />
-                    <Button auto ghost type="submit" id="submit">
+                    <Button
+                      auto
+                      ghost
+                      type="submit"
+                      id="submit"
+                      css={{ h: '37px' }}
+                    >
                       {loading ? (
                         <Loading type="points" color="currentColor" size="sm" />
                       ) : (

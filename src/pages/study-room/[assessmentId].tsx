@@ -53,7 +53,7 @@ const StudyRoom: NextPage<PageProps> = ({
         setChatLog={(x) => setChatLog(x)}
       />
       <Grid.Container css={{ height: 'calc(100vh - 76px)' }}>
-        <Grid xs={0} md={2.2} lg={1.9}>
+        <Grid xs={0} sm={2} md={1.5}>
           <SideMenu
             assessments={assessments}
             chatLogs={chatLogs}
@@ -61,7 +61,7 @@ const StudyRoom: NextPage<PageProps> = ({
             setChatLog={(x) => setChatLog(x)}
           />
         </Grid>
-        <Grid xs={12} md={9.8} lg={10.1}>
+        <Grid xs={12} sm={10} md={10.5}>
           <ChatBox
             messageCount={messageCountFromDB}
             assessmentId={assessmentId}

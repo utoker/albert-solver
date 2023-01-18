@@ -30,7 +30,7 @@ const Features: NextPage = () => {
         <Row justify="center" align="center">
           <Text
             h1
-            size={'$4xl'}
+            // size={'$4xl'}
             css={{
               textGradient: '45deg, $blue600 -20%, $pink600 50%',
             }}
@@ -42,7 +42,7 @@ const Features: NextPage = () => {
         <Row justify="center" align="center">
           <Text
             hideIn={'sm'}
-            size={'$3xl'}
+            // size={'$3xl'}
             h2
             css={{
               textGradient: '45deg, $purple600 -20%, $pink600 100%',
@@ -57,7 +57,7 @@ const Features: NextPage = () => {
             <Container key={i}>
               <Card>
                 <Card.Header>
-                  <Text b>{feature.title}</Text>
+                  <Text h3>{feature.title}</Text>
                 </Card.Header>
                 <Card.Body>
                   <Text>{feature.description}</Text>

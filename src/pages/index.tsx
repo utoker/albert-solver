@@ -53,24 +53,12 @@ const Home: NextPage = () => {
                 width: '100%',
                 maxWidth: '772px',
                 height: 'auto',
+                border: '1px solid #7a28c7',
+                borderRadius: '10px',
               }}
             >
               <source src="./video.mp4" type="video/mp4" />
             </video>
-            {/* <div
-              onClick={() => {
-                video.current?.play();
-                console.log('clicked');
-              }}
-              style={{
-                position: 'absolute',
-                width: '50px',
-                height: '50px',
-                backgroundColor: 'black',
-                bottom: '50%',
-                left: '50%',
-              }}
-            ></div> */}
           </div>
         </Row>
       </Container>

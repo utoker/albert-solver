@@ -138,7 +138,7 @@ const ChatBox: FC<ChatBoxProps> = ({
         visible={visible}
         ModalCloseHandler={() => ModalCloseHandler()}
       />
-      <Container className={styles.chatbox}>
+      <Container className={styles.chatbox} css={{ ml: '$18' }}>
         <div className={styles.chatLog} ref={scrollRef}>
           {chatLog &&
             chatLog.map((message, i) => (
