@@ -13,5 +13,5 @@ jobs:
       - name: Make HTTP POST request
         env:
           API_KEY: ${{ secrets.API_ROUTE_SECRET }}
-        run:
+        run: |
           curl -X POST -H "Content-Type: application/json" -H "Authorization:$API_KEY" https://albertsolver.com/api/counter-reset
