@@ -13,6 +13,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Make HTTP POST request
-        run: |
+    - name: Make HTTP POST request
+      run: |
         curl -X POST -H "Content-Type: application/json" -H "Authorization:${API_KEY}" ${ENDPOINT_URL}
