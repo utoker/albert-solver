@@ -124,6 +124,13 @@ const ChatBox: FC<ChatBoxProps> = ({
     console.log('closed');
   };
 
+  const scrollRef = useRef<HTMLDivElement>(null);
+  React.useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [messageCount]);
+
   return (
     <>
       <ErrorModal
@@ -132,7 +139,7 @@ const ChatBox: FC<ChatBoxProps> = ({
         ModalCloseHandler={() => ModalCloseHandler()}
       />
       <Container className={styles.chatbox}>
-        <div className={styles.chatLog}>
+        <div className={styles.chatLog} ref={scrollRef}>
           {chatLog &&
             chatLog.map((message, i) => (
               <ChatMessage message={message} key={i} />

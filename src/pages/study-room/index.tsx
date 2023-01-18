@@ -13,7 +13,7 @@ import {
 import axios from 'axios';
 import { type GetServerSideProps, type NextPage } from 'next';
 import { getSession, useSession } from 'next-auth/react';
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import { prisma } from '../../server/db/client';
 import styles from './study-room.module.css';
@@ -22,6 +22,7 @@ import { useRouter } from 'next/router';
 import SideMenu from '../../components/SideMenu';
 import dynamic from 'next/dynamic';
 import ErrorModal from '../../components/ErrorModal';
+import Examples from '../../components/Examples';
 
 // This is a workaround for hydration issues with Next.js
 const StudyNav = dynamic(() => import('../../components/StudyNav'), {
@@ -64,8 +65,10 @@ const StudyRoom: NextPage<PageProps> = ({
   const subscription = authSession?.user?.subscription;
   const basicInputLimit = 500;
   const proInputLimit = 5000;
+  const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  const handleSubmit = async (e: React.SyntheticEvent) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     if (!input || loading) return;
     setLoading(true);
@@ -128,13 +131,22 @@ const StudyRoom: NextPage<PageProps> = ({
     formRef.current?.reset();
   }, [formRef]);
 
-  const [visible, setVisible] = React.useState(false);
+  const [visible, setVisible] = useState(false);
   const modalHandler = () => setVisible(true);
-  const ModalCloseHandler = () => {
-    setVisible(false);
-    console.log('closed');
-  };
+  const ModalCloseHandler = () => setVisible(false);
+  const [exampleClicked, setExampleClicked] = useState(false);
+  useEffect(() => {
+    if (inputRef.current !== null && exampleClicked) {
+      setExampleClicked(false);
+      inputRef.current.value = input;
+      handleSubmit(new Event('submit'));
+    }
+  }, [exampleClicked, handleSubmit, input]);
 
+  const examplePress = (input: React.SetStateAction<string>) => {
+    setExampleClicked(true);
+    setInput(input);
+  };
   return (
     <>
       <StudyNav
@@ -149,7 +161,7 @@ const StudyRoom: NextPage<PageProps> = ({
         visible={visible}
       />
       <Grid.Container css={{ height: 'calc(100vh - 76px)' }}>
-        <Grid xs={0} sm={3} md={2}>
+        <Grid xs={0} sm={1.5}>
           <SideMenu
             assessments={assessments}
             chatLogs={chatLogs}
@@ -157,9 +169,11 @@ const StudyRoom: NextPage<PageProps> = ({
             setChatLog={(x) => setChatLog(x)}
           />
         </Grid>
-        <Grid xs={12} sm={9} md={10}>
+        <Grid xs={12} sm={10.5}>
           <Container className={styles.chatbox}>
-            <div className={styles.chatLog}></div>
+            <div className={styles.chatLog}>
+              <Examples examplePress={examplePress} />
+            </div>
             <div className={styles.chatInputHolder}>
               <form
                 ref={formRef}
@@ -174,6 +188,7 @@ const StudyRoom: NextPage<PageProps> = ({
                 {authSession && (
                   <Row>
                     <Textarea
+                      ref={inputRef}
                       onKeyDown={(event) => onTextareaKeyDown(event)}
                       initialValue=""
                       minRows={1}

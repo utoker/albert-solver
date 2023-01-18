@@ -2,11 +2,20 @@ import { Card, Text } from '@nextui-org/react';
 import React, { type FC } from 'react';
 import styles from '../pages/study-room/study-room.module.css';
 
-const Examples: FC = () => {
+type ExamplesProps = {
+  examplePress: (input: React.SetStateAction<string>) => void;
+};
+const Examples: FC<ExamplesProps> = ({ examplePress }) => {
+  const inputs = [
+    'What type of protests did Martin Luther King Jr organize?',
+    'What is the philosophy of Epictetus?',
+    'What is the string theory in physics?',
+  ];
   return (
     <div
       className={styles.mdChatLog}
       style={{
+        padding: '56px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -37,28 +46,23 @@ const Examples: FC = () => {
             <Text h3 css={{ margin: '0', textAlign: 'center' }}>
               Examples
             </Text>
-            <Card>
-              <Card.Body>
-                <Text css={{ textAlign: 'center' }}>
-                  &quot;What type of protests did Martin Luther King Jr
-                  organize?&quot;
-                </Text>
-              </Card.Body>
-            </Card>
-            <Card>
-              <Card.Body>
-                <Text css={{ textAlign: 'center' }}>
-                  &quot;What is the philosophy of Epictetus?&quot;
-                </Text>
-              </Card.Body>
-            </Card>
-            <Card>
-              <Card.Body>
-                <Text css={{ textAlign: 'center' }}>
-                  &quot;What is the string theory in physics?&quot;
-                </Text>
-              </Card.Body>
-            </Card>
+            {inputs.map((input) => {
+              return (
+                <Card
+                  key={input}
+                  isPressable
+                  onPress={() => {
+                    examplePress(input);
+                  }}
+                >
+                  <Card.Body>
+                    <Text css={{ textAlign: 'center' }}>
+                      &quot;{input}&quot;
+                    </Text>
+                  </Card.Body>
+                </Card>
+              );
+            })}
           </div>
           <div
             style={{
