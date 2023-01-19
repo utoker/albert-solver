@@ -20,7 +20,6 @@ const Success: NextPage = () => {
           <Card.Header css={{ jc: 'center' }}>
             <Text
               h1
-              // size={'$4xl'}
               css={{
                 textGradient: '45deg, $blue600 -20%, $pink600 50%',
               }}
@@ -30,7 +29,6 @@ const Success: NextPage = () => {
           </Card.Header>
           <Card.Body>
             <Text
-              // size={'$3xl'}
               h3
               css={{
                 textGradient: '45deg, $purple600 -20%, $pink600 100%',

@@ -7,9 +7,9 @@ type ExamplesProps = {
 };
 const Examples: FC<ExamplesProps> = ({ examplePress }) => {
   const inputs = [
-    'What type of protests did Martin Luther King Jr organize?',
-    'What is the philosophy of Epictetus?',
-    'What is the string theory in physics?',
+    'Write an assay about the importance of mental health.',
+    'Write a short story about the effects of climate change.',
+    'Write a poem about the importance of family.',
   ];
   return (
     <div
