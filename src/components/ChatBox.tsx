@@ -209,8 +209,8 @@ const ChatBox: FC<ChatBoxProps> = ({
           </form>
           {subscription === 'basic' && (
             <Text size="$sm" css={{ ta: 'center' }}>
-              Basic users can only send 10 messages per day. Remaining messages
-              today: {10 - messageCount}
+              Basic users can only send 10 questions per day. Remaining
+              questions today: {10 - messageCount}
             </Text>
           )}
           <Spacer y={subscription === 'pro' ? 1 : 0} />
