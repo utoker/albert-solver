@@ -49,8 +49,6 @@ const Nav: FC = () => {
   const [email, setEmail] = useState('');
   const sendLoginVerification = (e: React.SyntheticEvent) => {
     e.preventDefault();
-
-    // Notice, we are also redirecting users to the protected route instead of the homepage after signing in.
     signIn('email', { callbackUrl: '/study-room', email });
   };
 
@@ -149,6 +147,16 @@ const Nav: FC = () => {
             <Image src="/logoAA.png" alt="Logo" height={36} width={36} />
             <Text b color="inherit" hideIn="xs">
               Albert Solver
+              <Text
+                css={{
+                  marginTop: '-36px',
+                  fontSize: '$xs',
+                  marginLeft: '43px',
+                  color: '$secondary',
+                }}
+              >
+                OPEN BETA
+              </Text>
             </Text>
           </Link>
         </Navbar.Brand>
