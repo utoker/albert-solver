@@ -38,7 +38,7 @@ const generate = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   try {
     const response = await openai.createCompletion({
       model: 'text-davinci-003',
-      prompt: `You are a super intelligent AI made for helping students with their homework and assessments. \n${messages}`,
+      prompt: `The following is a conversation with an AI assistant named Albert Solver. The assistant is helpful, creative, clever, and very friendly. \n${messages}`,
       max_tokens: 2048,
       temperature: 0.7,
       top_p: 1,
