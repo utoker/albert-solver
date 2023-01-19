@@ -26,8 +26,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         mode: 'subscription',
         payment_method_types: ['card'],
         line_items: lineItems,
-        success_url: `${env.NEXTAUTH_URL}/pricing`,
-        cancel_url: `${env.NEXTAUTH_URL}/`,
+        success_url: `${env.NEXTAUTH_URL}/success`,
+        cancel_url: `${env.NEXTAUTH_URL}/cancel`,
       });
       if (!stripeSession.url) throw new Error('No stripe session url found');
       res.redirect(303, stripeSession.url);
