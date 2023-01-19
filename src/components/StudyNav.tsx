@@ -88,8 +88,18 @@ const StudyNav: FC<Props> = ({
         />
         <Link href="/" color="inherit">
           <Image src="/logoAA.png" alt="Logo" height={36} width={36} />
-          <Text b hideIn="xs">
+          <Text b color="inherit" hideIn="xs">
             Albert Solver
+            <Text
+              css={{
+                marginTop: '-36px',
+                fontSize: '$xs',
+                marginLeft: '43px',
+                color: '$secondary',
+              }}
+            >
+              OPEN BETA
+            </Text>
           </Text>
         </Link>
       </Navbar.Brand>
