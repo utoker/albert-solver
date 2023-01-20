@@ -12,7 +12,14 @@ import {
 } from '@nextui-org/react';
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
-import React, { useCallback, useRef, useState, type FC } from 'react';
+import React, {
+  type FormEvent,
+  type KeyboardEvent,
+  type FC,
+  useCallback,
+  useRef,
+  useState,
+} from 'react';
 import styles from '../pages/study-room/study-room.module.css';
 import ChatMessage from './ChatMessage';
 import ErrorModal from './ErrorModal';
@@ -47,7 +54,7 @@ const ChatBox: FC<ChatBoxProps> = ({
   const formRef = useRef<HTMLFormElement>(null);
 
   const onTextareaKeyDown = useCallback(
-    (e: React.KeyboardEvent<FormElement>) => {
+    (e: KeyboardEvent<FormElement>) => {
       if (e.keyCode === 13 && e.shiftKey === false) {
         e.preventDefault();
         formRef.current?.requestSubmit();
@@ -62,7 +69,7 @@ const ChatBox: FC<ChatBoxProps> = ({
   const subscription = authSession?.user?.subscription;
   const basicInputLimit = 500;
   const proInputLimit = 5000;
-  const handleSubmit = async (e: React.SyntheticEvent) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!input || loading) return;
     setLoading(true);

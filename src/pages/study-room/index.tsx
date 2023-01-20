@@ -13,7 +13,13 @@ import {
 import axios from 'axios';
 import { type GetServerSideProps, type NextPage } from 'next';
 import { getSession, useSession } from 'next-auth/react';
-import React, { useState, useCallback, useRef, useEffect } from 'react';
+import React, {
+  useState,
+  useCallback,
+  useRef,
+  useEffect,
+  type FormEvent,
+} from 'react';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import { prisma } from '../../server/db/client';
 import styles from './study-room.module.css';
@@ -73,8 +79,7 @@ const StudyRoom: NextPage<PageProps> = ({
     formRef.current?.reset();
   }, [formRef]);
   const handleSubmit = useCallback(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    async (e: any) => {
+    async (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       if (!input || loading) return;
       setLoading(true);
@@ -141,9 +146,8 @@ const StudyRoom: NextPage<PageProps> = ({
     if (inputRef.current !== null && exampleClicked) {
       setExampleClicked(false);
       inputRef.current.value = input;
-      handleSubmit(new Event('submit'));
     }
-  }, [exampleClicked, handleSubmit, input]);
+  }, [exampleClicked, input]);
 
   const examplePress = (input: React.SetStateAction<string>) => {
     setExampleClicked(true);
