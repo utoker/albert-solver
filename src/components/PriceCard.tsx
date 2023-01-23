@@ -76,7 +76,7 @@ const PriceCard: NextPage<Props> = ({
 
           {buttonText === 'Subscribe' && (
             <form
-              action={`/api/subscriptions/${planId}`}
+              action={`/api/stripe/subscriptions/${planId}`}
               method="POST"
               role="link"
             >
@@ -100,7 +100,7 @@ const PriceCard: NextPage<Props> = ({
 
           {buttonText === 'Manage Subscription' && (
             <form
-              action={`/api/create-portal-session`}
+              action={`/api/stripe/create-portal-session`}
               method="POST"
               role="link"
             >

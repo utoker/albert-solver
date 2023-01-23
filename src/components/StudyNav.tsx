@@ -48,7 +48,7 @@ const StudyNav: FC<Props> = ({ assessments }) => {
         });
         break;
       case 'pro':
-        router.push('/api/create-portal-session');
+        router.push('/api/stripe/create-portal-session');
         break;
       case 'upgrade':
         router.push('/pricing');

@@ -1,15 +1,15 @@
 import { type NextApiRequest, type NextApiResponse } from 'next';
-import { unstable_getServerSession } from 'next-auth';
+import { getSession } from 'next-auth/react/index.js';
 import Stripe from 'stripe';
-import { env } from '../../../env/server.mjs';
-import { authOptions } from '../auth/[...nextauth]';
+import { env } from '../../../../env/server.mjs';
 
 const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
   apiVersion: '2022-11-15',
 });
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const authSession = await unstable_getServerSession(req, res, authOptions);
+  const authSession = await getSession({ req });
+
   if (!authSession) {
     res.send({ error: 'Not authenticated' });
   }
