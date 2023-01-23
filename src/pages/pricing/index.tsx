@@ -36,7 +36,7 @@ type plan = {
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
-const NextStripePricingTable: NextPage = () => {
+const Index: NextPage = () => {
   const { data: plans } = useSWR('/api/stripe/get-prices', fetcher);
   const { data: authSession, status } = useSession();
   const [isMonthly, setIsMonthly] = useState(true);
@@ -196,4 +196,4 @@ const NextStripePricingTable: NextPage = () => {
   );
 };
 
-export default NextStripePricingTable;
+export default Index;

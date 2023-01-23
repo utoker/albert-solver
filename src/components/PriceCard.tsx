@@ -6,8 +6,6 @@ import { signIn } from 'next-auth/react';
 import NextLink from 'next/link';
 import type Stripe from 'stripe';
 
-//todo - add modal for signing in
-
 type Props = {
   planId?: string;
   buttonText: string;
