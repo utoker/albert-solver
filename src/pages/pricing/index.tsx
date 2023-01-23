@@ -53,11 +53,11 @@ const NextStripePricingTable: NextPage<Props> = () => {
   const [proButton, setProButton] = useState('');
   const [basicButton, setBasicButton] = useState('');
 
-  const monthlyProPlan = plans.find(
+  const monthlyProPlan = plans?.find(
     (plan: { interval: string; active: boolean }) =>
       plan.interval === 'month' && plan.active === true
   );
-  const yearlyProPlan = plans.find(
+  const yearlyProPlan = plans?.find(
     (plan: { interval: string; active: boolean }) =>
       plan.interval === 'year' && plan.active === true
   );
