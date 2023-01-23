@@ -19,7 +19,9 @@ import React, { useEffect, useState } from 'react';
 import Stripe from 'stripe';
 import Footer from '../../components/Footer';
 import PriceCard from '../../components/PriceCard';
+import useSWR, { preload } from 'swr';
 import { env } from '../../env/server.mjs';
+import axios from 'axios';
 
 const Nav = dynamic(() => import('../../components/Nav'), {
   ssr: false,
@@ -42,17 +44,22 @@ type Props = {
     active: boolean;
   }[];
 };
+const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
-const NextStripePricingTable: NextPage<Props> = ({ plans }) => {
+const NextStripePricingTable: NextPage<Props> = () => {
+  const { data: plans } = useSWR('/api/stripe/get-prices', fetcher);
   const { data: authSession, status } = useSession();
   const [isMonthly, setIsMonthly] = useState(true);
   const [proButton, setProButton] = useState('');
   const [basicButton, setBasicButton] = useState('');
+
   const monthlyProPlan = plans.find(
-    (plan) => plan.interval === 'month' && plan.active === true
+    (plan: { interval: string; active: boolean }) =>
+      plan.interval === 'month' && plan.active === true
   );
   const yearlyProPlan = plans.find(
-    (plan) => plan.interval === 'year' && plan.active === true
+    (plan: { interval: string; active: boolean }) =>
+      plan.interval === 'year' && plan.active === true
   );
 
   useEffect(() => {
@@ -198,36 +205,36 @@ const NextStripePricingTable: NextPage<Props> = ({ plans }) => {
 export default NextStripePricingTable;
 
 // ssr
-export const getServerSideProps: GetServerSideProps = async () => {
-  const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
-    apiVersion: '2022-11-15',
-  });
-  const { data: prices } = await stripe.prices.list();
+// export const getServerSideProps: GetServerSideProps = async () => {
+//   const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
+//     apiVersion: '2022-11-15',
+//   });
+//   const { data: prices } = await stripe.prices.list();
 
-  const plans = await Promise.all(
-    prices.map(async (price) => {
-      const product = await stripe.products.retrieve(price.product.toString());
-      return {
-        id: price.id,
-        name: product.name,
-        price: price.unit_amount,
-        currency: price.currency,
-        interval: price.recurring?.interval,
-        interval_count: price.recurring?.interval_count,
-        description: product.description,
-        metadata: product.metadata,
-        active: price.active,
-      };
-    })
-  );
-  const sortPlans = plans.sort((a, b) => {
-    if (a.price && b.price) {
-      return a.price - b.price;
-    }
-    return 0;
-  });
+//   const plans = await Promise.all(
+//     prices.map(async (price) => {
+//       const product = await stripe.products.retrieve(price.product.toString());
+//       return {
+//         id: price.id,
+//         name: product.name,
+//         price: price.unit_amount,
+//         currency: price.currency,
+//         interval: price.recurring?.interval,
+//         interval_count: price.recurring?.interval_count,
+//         description: product.description,
+//         metadata: product.metadata,
+//         active: price.active,
+//       };
+//     })
+//   );
+//   const sortPlans = plans.sort((a, b) => {
+//     if (a.price && b.price) {
+//       return a.price - b.price;
+//     }
+//     return 0;
+//   });
 
-  return {
-    props: { plans: sortPlans },
-  };
-};
+//   return {
+//     props: { plans: sortPlans },
+//   };
+// };
