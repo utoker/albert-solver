@@ -4,7 +4,6 @@ import React from 'react';
 const Footer = () => {
   return (
     <Container lg>
-      <Spacer y={2} />
       <Row
         align="center"
         css={{

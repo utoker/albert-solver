@@ -7,46 +7,36 @@ import {
   Switch,
   Text,
 } from '@nextui-org/react';
-import { type GetServerSideProps, type NextPage } from 'next';
-import { type BuiltInProviderType } from 'next-auth/providers';
-import {
-  type ClientSafeProvider,
-  type LiteralUnion,
-  useSession,
-} from 'next-auth/react';
+import { type NextPage } from 'next';
+import { useSession } from 'next-auth/react';
 import dynamic from 'next/dynamic';
 import React, { useEffect, useState } from 'react';
-import Stripe from 'stripe';
 import Footer from '../../components/Footer';
 import PriceCard from '../../components/PriceCard';
-import useSWR, { preload } from 'swr';
-import { env } from '../../env/server.mjs';
+import useSWR from 'swr';
 import axios from 'axios';
+import type Stripe from 'stripe';
+import Head from 'next/head';
 
 const Nav = dynamic(() => import('../../components/Nav'), {
   ssr: false,
 });
 
-type Props = {
-  providers: Record<
-    LiteralUnion<BuiltInProviderType, string>,
-    ClientSafeProvider
-  >;
-  plans: {
-    id: string;
-    name: string;
-    price: number | null;
-    currency: string;
-    interval: Stripe.Price.Recurring.Interval | undefined;
-    interval_count: number | undefined;
-    description: string | null;
-    metadata: Stripe.Metadata;
-    active: boolean;
-  }[];
+type plan = {
+  id: string;
+  name: string;
+  price: number | null;
+  currency: string;
+  interval: Stripe.Price.Recurring.Interval | undefined;
+  interval_count: number | undefined;
+  description: string | null;
+  metadata: Stripe.Metadata;
+  active: boolean;
 };
+
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
-const NextStripePricingTable: NextPage<Props> = () => {
+const NextStripePricingTable: NextPage = () => {
   const { data: plans } = useSWR('/api/stripe/get-prices', fetcher);
   const { data: authSession, status } = useSession();
   const [isMonthly, setIsMonthly] = useState(true);
@@ -54,12 +44,10 @@ const NextStripePricingTable: NextPage<Props> = () => {
   const [basicButton, setBasicButton] = useState('');
 
   const monthlyProPlan = plans?.find(
-    (plan: { interval: string; active: boolean }) =>
-      plan.interval === 'month' && plan.active === true
+    (plan: plan) => plan.interval === 'month' && plan.active === true
   );
   const yearlyProPlan = plans?.find(
-    (plan: { interval: string; active: boolean }) =>
-      plan.interval === 'year' && plan.active === true
+    (plan: plan) => plan.interval === 'year' && plan.active === true
   );
 
   useEffect(() => {
@@ -84,18 +72,24 @@ const NextStripePricingTable: NextPage<Props> = () => {
   }, [authSession, status]);
 
   return (
-    <div>
+    <>
+      <Head>
+        <link
+          rel="preload"
+          href="/api/stripe/get-prices"
+          as="fetch"
+          crossOrigin="anonymous"
+        />
+      </Head>
       <Nav />
-      <Spacer y={2} />
+      <Spacer y={1} />
       <Container>
         <Row justify="center" align="center">
           <Text
             h1
-            size={'$4xl'}
             css={{
               textGradient: '45deg, $blue600 -20%, $pink600 50%',
             }}
-            weight="bold"
           >
             Affordable Pricing
           </Text>
@@ -198,43 +192,8 @@ const NextStripePricingTable: NextPage<Props> = () => {
       </Container>
       <Spacer y={2} />
       <Footer />
-    </div>
+    </>
   );
 };
 
 export default NextStripePricingTable;
-
-// ssr
-// export const getServerSideProps: GetServerSideProps = async () => {
-//   const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
-//     apiVersion: '2022-11-15',
-//   });
-//   const { data: prices } = await stripe.prices.list();
-
-//   const plans = await Promise.all(
-//     prices.map(async (price) => {
-//       const product = await stripe.products.retrieve(price.product.toString());
-//       return {
-//         id: price.id,
-//         name: product.name,
-//         price: price.unit_amount,
-//         currency: price.currency,
-//         interval: price.recurring?.interval,
-//         interval_count: price.recurring?.interval_count,
-//         description: product.description,
-//         metadata: product.metadata,
-//         active: price.active,
-//       };
-//     })
-//   );
-//   const sortPlans = plans.sort((a, b) => {
-//     if (a.price && b.price) {
-//       return a.price - b.price;
-//     }
-//     return 0;
-//   });
-
-//   return {
-//     props: { plans: sortPlans },
-//   };
-// };

@@ -27,8 +27,9 @@ import SideMenu from '../../components/SideMenu';
 import dynamic from 'next/dynamic';
 import ErrorModal from '../../components/ErrorModal';
 import Examples from '../../components/Examples';
-import useSWR, { preload } from 'swr';
+import useSWR from 'swr';
 import generate from '../../helpers/generate';
+import Head from 'next/head';
 
 // This is a workaround for hydration issues with Next.js
 const StudyNav = dynamic(() => import('../../components/StudyNav'), {
@@ -36,9 +37,6 @@ const StudyNav = dynamic(() => import('../../components/StudyNav'), {
 });
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
-
-preload('/api/assessment/get-all', fetcher);
-preload('/api/post-counter/get-count', fetcher);
 
 const StudyRoom: NextPage = () => {
   const { data: assessments, mutate } = useSWR(
@@ -138,6 +136,20 @@ const StudyRoom: NextPage = () => {
 
   return (
     <>
+      <Head>
+        <link
+          rel="preload"
+          href="/api/assessment/get-all"
+          as="fetch"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="/api/post-counter/get-count"
+          as="fetch"
+          crossOrigin="anonymous"
+        />
+      </Head>
       <StudyNav assessments={assessments || []} />
       <ErrorModal
         errorMessage={errorMessage}
