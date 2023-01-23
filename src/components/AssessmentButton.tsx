@@ -5,6 +5,7 @@ import { type Assessment } from '@prisma/client';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useState, type FC } from 'react';
+import { mutate } from 'swr';
 
 const AssessmentButton: FC<{
   changeAssessment: (id: string) => void;
@@ -34,10 +35,11 @@ const AssessmentButton: FC<{
 
   const handleEditAssessmentName = async () => {
     if (isEditMode) {
-      await axios.post('/api/assessment-name', {
+      await axios.post('/api/assessment/update-name', {
         assessmentName: newAssessmentName,
         assessmentId,
       });
+      mutate('/api/assessment/get-all');
     }
     setIsEditMode((prev) => !prev);
   };

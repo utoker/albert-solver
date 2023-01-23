@@ -1,8 +1,8 @@
-import { type NextApiRequest, type NextApiResponse } from 'next';
 import Stripe from 'stripe';
-import { env } from '../../env/server.mjs';
+import { type NextApiRequest, type NextApiResponse } from 'next';
+import { env } from '../../../env/server.mjs';
 import { buffer } from 'micro';
-import { prisma } from '../../server/db/client';
+import { prisma } from '../../../server/db/client';
 
 export const config = { api: { bodyParser: false } };
 //to start listening to stripe events

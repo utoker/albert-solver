@@ -1,18 +1,24 @@
 import { type NextApiRequest, type NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
-
-import { prisma } from '../../server/db/client';
+import { prisma } from '../../../server/db/client';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  // get the session
   const session = await getSession({ req });
+
   if (session?.user?.id) {
-    await prisma.assessment.deleteMany({
+    await prisma.assessment.delete({
       where: {
-        userId: req.body.userId,
+        id: req.body.assessmentId,
       },
     });
-    res.status(200).json('deleted');
+
+    const assessments = await prisma.assessment.findMany({
+      where: {
+        userId: session.user.id,
+      },
+    });
+
+    res.status(200).json(assessments);
   }
 };
 

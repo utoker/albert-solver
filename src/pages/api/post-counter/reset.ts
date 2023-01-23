@@ -1,7 +1,6 @@
 import { type NextApiRequest, type NextApiResponse } from 'next';
-import { env } from '../../env/server.mjs';
-
-import { prisma } from '../../server/db/client';
+import { env } from '../../../env/server.mjs';
+import { prisma } from '../../../server/db/client';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const auth = req.headers.authorization;

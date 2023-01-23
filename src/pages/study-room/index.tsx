@@ -11,8 +11,8 @@ import {
   Text,
 } from '@nextui-org/react';
 import axios from 'axios';
-import { type GetServerSideProps, type NextPage } from 'next';
-import { getSession, useSession } from 'next-auth/react';
+import { type NextPage } from 'next';
+import { useSession } from 'next-auth/react';
 import React, {
   useState,
   useCallback,
@@ -21,51 +21,38 @@ import React, {
   type FormEvent,
 } from 'react';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
-import { prisma } from '../../server/db/client';
 import styles from './study-room.module.css';
-import { type Assessment } from '@prisma/client';
 import { useRouter } from 'next/router';
 import SideMenu from '../../components/SideMenu';
 import dynamic from 'next/dynamic';
 import ErrorModal from '../../components/ErrorModal';
 import Examples from '../../components/Examples';
+import useSWR, { preload } from 'swr';
+import generate from '../../helpers/generate';
 
 // This is a workaround for hydration issues with Next.js
 const StudyNav = dynamic(() => import('../../components/StudyNav'), {
   ssr: false,
 });
 
-type PageProps = {
-  assessmentsFromDB: string;
-  messageCountFromDB: number;
-};
+const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
-const StudyRoom: NextPage<PageProps> = ({
-  assessmentsFromDB,
-  messageCountFromDB,
-}) => {
-  type chatLog = {
-    user: string;
-    message: string;
-  }[];
-  type chatLogsObject = {
-    [key: string]: chatLog;
-  };
-  const assessmentsParsed: Assessment[] = JSON.parse(assessmentsFromDB);
-  const [assessments, setAssessments] = useState(assessmentsParsed);
-  const logs = useCallback(() => {
-    const chatLogsObject: chatLogsObject = {};
-    assessments.forEach((assessment) => {
-      chatLogsObject[assessment.id] = JSON.parse(assessment.chatLog);
-    });
-    return chatLogsObject;
-  }, [assessments]);
-  const [chatLogs] = useState(logs());
-  const [chatLog, setChatLog] = useState([] as chatLog);
+preload('/api/assessment/get-all', fetcher);
+preload('/api/post-counter/get-count', fetcher);
+
+const StudyRoom: NextPage = () => {
+  const { data: assessments, mutate } = useSWR(
+    '/api/assessment/get-all',
+    fetcher
+  );
+  const { data: messageCount, mutate: mutateCount } = useSWR(
+    '/api/post-counter/get-count',
+    fetcher
+  );
+
   const [input, setInput] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
-  const [messageCount, setMessageCount] = useState(messageCountFromDB);
   const { data: authSession } = useSession();
   const router = useRouter();
   const subscription = authSession?.user?.subscription;
@@ -74,74 +61,69 @@ const StudyRoom: NextPage<PageProps> = ({
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const reset = useCallback(() => {
-    // reset to the initial values by using form ref
-    // or button type="reset" https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#attr-type
     formRef.current?.reset();
   }, [formRef]);
-  const handleSubmit = useCallback(
-    async (e: FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      if (!input || loading) return;
-      setLoading(true);
-      const messages = [{ user: 'Student', message: input }];
-      if (subscription === 'basic' && input.length > basicInputLimit) {
-        setLoading(false);
-        setErrorMessage('Message too long! (max 500 characters)');
-        modalHandler();
-        return;
-      }
-      if (subscription === 'pro' && input.length > proInputLimit) {
-        setLoading(false);
-        setErrorMessage('Message too long! (max 5000 characters)');
-        modalHandler();
-        return;
-      }
-      if (input.length < 8) {
-        setLoading(false);
-        setErrorMessage('Message too short! (min 8 characters)');
-        modalHandler();
-        return;
-      }
-      try {
-        const res = await axios.post('/api/generate', {
-          userId: authSession?.user?.id,
-          messages: messages.map((message) => message.message).join('\n'),
-        });
-        const newAssres = await axios.post('/api/assessment-create', {
-          // first 18 characters of the question
-          assessmentName: input.slice(0, 18),
-          chatLog: JSON.stringify([
-            { user: 'Student', message: input },
-            { user: 'AI', message: res.data.result },
-          ]),
-        });
-        setAssessments((prev) => [...prev, newAssres.data.newAssessment]);
-        router.push(`/study-room/${newAssres.data.newAssessment.id}`);
-        setMessageCount((prev) => prev++);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-        reset();
-      }
-    },
-    [input, loading, subscription, authSession, router, reset]
-  );
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!input || loading) return;
+    setLoading(true);
+    const messagesArr = [{ user: 'Student', message: input }];
+    const messages = messagesArr.map((message) => message.message).join('\n');
+    if (subscription === 'basic' && input.length > basicInputLimit) {
+      setLoading(false);
+      setErrorMessage('Message too long! (max 500 characters)');
+      modalHandler();
+      return;
+    }
+    if (subscription === 'pro' && input.length > proInputLimit) {
+      setLoading(false);
+      setErrorMessage('Message too long! (max 5000 characters)');
+      modalHandler();
+      return;
+    }
+    if (input.length < 3) {
+      setLoading(false);
+      setErrorMessage('Message too short! (min 3 characters)');
+      modalHandler();
+      return;
+    }
+    try {
+      const res = await generate(messages, messageCount, authSession);
+      const chatLog = JSON.stringify([
+        { user: 'Student', message: input },
+        { user: 'AI', message: res },
+      ]);
+      const newAssessment = await axios.post('/api/assessment/create', {
+        assessmentName: input.slice(0, 18),
+        chatLog,
+      });
+      mutate();
+      mutateCount();
+      router.push(`/study-room/${newAssessment.data.newAssessment.id}`);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+      reset();
+    }
+  };
 
   const onTextareaKeyDown = useCallback(
     (e: React.KeyboardEvent<FormElement>) => {
-      if (e.keyCode === 13 && e.shiftKey === false) {
+      if (e.keyCode === 13 && e.shiftKey === false && !loading) {
         e.preventDefault();
         formRef.current?.requestSubmit();
       }
     },
-    [formRef]
+    [loading]
   );
 
   const [visible, setVisible] = useState(false);
   const modalHandler = () => setVisible(true);
   const ModalCloseHandler = () => setVisible(false);
   const [exampleClicked, setExampleClicked] = useState(false);
+
   useEffect(() => {
     if (inputRef.current !== null && exampleClicked) {
       setExampleClicked(false);
@@ -153,14 +135,10 @@ const StudyRoom: NextPage<PageProps> = ({
     setExampleClicked(true);
     setInput(input);
   };
+
   return (
     <>
-      <StudyNav
-        assessments={assessments}
-        chatLogs={chatLogs}
-        setAssessments={(x) => setAssessments(x)}
-        setChatLog={(x) => setChatLog(x)}
-      />
+      <StudyNav assessments={assessments || []} />
       <ErrorModal
         errorMessage={errorMessage}
         ModalCloseHandler={() => ModalCloseHandler()}
@@ -168,15 +146,13 @@ const StudyRoom: NextPage<PageProps> = ({
       />
       <Grid.Container css={{ height: 'calc(100vh - 76px)' }}>
         <Grid xs={0} sm={2} md={1.5}>
-          <SideMenu
-            assessments={assessments}
-            chatLogs={chatLogs}
-            setAssessments={(x) => setAssessments(x)}
-            setChatLog={(x) => setChatLog(x)}
-          />
+          <SideMenu assessments={assessments || []} />
         </Grid>
         <Grid xs={12} sm={10} md={10.5}>
-          <Container className={styles.chatbox}>
+          <Container
+            className={styles.chatbox}
+            css={{ mx: '$0', '@xs': { mx: '$18' } }}
+          >
             <div className={styles.chatLog}>
               <Examples examplePress={examplePress} />
             </div>
@@ -194,7 +170,7 @@ const StudyRoom: NextPage<PageProps> = ({
                 {authSession && (
                   <Row>
                     <Textarea
-                      css={{ ml: '$18' }}
+                      // css={{ ml: '$18' }}
                       ref={inputRef}
                       onKeyDown={(event) => onTextareaKeyDown(event)}
                       initialValue=""
@@ -206,13 +182,41 @@ const StudyRoom: NextPage<PageProps> = ({
                       id="question"
                       fullWidth
                     />
-                    <Spacer x={0.5} />
+                    {subscription === 'basic'
+                      ? input.length > basicInputLimit - 100 && (
+                          <Text
+                            size="$sm"
+                            color="error"
+                            css={{
+                              position: 'absolute',
+                              bottom: '0',
+                              right: '$20',
+                            }}
+                          >
+                            {basicInputLimit}/{input.length}
+                          </Text>
+                        )
+                      : input.length > proInputLimit - 200 && (
+                          <Text
+                            size="$sm"
+                            color="error"
+                            css={{
+                              position: 'absolute',
+                              bottom: '0',
+                              right: '$20',
+                            }}
+                          >
+                            {proInputLimit}/{input.length}
+                          </Text>
+                        )}
+                    <Spacer x={1} />
                     <Button
+                      css={{ h: '37px' }}
                       auto
                       ghost
                       type="submit"
                       id="submit"
-                      css={{ h: '37px' }}
+                      disabled={loading}
                     >
                       {loading ? (
                         <Loading type="points" color="currentColor" size="sm" />
@@ -239,48 +243,3 @@ const StudyRoom: NextPage<PageProps> = ({
 };
 
 export default StudyRoom;
-
-//ssr
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await getSession(context);
-
-  if (!session) {
-    return {
-      redirect: {
-        destination: '/api/auth/signin',
-        permanent: false,
-        callback: '/study-room',
-      },
-    };
-  }
-  if (session.user?.id) {
-    const assessments: Assessment[] = await prisma.assessment.findMany({
-      where: {
-        userId: session.user.id,
-      },
-    });
-    const messageCount = await prisma.postCounter.findUnique({
-      where: {
-        userId: session.user.id,
-      },
-    });
-    if (!messageCount) {
-      await prisma.postCounter.create({
-        data: {
-          userId: session.user.id,
-          count: 0,
-        },
-      });
-    }
-    return {
-      props: {
-        assessmentsFromDB: JSON.stringify(assessments),
-        messageCountFromDB: messageCount?.count,
-      },
-    };
-  }
-
-  return {
-    props: {},
-  };
-};

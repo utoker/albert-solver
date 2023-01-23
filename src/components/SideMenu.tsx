@@ -7,59 +7,47 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Container, Spacer } from '@nextui-org/react';
-import { type Assessment } from '@prisma/client';
 import axios from 'axios';
-import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import React, { type FC, useState } from 'react';
 import styles from '../pages/study-room/study-room.module.css';
 import AssessmentButton from './AssessmentButton';
+import { mutate } from 'swr';
+import { type Assessment } from '@prisma/client';
 
-type chatLog = {
-  user: string;
-  message: string;
-}[];
-type SideMenuProps = {
+type Props = {
   assessments: Assessment[];
-  setAssessments: React.Dispatch<React.SetStateAction<Assessment[]>>;
-  chatLogs: { [key: string]: chatLog };
-  setChatLog: React.Dispatch<React.SetStateAction<chatLog>>;
 };
-const SideMenu: FC<SideMenuProps> = ({
-  assessments,
-  setAssessments,
-  chatLogs,
-  setChatLog,
-}) => {
+
+const SideMenu: FC<Props> = ({ assessments }) => {
   const router = useRouter();
+
   const handleNewAssessment = async () => {
     router.push('/study-room');
   };
   const handleChangeAssessment = (assessmentId: string) => {
     router.push(`/study-room/${assessmentId}`);
-    setChatLog(chatLogs[assessmentId] || []);
   };
+
   const handleDeleteAssessment = async (assessmentId: string) => {
-    await axios.post('/api/assessment-delete', {
+    await axios.post('/api/assessment/delete', {
       assessmentId,
     });
-    setAssessments((prev) =>
-      prev.filter((assessment) => assessment.id !== assessmentId)
-    );
+    mutate('/api/assessment/get-all');
     if (router.query.assessmentId === assessmentId) router.push('/study-room');
   };
-  const { data: authSession } = useSession();
+
   const [isDeleteAll, setIsDeleteAll] = useState(false);
+
   const handleDeleteAllAssessments = async () => {
-    await axios.post('/api/assessment-delete-all', {
-      userId: authSession?.user?.id,
-    });
-    setAssessments([]);
+    await axios.get('/api/assessment/delete-all');
+    mutate('/api/assessment/get-all');
     router.push('/study-room');
   };
+
   return (
     <Container className={styles.sidemenu}>
-      <div>
+      <div style={{ width: '220px' }}>
         <Button
           onPress={handleNewAssessment}
           ghost
@@ -68,17 +56,18 @@ const SideMenu: FC<SideMenuProps> = ({
         >
           New Assessment
         </Button>
-        {assessments.map((assessment) => (
-          <div key={assessment.id}>
-            <Spacer y={0.5} />
-            <AssessmentButton
-              assessmentName={assessment.assessmentName}
-              assessmentId={assessment.id}
-              changeAssessment={(id) => handleChangeAssessment(id)}
-              deleteAssessment={(id) => handleDeleteAssessment(id)}
-            />
-          </div>
-        ))}
+        {assessments &&
+          assessments.map((assessment) => (
+            <div key={assessment.id}>
+              <Spacer y={0.5} />
+              <AssessmentButton
+                assessmentName={assessment.assessmentName}
+                assessmentId={assessment.id}
+                changeAssessment={(id) => handleChangeAssessment(id)}
+                deleteAssessment={(id) => handleDeleteAssessment(id)}
+              />
+            </div>
+          ))}
       </div>
       <div className={styles.sidemenuBottom}>
         {isDeleteAll ? (

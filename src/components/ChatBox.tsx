@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -19,61 +20,94 @@ import React, {
   useCallback,
   useRef,
   useState,
+  useEffect,
 } from 'react';
+import generate from '../helpers/generate';
 import styles from '../pages/study-room/study-room.module.css';
 import ChatMessage from './ChatMessage';
 import ErrorModal from './ErrorModal';
+import useSWR, { preload } from 'swr';
+import sendRequest from '../helpers/sendRequest';
+import { useRouter } from 'next/router';
 
 type chatLog = {
   user: string;
   message: string;
 }[];
-type chatLogsObject = {
+type chatLogs = {
   [key: string]: chatLog;
 };
-type ChatBoxProps = {
-  assessmentId: string;
-  chatLog: chatLog;
-  setChatLog: React.Dispatch<React.SetStateAction<chatLog>>;
-  setChatLogs: React.Dispatch<React.SetStateAction<chatLogsObject>>;
-  messageCount: number;
-};
 
-const ChatBox: FC<ChatBoxProps> = ({
-  assessmentId,
-  chatLog,
-  setChatLog,
-  setChatLogs,
-  messageCount: messageCountFromDB,
-}) => {
+const fetcher = (url: string) => axios.get(url).then((res) => res.data);
+
+preload('/api/assessment/get-all', fetcher);
+preload('/api/post-counter/get-count', fetcher);
+
+const ChatBox: FC = () => {
   const { data: authSession } = useSession();
   const [input, setInput] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
-  const [messageCount, setMessageCount] = useState(messageCountFromDB);
   const formRef = useRef<HTMLFormElement>(null);
+  const router = useRouter();
+  const assessmentId = router.query.assessmentId as string;
 
   const onTextareaKeyDown = useCallback(
     (e: KeyboardEvent<FormElement>) => {
-      if (e.keyCode === 13 && e.shiftKey === false) {
+      if (e.keyCode === 13 && e.shiftKey === false && !loading) {
         e.preventDefault();
         formRef.current?.requestSubmit();
       }
     },
-    [formRef]
+    [loading]
   );
+
+  const [chatLog, setChatLog] = useState<chatLog>([]);
+
+  const { data: messageCount, mutate: mutateCount } = useSWR(
+    '/api/post-counter/get-count',
+    fetcher
+  );
+
+  const { data: assessments, mutate } = useSWR(
+    '/api/assessment/get-all',
+    fetcher,
+    {
+      onSuccess: (assessments) => {
+        console.log('ONSUCCESS RUN');
+        const chatLogsObject: chatLogs = {};
+        assessments.forEach((assessment: { id: string; chatLog: string }) => {
+          chatLogsObject[assessment.id] = JSON.parse(assessment.chatLog);
+        });
+        setChatLog(chatLogsObject[assessmentId] || []);
+      },
+    }
+  );
+
+  useEffect(() => {
+    if (assessments) {
+      const chatLogsObject: chatLogs = {};
+      assessments.forEach((assessment: { id: string; chatLog: string }) => {
+        chatLogsObject[assessment.id] = JSON.parse(assessment.chatLog);
+      });
+      setChatLog(chatLogsObject[assessmentId] || []);
+    }
+  }, [assessmentId, assessments]);
 
   const reset = useCallback(() => {
     formRef.current?.reset();
   }, [formRef]);
+
   const subscription = authSession?.user?.subscription;
   const basicInputLimit = 500;
   const proInputLimit = 5000;
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!input || loading) return;
     setLoading(true);
-    const messages = [...chatLog, { user: 'Student', message: input }];
+    const messagesArr = [...chatLog, { user: 'Student', message: input }];
+    const messages = messagesArr.map((message) => message.message).join('\n');
     if (subscription === 'basic' && input.length > basicInputLimit) {
       setLoading(false);
       setErrorMessage('Message too long! (max 500 characters)');
@@ -86,37 +120,29 @@ const ChatBox: FC<ChatBoxProps> = ({
       modalHandler();
       return;
     }
-    if (input.length < 8) {
+    if (input.length < 3) {
       setLoading(false);
-      setErrorMessage('Message too short! (min 8 characters)');
+      setErrorMessage('Message too short! (min 3 characters)');
       modalHandler();
       return;
     }
     try {
-      const res = await axios.post('/api/generate', {
-        userId: authSession?.user?.id,
-        messages: messages.map((message) => message.message).join('\n'),
-      });
-      const chatLogArray = [
-        ...chatLog,
-        { user: 'Student', message: input },
-        { user: 'AI', message: res.data.result },
-      ];
-      setChatLogs((prev) => ({
-        ...prev,
-        [assessmentId]: chatLogArray,
-      }));
-      await axios.post('/api/chatlog', {
-        chatLog: JSON.stringify(chatLogArray),
-        assessmentId,
-      });
+      reset();
       setChatLog((prev) => [
         ...prev,
         { user: 'Student', message: input },
-        { user: 'AI', message: res.data.result },
+        { user: 'AI', message: 'Thinking...' },
       ]);
-      setMessageCount((prev) => prev + 1);
-      reset();
+      const res = await generate(messages, messageCount, authSession);
+      const chatLogArr = [
+        ...chatLog,
+        { user: 'Student', message: input },
+        { user: 'AI', message: res },
+      ];
+      const url = '/api/assessment/chatLog/update';
+      const arg = { chatLog: JSON.stringify(chatLogArr), assessmentId };
+      mutate(sendRequest(url, { arg }));
+      mutateCount();
     } catch (error) {
       console.log(error);
     } finally {
@@ -124,19 +150,18 @@ const ChatBox: FC<ChatBoxProps> = ({
     }
   };
 
-  const [visible, setVisible] = React.useState(false);
+  const [visible, setVisible] = useState(false);
   const modalHandler = () => setVisible(true);
   const ModalCloseHandler = () => {
     setVisible(false);
-    console.log('closed');
   };
 
   const scrollRef = useRef<HTMLDivElement>(null);
-  React.useEffect(() => {
+  useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [messageCount]);
+  }, [chatLog]);
 
   return (
     <>
@@ -145,7 +170,10 @@ const ChatBox: FC<ChatBoxProps> = ({
         visible={visible}
         ModalCloseHandler={() => ModalCloseHandler()}
       />
-      <Container className={styles.chatbox} css={{ ml: '$18' }}>
+      <Container
+        className={styles.chatbox}
+        css={{ mx: '$0', p: '0', '@xs': { mx: '$18', pl: '$12' } }}
+      >
         <div className={styles.chatLog} ref={scrollRef}>
           {chatLog &&
             chatLog.map((message, i) => (
@@ -204,7 +232,14 @@ const ChatBox: FC<ChatBoxProps> = ({
                       </Text>
                     )}
                 <Spacer x={1} />
-                <Button auto ghost type="submit" id="submit">
+                <Button
+                  css={{ h: '37px' }}
+                  auto
+                  ghost
+                  type="submit"
+                  id="submit"
+                  disabled={loading}
+                >
                   {loading ? (
                     <Loading type="points" color="currentColor" size="sm" />
                   ) : (

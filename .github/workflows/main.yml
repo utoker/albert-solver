@@ -6,13 +6,13 @@ on:
   workflow_dispatch:
 
 env:
-  ENDPOINT_URL: https://www.albertsolver.com/api/counter-reset
+  ENDPOINT_URL: https://www.albertsolver.com/api/post-counter/reset
   API_KEY: ${{ secrets.API_ROUTE_SECRET }}
 jobs:
   daily-job:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Make HTTP POST request
-      run: |
-        curl -X POST -H "Content-Type: application/json" -H "Authorization:${API_KEY}" ${ENDPOINT_URL}
+      - name: Make HTTP POST request
+        run: |
+          curl -X POST -H "Content-Type: application/json" -H "Authorization:${API_KEY}" ${ENDPOINT_URL}

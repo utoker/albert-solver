@@ -16,41 +16,26 @@ import { useRouter } from 'next/router';
 import React, { type FC, type Key } from 'react';
 import AssessmentButton from './AssessmentButton';
 
-type chatLog = {
-  user: string;
-  message: string;
-}[];
-
 type Props = {
   assessments: Assessment[];
-  setAssessments: React.Dispatch<React.SetStateAction<Assessment[]>>;
-  chatLogs: { [key: string]: chatLog };
-  setChatLog: React.Dispatch<React.SetStateAction<chatLog>>;
 };
 
-const StudyNav: FC<Props> = ({
-  assessments,
-  setAssessments,
-  chatLogs,
-  setChatLog,
-}) => {
+const StudyNav: FC<Props> = ({ assessments }) => {
   const { data: authData } = useSession();
 
   const router = useRouter();
   const handleNewAssessment = async () => {
     router.push('/study-room');
   };
+
   const handleChangeAssessment = (assessmentId: string) => {
     router.push(`/study-room/${assessmentId}`);
-    setChatLog(chatLogs[assessmentId] || []);
   };
   const handleDeleteAssessment = async (assessmentId: string) => {
     await axios.post('/api/assessment-delete', {
       assessmentId,
     });
-    setAssessments((prev) =>
-      prev.filter((assessment) => assessment.id !== assessmentId)
-    );
+    //mutate
     if (router.query.assessmentId === assessmentId) router.push('/study-room');
   };
 
@@ -182,16 +167,17 @@ const StudyNav: FC<Props> = ({
             New Assessment
           </Button>
         </Navbar.CollapseItem>
-        {assessments.map((assessment) => (
-          <Navbar.CollapseItem key={assessment.id}>
-            <AssessmentButton
-              assessmentName={assessment.assessmentName}
-              assessmentId={assessment.id}
-              changeAssessment={(id) => handleChangeAssessment(id)}
-              deleteAssessment={(id) => handleDeleteAssessment(id)}
-            />
-          </Navbar.CollapseItem>
-        ))}
+        {assessments &&
+          assessments.map((assessment) => (
+            <Navbar.CollapseItem key={assessment.id}>
+              <AssessmentButton
+                assessmentName={assessment.assessmentName}
+                assessmentId={assessment.id}
+                changeAssessment={(id) => handleChangeAssessment(id)}
+                deleteAssessment={(id) => handleDeleteAssessment(id)}
+              />
+            </Navbar.CollapseItem>
+          ))}
       </Navbar.Collapse>
     </Navbar>
   );

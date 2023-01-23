@@ -10,12 +10,7 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-type Data = {
-  result?: string;
-  error?: string;
-};
-
-const generate = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
+const generate = async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await getSession({ req });
   const { messages } = req.body;
   const { userId } = req.body;
@@ -27,10 +22,10 @@ const generate = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   });
   const count = postCounter?.count;
   if (count === undefined) {
-    res.status(500).json({ error: 'Something went wrong' });
+    res.status(500).json('Something went wrong');
   }
   if (subscription === 'basic' && count && count > 9) {
-    res.status(200).json({ result: 'You have reached your limit of 10 posts' });
+    res.status(200).json('You have reached your limit of 10 posts');
   }
   if (subscription === 'pro' && count && count > 49) {
     res.status(200).json({ result: 'You have reached your limit of 50 posts' });
@@ -48,7 +43,7 @@ const generate = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
       // stop: "\n",
     });
     if (response.status !== 200) {
-      res.status(500).json({ result: 'Something went wrong' });
+      res.status(500).json('Something went wrong');
     }
     // prisma update postCounter +1
     if (count !== undefined) {
@@ -62,10 +57,10 @@ const generate = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
       });
     }
     const result = response?.data?.choices[0]?.text;
-    res.status(200).json({ result });
+    res.status(200).json(result);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
-    res.status(500).json({ error: `${error.message} CATCH` });
+    res.status(500).json(`${error.message} CATCH`);
   }
 };
 

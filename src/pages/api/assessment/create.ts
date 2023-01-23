@@ -1,23 +1,21 @@
 import { type NextApiRequest, type NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
-
-import { prisma } from '../../server/db/client';
+import { prisma } from '../../../server/db/client';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  // get the session
   const session = await getSession({ req });
-  const { assessmentId } = req.body;
   const { chatLog } = req.body;
+  const { assessmentName } = req.body;
+
   if (session?.user?.id) {
-    const assessmentName = await prisma.assessment.update({
-      where: {
-        id: assessmentId,
-      },
+    const newAssessment = await prisma.assessment.create({
       data: {
+        userId: session.user.id,
+        assessmentName,
         chatLog,
       },
     });
-    res.status(200).json(assessmentName);
+    res.status(200).json({ newAssessment });
   }
 };
 
