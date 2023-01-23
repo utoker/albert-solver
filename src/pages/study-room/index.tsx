@@ -230,7 +230,7 @@ const StudyRoom: NextPage = () => {
               {subscription === 'basic' && (
                 <Text size="$sm" css={{ ta: 'center' }}>
                   Basic users can only send 10 questions per day. Remaining
-                  questions today: {10 - messageCount.count}
+                  questions today: {10 - messageCount?.count}
                 </Text>
               )}
               <Spacer y={subscription === 'pro' ? 1 : 0} />
