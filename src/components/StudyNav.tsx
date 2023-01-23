@@ -88,12 +88,12 @@ const StudyNav: FC<Props> = ({ assessments }) => {
           </Text>
         </Link>
       </Navbar.Brand>
-      {/* <Navbar.Content enableCursorHighlight activeColor="secondary">
+      <Navbar.Content enableCursorHighlight activeColor="secondary">
         <Navbar.Link href="/pricing">Pricing</Navbar.Link>
         <Navbar.Link isActive href="/study-room">
           Study Room
         </Navbar.Link>
-      </Navbar.Content> */}
+      </Navbar.Content>
 
       <Navbar.Content
         css={{
