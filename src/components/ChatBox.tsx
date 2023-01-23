@@ -44,6 +44,13 @@ preload('/api/assessment/get-all', fetcher);
 preload('/api/post-counter/get-count', fetcher);
 
 const ChatBox: FC = () => {
+  const [chatLog, setChatLog] = useState<chatLog>([]);
+
+  const { data: messageCount, mutate: mutateCount } = useSWR(
+    '/api/post-counter/get-count',
+    fetcher
+  );
+
   const { data: authSession } = useSession();
   const [input, setInput] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -51,6 +58,7 @@ const ChatBox: FC = () => {
   const formRef = useRef<HTMLFormElement>(null);
   const router = useRouter();
   const assessmentId = router.query.assessmentId as string;
+  const count = messageCount?.count;
 
   const onTextareaKeyDown = useCallback(
     (e: KeyboardEvent<FormElement>) => {
@@ -60,13 +68,6 @@ const ChatBox: FC = () => {
       }
     },
     [loading]
-  );
-
-  const [chatLog, setChatLog] = useState<chatLog>([]);
-
-  const { data: messageCount, mutate: mutateCount } = useSWR(
-    '/api/post-counter/get-count',
-    fetcher
   );
 
   const { data: assessments, mutate } = useSWR(
@@ -133,7 +134,7 @@ const ChatBox: FC = () => {
         { user: 'Student', message: input },
         { user: 'AI', message: 'Thinking...' },
       ]);
-      const res = await generate(messages, messageCount, authSession);
+      const res = await generate(messages, count, authSession);
       const chatLogArr = [
         ...chatLog,
         { user: 'Student', message: input },
@@ -252,7 +253,7 @@ const ChatBox: FC = () => {
           {subscription === 'basic' && (
             <Text size="$sm" css={{ ta: 'center' }}>
               Basic users can only send 10 questions per day. Remaining
-              questions today: {10 - messageCount?.count}
+              questions today: {10 - count}
             </Text>
           )}
           <Spacer y={subscription === 'pro' ? 1 : 0} />

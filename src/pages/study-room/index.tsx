@@ -49,7 +49,7 @@ const StudyRoom: NextPage = () => {
     '/api/post-counter/get-count',
     fetcher
   );
-
+  const count = messageCount?.count;
   const [input, setInput] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
@@ -89,7 +89,7 @@ const StudyRoom: NextPage = () => {
       return;
     }
     try {
-      const res = await generate(messages, messageCount, authSession);
+      const res = await generate(messages, count, authSession);
       const chatLog = JSON.stringify([
         { user: 'Student', message: input },
         { user: 'AI', message: res },
@@ -230,7 +230,7 @@ const StudyRoom: NextPage = () => {
               {subscription === 'basic' && (
                 <Text size="$sm" css={{ ta: 'center' }}>
                   Basic users can only send 10 questions per day. Remaining
-                  questions today: {10 - messageCount?.count}
+                  questions today: {10 - count}
                 </Text>
               )}
               <Spacer y={subscription === 'pro' ? 1 : 0} />
