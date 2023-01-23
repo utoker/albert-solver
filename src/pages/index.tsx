@@ -1,6 +1,7 @@
 import { Container, Row, Spacer, Text } from '@nextui-org/react';
 import { type NextPage } from 'next';
 import dynamic from 'next/dynamic';
+import Head from 'next/head';
 import { useRef } from 'react';
 import Footer from '../components/Footer';
 
@@ -13,6 +14,53 @@ const Home: NextPage = () => {
   const video = useRef<HTMLVideoElement>(null);
   return (
     <>
+      <Head>
+        <title>Albert Solver - Elevate your writing with AI</title>
+        <link
+          key={'canonical'}
+          rel="canonical"
+          href="https://albertsolver.com/"
+        />
+
+        <meta
+          name="title"
+          content="Albert Solver - Elevate your writing with AI"
+        />
+        <meta
+          name="description"
+          content="AI Writing Assistant is your go-to solution for expert help with essays and homework. Using cutting-edge technology, we provide advanced grammar checking, style suggestions, and personalized feedback to improve your writing and achieve academic success. Start seeing results with our AI-powered writing coach today."
+        />
+
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://albertsolver.com/" />
+        <meta
+          property="og:title"
+          content="Albert Solver - Elevate your writing with AI"
+        />
+        <meta
+          property="og:description"
+          content="AI Writing Assistant is your go-to solution for expert help with essays and homework. Using cutting-edge technology, we provide advanced grammar checking, style suggestions, and personalized feedback to improve your writing and achieve academic success. Start seeing results with our AI-powered writing coach today."
+        />
+        <meta
+          property="og:image"
+          content="https://albertsolver.com/images/banner.png"
+        />
+
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content="https://albertsolver.com/" />
+        <meta
+          property="twitter:title"
+          content="Albert Solver - Elevate your writing with AI"
+        />
+        <meta
+          property="twitter:description"
+          content="AI Writing Assistant is your go-to solution for expert help with essays and homework. Using cutting-edge technology, we provide advanced grammar checking, style suggestions, and personalized feedback to improve your writing and achieve academic success. Start seeing results with our AI-powered writing coach today."
+        />
+        <meta
+          property="twitter:image"
+          content="https://albertsolver.com/images/banner.png"
+        />
+      </Head>
       <Nav />
       <Spacer y={1.5} />
       <Container lg>

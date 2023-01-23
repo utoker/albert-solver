@@ -4,12 +4,97 @@ import Head from 'next/head';
 const AppHead = () => {
   return (
     <Head>
-      <title>Albert Solver</title>
+      <title>Albert Solver - Elevate your writing with AI</title>
       <meta
         name="description"
-        content="Get expert help with your assessments and improve your grades with our AI-powered website. Ask our AI any question and receive accurate and reliable answers quickly. Perfect for students of all levels looking to excel in their studies."
+        content="Improve your writing and achieve academic success with AI Writing Assistant. Our cutting-edge technology and expert assistance provide a comprehensive solution for essays and homework. With our AI-powered writing coach, you'll have access to advanced grammar checking, style suggestions, and personalized feedback. Whether you're a student, professional, or just looking to improve your writing skills, AI Writing Assistant is the perfect tool to help you achieve your goals. Get started today and see the difference AI can make in your writing!"
       />
-      <link rel="icon" href="/favicon.ico" />
+      <link
+        rel="apple-touch-icon-precomposed"
+        sizes="57x57"
+        href="/apple-touch-icon-57x57.png"
+      />
+      <link
+        rel="apple-touch-icon-precomposed"
+        sizes="114x114"
+        href="/apple-touch-icon-114x114.png"
+      />
+      <link
+        rel="apple-touch-icon-precomposed"
+        sizes="72x72"
+        href="/apple-touch-icon-72x72.png"
+      />
+      <link
+        rel="apple-touch-icon-precomposed"
+        sizes="144x144"
+        href="/apple-touch-icon-144x144.png"
+      />
+      <link
+        rel="apple-touch-icon-precomposed"
+        sizes="60x60"
+        href="/apple-touch-icon-60x60.png"
+      />
+      <link
+        rel="apple-touch-icon-precomposed"
+        sizes="120x120"
+        href="/apple-touch-icon-120x120.png"
+      />
+      <link
+        rel="apple-touch-icon-precomposed"
+        sizes="76x76"
+        href="/apple-touch-icon-76x76.png"
+      />
+      <link
+        rel="apple-touch-icon-precomposed"
+        sizes="152x152"
+        href="/apple-touch-icon-152x152.png"
+      />
+      <link
+        rel="icon"
+        type="image/png"
+        href="/favicon-196x196.png"
+        sizes="196x196"
+      />
+      <link
+        rel="icon"
+        type="image/png"
+        href="/favicon-96x96.png"
+        sizes="96x96"
+      />
+      <link
+        rel="icon"
+        type="image/png"
+        href="/favicon-32x32.png"
+        sizes="32x32"
+      />
+      <link
+        rel="icon"
+        type="image/png"
+        href="/favicon-16x16.png"
+        sizes="16x16"
+      />
+      <link
+        rel="icon"
+        type="image/png"
+        href="/favicon-128.png"
+        sizes="128x128"
+      />
+      <meta name="application-name" content="&nbsp;" />
+      <meta name="msapplication-TileColor" content="#FFFFFF" />
+      <meta name="msapplication-TileImage" content="/mstile-144x144.png" />
+      <meta name="msapplication-square70x70logo" content="/mstile-70x70.png" />
+      <meta
+        name="msapplication-square150x150logo"
+        content="/mstile-150x150.png"
+      />
+      <meta
+        name="msapplication-wide310x150logo"
+        content="/mstile-310x150.png"
+      />
+      <meta
+        name="msapplication-square310x310logo"
+        content="/mstile-310x310.png"
+      />
     </Head>
   );
 };
