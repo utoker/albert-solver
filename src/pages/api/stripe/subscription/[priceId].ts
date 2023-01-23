@@ -1,5 +1,5 @@
 import { type NextApiRequest, type NextApiResponse } from 'next';
-import { getSession } from 'next-auth/react/index.js';
+import { getSession } from 'next-auth/react';
 import Stripe from 'stripe';
 import { env } from '../../../../env/server.mjs';
 
