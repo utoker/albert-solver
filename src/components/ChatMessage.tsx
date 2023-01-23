@@ -1,35 +1,36 @@
 import { Container, Row, Text, User } from '@nextui-org/react';
-import React, { type FC } from 'react';
+import { useSession } from 'next-auth/react';
+import React, { useEffect, useRef, useState, type FC } from 'react';
 
-// type SlowTextProps = {
-//   speed: number;
-//   text: string;
-// };
+type SlowTextProps = {
+  speed: number;
+  text: string;
+};
 
-// const SlowText: FC<SlowTextProps> = ({ speed, text }) => {
-//   const [placeholder, setPlaceholder] = useState(text[0] || '');
+const SlowText: FC<SlowTextProps> = ({ speed, text }) => {
+  const [placeholder, setPlaceholder] = useState(text[0] || '');
 
-//   const index = useRef(0);
+  const index = useRef(0);
 
-//   useEffect(() => {
-//     const tick = () => {
-//       index.current++;
-//       setPlaceholder((prev) => prev + text[index.current]);
-//     };
-//     if (index.current < text.length - 1) {
-//       const addChar = setInterval(tick, speed);
-//       return () => clearInterval(addChar);
-//     }
-//   }, [placeholder, speed, text]);
+  useEffect(() => {
+    const tick = () => {
+      index.current++;
+      setPlaceholder((prev) => prev + text[index.current]);
+    };
+    if (index.current < text.length - 1) {
+      const addChar = setInterval(tick, speed);
+      return () => clearInterval(addChar);
+    }
+  }, [placeholder, speed, text]);
 
-//   return <pre>{placeholder}</pre>;
-// };
+  return <pre>{placeholder}</pre>;
+};
 
 type ChatMessageProps = {
   message: { user: string; message: string };
 };
 const ChatMessage: FC<ChatMessageProps> = ({ message }) => {
-  // const { data: AuthSession } = useSession();
+  const { data: AuthSession } = useSession();
   const textToRender = message.message.trimStart();
 
   return (
