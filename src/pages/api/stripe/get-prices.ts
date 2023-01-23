@@ -6,6 +6,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
     apiVersion: '2022-11-15',
   });
+
   const { data: prices } = await stripe.prices.list();
 
   const plans = await Promise.all(
@@ -24,6 +25,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       };
     })
   );
+
   const sortedPlans = plans.sort((a, b) => {
     if (a.price && b.price) {
       return a.price - b.price;

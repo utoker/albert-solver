@@ -6,8 +6,13 @@ import { SSRProvider } from 'react-aria';
 import { config } from '@fortawesome/fontawesome-svg-core';
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import AppHead from '../components/AppHead';
+import { preload } from 'swr';
+import axios from 'axios';
+
+const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
 config.autoAddCss = false;
+preload('/api/stripe/get-prices', fetcher);
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
