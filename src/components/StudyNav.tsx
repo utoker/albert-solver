@@ -32,7 +32,7 @@ const StudyNav: FC<Props> = ({ assessments }) => {
     router.push(`/study-room/${assessmentId}`);
   };
   const handleDeleteAssessment = async (assessmentId: string) => {
-    await axios.post('/api/assessment-delete', {
+    await axios.post('/api/assessment/delete', {
       assessmentId,
     });
     //mutate
