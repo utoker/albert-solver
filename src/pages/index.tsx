@@ -2,8 +2,8 @@ import { Container, Row, Spacer, Text } from '@nextui-org/react';
 import { type NextPage } from 'next';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
-import { useRef } from 'react';
 import Footer from '../components/Footer';
+import { useTheme } from '@nextui-org/react';
 
 // This is a workaround for hydration issues with Next.js
 const Nav = dynamic(() => import('../components/Nav'), {
@@ -11,7 +11,8 @@ const Nav = dynamic(() => import('../components/Nav'), {
 });
 
 const Home: NextPage = () => {
-  const video = useRef<HTMLVideoElement>(null);
+  const { isDark } = useTheme();
+
   return (
     <>
       <Head>
@@ -62,22 +63,21 @@ const Home: NextPage = () => {
         />
       </Head>
       <Nav />
-      <Spacer y={1.5} />
-      <Container lg>
+      <Container fluid css={{ bc: '$qq' }}>
         <Row justify="center" align="center">
           <Text
             h1
             css={{
+              pt: '$8',
               m: '$0',
               ta: 'center',
-              lh: '$xs',
+              lh: '$md',
               textGradient: '45deg, $blue600 -20%, $pink600 50%',
             }}
           >
             AI Writing Pro: Expert Support for Essays and Homework
           </Text>
         </Row>
-        <Spacer y={1} />
         <Row justify="center" align="center">
           <Text
             hideIn={'sm'}
@@ -85,7 +85,7 @@ const Home: NextPage = () => {
             css={{
               m: '$0',
               ta: 'center',
-              lh: '$xs',
+              lh: '$md',
               textGradient: '45deg, $purple600 -20%, $pink600 100%',
             }}
           >
@@ -96,7 +96,7 @@ const Home: NextPage = () => {
         <Row justify="center" align="center">
           <div style={{ position: 'relative' }}>
             <video
-              ref={video}
+              key={isDark ? '/video-dark.mp4' : '/video.mp4'}
               loop
               autoPlay
               playsInline
@@ -109,7 +109,10 @@ const Home: NextPage = () => {
                 borderRadius: '10px',
               }}
             >
-              <source src="./video.mp4" type="video/mp4" />
+              <source
+                src={isDark ? '/video-dark.mp4' : '/video.mp4'}
+                type="video/mp4"
+              />
             </video>
           </div>
         </Row>

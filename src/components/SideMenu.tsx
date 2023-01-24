@@ -46,7 +46,7 @@ const SideMenu: FC<Props> = ({ assessments }) => {
   };
 
   return (
-    <Container className={styles.sidemenu}>
+    <Container className={styles.sidemenu} css={{ bc: '$accents0' }}>
       <div style={{ width: '220px' }}>
         <Button
           onPress={handleNewAssessment}
@@ -69,7 +69,10 @@ const SideMenu: FC<Props> = ({ assessments }) => {
             </div>
           ))}
       </div>
-      <div className={styles.sidemenuBottom}>
+      <Container
+        css={{ m: '$0', p: '$0', borderTop: '1px solid $neutral' }}
+        className={styles.sidemenuBottom}
+      >
         {isDeleteAll ? (
           <Button.Group light css={{ m: '$0' }}>
             <Button onPress={() => setIsDeleteAll(false)}>
@@ -98,7 +101,7 @@ const SideMenu: FC<Props> = ({ assessments }) => {
         >
           Albert Solver Discord
         </Button>
-      </div>
+      </Container>
     </Container>
   );
 };

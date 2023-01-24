@@ -12,15 +12,19 @@ import {
   Navbar,
   Row,
   Spacer,
+  Switch,
   Text,
+  useTheme,
 } from '@nextui-org/react';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import React, { type FC, useState, type Key } from 'react';
+import { useTheme as useNextTheme } from 'next-themes';
 
 const Nav: FC = () => {
   const { data: authData, status: authStatus } = useSession();
-
+  const { setTheme } = useNextTheme();
+  const { isDark } = useTheme();
   const router = useRouter();
 
   const handleActionKey = async (actionKey: Key) => {
@@ -36,6 +40,9 @@ const Nav: FC = () => {
         break;
       case 'upgrade':
         router.push('/pricing');
+        break;
+      case 'dark':
+        setTheme(isDark ? 'light' : 'dark');
         break;
     }
   };
@@ -55,6 +62,7 @@ const Nav: FC = () => {
   return (
     <>
       <Modal
+        css={{ bc: '$background' }}
         closeButton
         blur
         aria-labelledby="login"
@@ -131,7 +139,7 @@ const Nav: FC = () => {
         </Modal.Footer>
       </Modal>
 
-      <Navbar maxWidth={'fluid'} variant={'sticky'}>
+      <Navbar maxWidth="fluid" variant="sticky">
         <Navbar.Brand>
           <Navbar.Toggle
             css={{
@@ -143,15 +151,19 @@ const Nav: FC = () => {
             aria-label="toggle-navigation"
             id="toggle-navigation"
           />
-          <Link href="/" color="inherit">
-            <Image src="/logoAA.png" alt="Logo" height={36} width={36} />
-            <Text b color="inherit" hideIn="xs">
+          <Link href="/" color="inherit" css={{ ml: '$6' }}>
+            {isDark ? (
+              <Image src="/logo.png" alt="Logo" height={36} width={36} />
+            ) : (
+              <Image src="/logo.png" alt="Logo" height={36} width={36} />
+            )}
+            <Text b color="inherit" hideIn="xs" css={{ mt: '$4' }}>
               Albert Solver
               <Text
                 css={{
-                  marginTop: '-36px',
+                  mt: '-36px',
+                  // ml: '43px',
                   fontSize: '$xs',
-                  marginLeft: '43px',
                   color: '$secondary',
                 }}
               >
@@ -199,10 +211,11 @@ const Nav: FC = () => {
               },
             }}
           >
-            <Dropdown placement="bottom-right">
+            <Dropdown placement="bottom-right" closeOnSelect={false}>
               <Navbar.Item>
                 <Dropdown.Trigger>
                   <Avatar
+                    squared
                     bordered
                     as="button"
                     color="secondary"
@@ -246,6 +259,17 @@ const Nav: FC = () => {
                     </Dropdown.Item>
                   )}
                 </Dropdown.Section>
+                <Dropdown.Item key="dark" textValue="Dark Mode">
+                  <Row justify="space-between">
+                    <Text>Dark Mode</Text>
+                    <Switch
+                      checked={isDark}
+                      onChange={(e) =>
+                        setTheme(e.target.checked ? 'dark' : 'light')
+                      }
+                    />
+                  </Row>
+                </Dropdown.Item>
                 {/* <Dropdown.Item key="help_and_feedback" withDivider>
               Help & Feedback
             </Dropdown.Item> */}
@@ -257,7 +281,7 @@ const Nav: FC = () => {
           </Navbar.Content>
         )}
 
-        <Navbar.Collapse>
+        <Navbar.Collapse css={{ bg: '$bg' }}>
           <Navbar.CollapseItem
             activeColor="secondary"
             isActive={router.route === '/'}
@@ -286,11 +310,13 @@ const Nav: FC = () => {
               Pricing
             </Link>
           </Navbar.CollapseItem>
-          <Navbar.CollapseItem
-            activeColor="secondary"
-            isActive={router.route === '/study-room'}
-          >
-            <Link
+          <Navbar.CollapseItem activeColor="secondary">
+            {authStatus === 'unauthenticated' ? (
+              <Link onClick={modalHandler}>Study Room</Link>
+            ) : (
+              <Link href="/study-room">Study Room</Link>
+            )}
+            {/* <Link
               href="/study-room"
               color="inherit"
               css={{
@@ -298,7 +324,7 @@ const Nav: FC = () => {
               }}
             >
               Study Room
-            </Link>
+            </Link> */}
           </Navbar.CollapseItem>
         </Navbar.Collapse>
       </Navbar>

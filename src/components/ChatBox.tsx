@@ -173,7 +173,11 @@ const ChatBox: FC = () => {
       />
       <Container
         className={styles.chatbox}
-        css={{ mx: '$0', p: '0', '@xs': { mx: '$18', pl: '$12' } }}
+        css={{
+          mx: '$0',
+          p: '0',
+          '@xs': { mx: '$18', pl: '$12' },
+        }}
       >
         <div className={styles.chatLog} ref={scrollRef}>
           {chatLog &&

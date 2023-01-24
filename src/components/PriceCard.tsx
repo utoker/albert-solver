@@ -30,7 +30,7 @@ const PriceCard: NextPage<Props> = ({
     <Card css={{ mw: '320px' }}>
       <Card.Header css={{ padding: '$10 $10 0 $10' }}>
         <Col>
-          <Text h3 color="black" size="$5xl">
+          <Text h3 size="$5xl">
             {name}
           </Text>
         </Col>

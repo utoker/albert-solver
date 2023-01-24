@@ -83,7 +83,7 @@ const Index: NextPage = () => {
       </Head>
       <Nav />
       <Spacer y={1} />
-      <Container>
+      <Container fluid>
         <Row justify="center" align="center">
           <Text
             h1
@@ -123,7 +123,14 @@ const Index: NextPage = () => {
             />
           </Row>
           <Spacer y={0.5} />
-          <Grid.Container justify="space-between">
+          <Grid.Container
+            justify="center"
+            css={{
+              '@sm': {
+                jc: 'space-between',
+              },
+            }}
+          >
             {isMonthly && (
               <>
                 <Grid>
@@ -164,8 +171,8 @@ const Index: NextPage = () => {
                     currency="usd"
                     interval="year"
                     price={0.0}
-                    description1="4 questions per day"
-                    description2="400 characters per question"
+                    description1="10 questions per day"
+                    description2="500 characters per question"
                     name="Basic"
                     planId={'basic'}
                   />
@@ -179,8 +186,8 @@ const Index: NextPage = () => {
                   currency={yearlyProPlan.currency}
                   interval={yearlyProPlan.interval}
                   price={yearlyProPlan.price}
-                  description1="40 questions per day"
-                  description2="4000 characters per question"
+                  description1="50 questions per day"
+                  description2="5000 characters per question"
                   name={yearlyProPlan.name}
                   key={yearlyProPlan.id}
                   planId={yearlyProPlan.id}

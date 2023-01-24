@@ -12,25 +12,10 @@
   flex-direction: column;
   justify-content: space-between;
   width: 240px;
-  background-color: #f1f3f5;
+  /* background-color: #f1f3f5; */
   padding: 10px;
 }
-.sidemenuButton {
-  padding: 12px;
-  border: 1px solid black;
-  border-radius: 5px;
-  transition: ease 0.25s all;
-}
-.sidemenuButton:hover {
-  background-color: rgba(255, 255, 255, 0.2);
-}
-.sidemenuButton span {
-  padding-left: 6px;
-  padding-right: 12px;
-}
-.sidemenuBottom {
-  border-top: 1px solid black;
-}
+
 /* ChatBox */
 .chatbox {
   flex: 1;

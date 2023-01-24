@@ -11,8 +11,8 @@ import {
   Text,
 } from '@nextui-org/react';
 import axios from 'axios';
-import { type NextPage } from 'next';
-import { useSession } from 'next-auth/react';
+import { type GetServerSideProps, type NextPage } from 'next';
+import { getSession, useSession } from 'next-auth/react';
 import React, {
   useState,
   useCallback,
@@ -156,7 +156,7 @@ const StudyRoom: NextPage = () => {
         ModalCloseHandler={() => ModalCloseHandler()}
         visible={visible}
       />
-      <Grid.Container css={{ height: 'calc(100vh - 76px)' }}>
+      <Grid.Container css={{ height: 'calc(100vh - 76px)', bg: '$qq' }}>
         <Grid xs={0} sm={2} md={1.5}>
           <SideMenu assessments={assessments || []} />
         </Grid>
@@ -255,3 +255,20 @@ const StudyRoom: NextPage = () => {
 };
 
 export default StudyRoom;
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getSession(context);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/api/auth/signin',
+        permanent: false,
+        callback: '/study-room',
+      },
+    };
+  }
+  return {
+    props: {},
+  };
+};

@@ -1,5 +1,5 @@
 import { Grid } from '@nextui-org/react';
-import { type NextPage } from 'next';
+import { type GetServerSideProps, type NextPage } from 'next';
 import React from 'react';
 import SideMenu from '../../components/SideMenu';
 import ChatBox from '../../components/ChatBox';
@@ -7,6 +7,7 @@ import dynamic from 'next/dynamic';
 import useSWR from 'swr';
 import axios from 'axios';
 import Head from 'next/head';
+import { getSession } from 'next-auth/react';
 
 // This is a workaround for hydration issues with Next.js
 const StudyNav = dynamic(() => import('../../components/StudyNav'), {
@@ -34,7 +35,7 @@ const StudyRoom: NextPage = () => {
         />
       </Head>
       <StudyNav assessments={assessments || []} />
-      <Grid.Container css={{ height: 'calc(100vh - 76px)' }}>
+      <Grid.Container css={{ height: 'calc(100vh - 76px)', bc: '$qq' }}>
         <Grid xs={0} sm={2} md={1.5}>
           <SideMenu assessments={assessments || []} />
         </Grid>
@@ -47,3 +48,20 @@ const StudyRoom: NextPage = () => {
 };
 
 export default StudyRoom;
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getSession(context);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/api/auth/signin',
+        permanent: false,
+        callback: '/study-room',
+      },
+    };
+  }
+  return {
+    props: {},
+  };
+};
