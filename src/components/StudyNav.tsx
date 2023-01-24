@@ -125,7 +125,7 @@ const StudyNav: FC<Props> = ({ assessments }) => {
                 src={
                   authData?.user?.image
                     ? authData.user.image
-                    : '../userLogo.png'
+                    : '/user-avatar.png'
                 }
               />
             </Dropdown.Trigger>
