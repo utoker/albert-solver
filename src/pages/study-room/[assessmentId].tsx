@@ -22,6 +22,7 @@ type Props = {
 
 const StudyRoom: NextPage<Props> = ({ assessmentId }) => {
   const { data: assessments } = useSWR('/api/assessment/get-all', fetcher);
+  console.log(assessmentId);
   return (
     <>
       <Head>
@@ -55,7 +56,8 @@ export default StudyRoom;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
-  const assessmentId = context.query.assessmentId as string;
+  const { assessmentId } = context.query;
+  console.log('ASSESSMENT ID', assessmentId);
 
   if (!session) {
     return {
