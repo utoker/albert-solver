@@ -8,6 +8,7 @@ import useSWR from 'swr';
 import axios from 'axios';
 import Head from 'next/head';
 import { getSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 
 // This is a workaround for hydration issues with Next.js
 const StudyNav = dynamic(() => import('../../components/StudyNav'), {
@@ -17,10 +18,12 @@ const StudyNav = dynamic(() => import('../../components/StudyNav'), {
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
 type Props = {
-  assessmentId: string;
+  assessmentIde: string;
 };
 
-const StudyRoom: NextPage<Props> = ({ assessmentId }) => {
+const StudyRoom: NextPage<Props> = ({ assessmentIde }) => {
+  const router = useRouter();
+  const { assessmentId } = router.query;
   const { data: assessments } = useSWR('/api/assessment/get-all', fetcher);
   return (
     <>

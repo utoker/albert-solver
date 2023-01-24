@@ -46,14 +46,9 @@ const ChatMessage: FC<ChatMessageProps> = ({ message }) => {
     >
       <Row css={{ py: '$8' }}>
         {message.user === 'AI' ? (
-          <User size="md" squared src="../logo.png" name={undefined} />
+          <User size="md" squared src="/logo.png" name={undefined} />
         ) : (
-          <User
-            name={undefined}
-            squared
-            size="md"
-            src={'../user-avatar-nobg.png'}
-          />
+          <User name={undefined} squared size="md" src={'/user-avatar.png'} />
         )}
         {message.user === 'AI' ? (
           <pre

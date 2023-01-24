@@ -137,7 +137,7 @@ const Nav: FC = () => {
                     src={
                       authData?.user?.image
                         ? authData.user.image
-                        : '../userLogo.png'
+                        : '../user-avatar.png'
                     }
                   />
                 </Dropdown.Trigger>
