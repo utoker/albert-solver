@@ -28,6 +28,7 @@ import ChatMessage from './ChatMessage';
 import ErrorModal from './ErrorModal';
 import useSWR, { preload } from 'swr';
 import sendRequest from '../helpers/sendRequest';
+import { useRouter } from 'next/router';
 
 type chatLog = {
   user: string;
@@ -42,12 +43,14 @@ const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 preload('/api/assessment/get-all', fetcher);
 preload('/api/post-counter/get-count', fetcher);
 
-type Props = {
-  assessmentId: string;
-};
+// type Props = {
+//   assessmentId: string;
+// };
 
-const ChatBox: FC<Props> = ({ assessmentId }) => {
+const ChatBox: FC = () => {
   const [chatLog, setChatLog] = useState<chatLog>([]);
+  const router = useRouter();
+  const assessmentId = router.query.assessmentId as string;
 
   const { data: messageCount, mutate: mutateCount } = useSWR(
     '/api/post-counter/get-count',
