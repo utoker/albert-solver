@@ -16,7 +16,11 @@ const StudyNav = dynamic(() => import('../../components/StudyNav'), {
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
-const StudyRoom: NextPage = () => {
+type Props = {
+  assessmentId: string;
+};
+
+const StudyRoom: NextPage<Props> = ({ assessmentId }) => {
   const { data: assessments } = useSWR('/api/assessment/get-all', fetcher);
   return (
     <>
@@ -40,7 +44,7 @@ const StudyRoom: NextPage = () => {
           <SideMenu assessments={assessments || []} />
         </Grid>
         <Grid xs={12} sm={10} md={10.5}>
-          <ChatBox />
+          <ChatBox assessmentId={assessmentId} />
         </Grid>
       </Grid.Container>
     </>

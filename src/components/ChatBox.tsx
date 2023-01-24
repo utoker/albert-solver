@@ -28,7 +28,6 @@ import ChatMessage from './ChatMessage';
 import ErrorModal from './ErrorModal';
 import useSWR, { preload } from 'swr';
 import sendRequest from '../helpers/sendRequest';
-import { useRouter } from 'next/router';
 
 type chatLog = {
   user: string;
@@ -43,7 +42,11 @@ const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 preload('/api/assessment/get-all', fetcher);
 preload('/api/post-counter/get-count', fetcher);
 
-const ChatBox: FC = () => {
+type Props = {
+  assessmentId: string;
+};
+
+const ChatBox: FC<Props> = ({ assessmentId }) => {
   const [chatLog, setChatLog] = useState<chatLog>([]);
 
   const { data: messageCount, mutate: mutateCount } = useSWR(
@@ -56,8 +59,6 @@ const ChatBox: FC = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
-  const router = useRouter();
-  const assessmentId = router.query.assessmentId as string;
   const count = messageCount?.count;
 
   const onTextareaKeyDown = useCallback(
