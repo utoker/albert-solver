@@ -116,6 +116,9 @@ const Home: NextPage = () => {
             </video>
           </div>
         </Row>
+        <Row>
+          <Spacer y={1.5} />
+        </Row>
       </Container>
       <Spacer y={1} />
       <Footer />

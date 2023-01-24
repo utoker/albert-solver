@@ -1,5 +1,5 @@
 import { faDiscord, faGoogle } from '@fortawesome/free-brands-svg-icons';
-import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope, faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Avatar,
@@ -174,7 +174,7 @@ const Nav: FC = () => {
         </Navbar.Brand>
         <Navbar.Content
           enableCursorHighlight
-          hideIn="sm"
+          hideIn="xs"
           activeColor="secondary"
         >
           {/* <Navbar.Link isActive={router.route === '/'} href="/">
@@ -194,23 +194,23 @@ const Nav: FC = () => {
             </Navbar.Link>
           )}
         </Navbar.Content>
-        {authStatus === 'unauthenticated' ? (
-          <Navbar.Content>
+
+        <Navbar.Content>
+          <Navbar.Item>
+            <Button
+              flat
+              auto
+              onPress={() => setTheme(isDark ? 'light' : 'dark')}
+              icon={<FontAwesomeIcon icon={isDark ? faSun : faMoon} />}
+            />
+          </Navbar.Item>
+          {authStatus === 'unauthenticated' ? (
             <Navbar.Item>
               <Button flat auto onPress={modalHandler}>
                 Login
               </Button>
             </Navbar.Item>
-          </Navbar.Content>
-        ) : (
-          <Navbar.Content
-            css={{
-              '@xs': {
-                w: '12%',
-                jc: 'flex-end',
-              },
-            }}
-          >
+          ) : (
             <Dropdown placement="bottom-right" closeOnSelect={false}>
               <Navbar.Item>
                 <Dropdown.Trigger>
@@ -278,8 +278,8 @@ const Nav: FC = () => {
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
-          </Navbar.Content>
-        )}
+          )}
+        </Navbar.Content>
 
         <Navbar.Collapse css={{ bg: '$bg' }}>
           <Navbar.CollapseItem
