@@ -51,6 +51,7 @@ export default StudyRoom;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
+  const assessmentId = context.query.assessmentId as string;
 
   if (!session) {
     return {
@@ -62,6 +63,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
   return {
-    props: {},
+    props: { assessmentId },
   };
 };

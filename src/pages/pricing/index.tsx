@@ -176,6 +176,7 @@ const Index: NextPage = () => {
                     name="Basic"
                     planId={'basic'}
                   />
+                  <Spacer y={1.5} />
                 </Grid>
               </>
             )}

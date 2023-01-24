@@ -1,25 +1,22 @@
-import { faDiscord, faGoogle } from '@fortawesome/free-brands-svg-icons';
-import { faEnvelope, faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
+import { faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Avatar,
   Button,
   Dropdown,
   Image,
-  Input,
   Link,
-  Modal,
   Navbar,
   Row,
-  Spacer,
   Switch,
   Text,
   useTheme,
 } from '@nextui-org/react';
-import { signIn, signOut, useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import React, { type FC, useState, type Key } from 'react';
 import { useTheme as useNextTheme } from 'next-themes';
+import LoginModal from './LoginModal';
 
 const Nav: FC = () => {
   const { data: authData, status: authStatus } = useSession();
@@ -53,92 +50,9 @@ const Nav: FC = () => {
     setVisible(false);
   };
 
-  const [email, setEmail] = useState('');
-  const sendLoginVerification = (e: React.SyntheticEvent) => {
-    e.preventDefault();
-    signIn('email', { callbackUrl: '/study-room', email });
-  };
-
   return (
     <>
-      <Modal
-        css={{ bc: '$background' }}
-        closeButton
-        blur
-        aria-labelledby="login"
-        open={visible}
-        onClose={closeHandler}
-      >
-        <Modal.Header>
-          <Text id="login" size="$xl">
-            Welcome to{' '}
-            <Text b size="$2xl">
-              Albert Solver
-            </Text>
-          </Text>
-        </Modal.Header>
-        <Modal.Body>
-          <Row justify="center">
-            <Button
-              size="lg"
-              onPress={() => signIn('google', { callbackUrl: '/study-room' })}
-              iconRight={<FontAwesomeIcon icon={faGoogle} />}
-            >
-              Sign in with Google
-            </Button>
-          </Row>
-          <Row justify="center">
-            <Button
-              size="lg"
-              onPress={() => signIn('discord', { callbackUrl: '/study-room' })}
-              iconRight={<FontAwesomeIcon icon={faDiscord} />}
-            >
-              Sign in with Discord
-            </Button>
-          </Row>
-          {/* 🪄 */}
-          <Row justify="center">
-            <form
-              onSubmit={sendLoginVerification}
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-              }}
-            >
-              <Input
-                label="Email"
-                type="email"
-                required
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <Spacer y={0.5} />
-              <Button
-                auto
-                size="lg"
-                type="submit"
-                iconRight={<FontAwesomeIcon icon={faEnvelope} />}
-              >
-                Sign in with Email
-              </Button>
-            </form>
-          </Row>
-        </Modal.Body>
-        <Modal.Footer>
-          <Row>
-            <Text size="$xs">
-              If you don&apos;t have an account, one will be created for you
-              automatically.
-            </Text>
-          </Row>
-          <Row>
-            <Text size="$xs">
-              Please use the same provider to login into your account in the
-              future.
-            </Text>
-          </Row>
-        </Modal.Footer>
-      </Modal>
-
+      <LoginModal isOpen={visible} closeHandler={closeHandler} />
       <Navbar maxWidth="fluid" variant="sticky">
         <Navbar.Brand>
           <Navbar.Toggle
