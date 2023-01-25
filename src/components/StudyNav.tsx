@@ -1,4 +1,4 @@
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faMoon, faPlus, faSun } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Avatar,
@@ -105,14 +105,15 @@ const StudyNav: FC<Props> = ({ assessments }) => {
           Study Room
         </Navbar.Link>
       </Navbar.Content>
-      <Navbar.Content
-        css={{
-          '@xs': {
-            w: '12%',
-            jc: 'flex-end',
-          },
-        }}
-      >
+      <Navbar.Content>
+        <Navbar.Item>
+          <Button
+            flat
+            auto
+            onPress={() => setTheme(isDark ? 'light' : 'dark')}
+            icon={<FontAwesomeIcon icon={isDark ? faSun : faMoon} />}
+          />
+        </Navbar.Item>
         <Dropdown placement="bottom-right" closeOnSelect={false}>
           <Navbar.Item>
             <Dropdown.Trigger>
