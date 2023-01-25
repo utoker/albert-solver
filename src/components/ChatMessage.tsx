@@ -53,6 +53,7 @@ const ChatMessage: FC<ChatMessageProps> = ({ message }) => {
         {message.user === 'AI' ? (
           <pre
             style={{
+              borderRadius: '0',
               margin: 0,
               padding: 0,
               whiteSpace: 'pre-wrap',

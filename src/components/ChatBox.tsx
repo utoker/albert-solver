@@ -2,7 +2,6 @@ import { Container } from '@nextui-org/react';
 import axios from 'axios';
 import React, { type FC, useRef, useState, useEffect } from 'react';
 import InputFrom from './InputForm';
-import styles from '../pages/study-room/study-room.module.css';
 import ChatMessage from './ChatMessage';
 import ErrorModal from './ErrorModal';
 import useSWR from 'swr';
@@ -70,27 +69,36 @@ const ChatBox: FC = () => {
         ModalCloseHandler={() => ModalCloseHandler()}
       />
       <Container
-        className={styles.chatbox}
         css={{
+          flex: '1', //
+          position: 'relative',
           mx: '$0',
           p: '0',
           '@xs': { mx: '$18', pl: '$12' },
         }}
       >
-        <div className={styles.chatLog} ref={scrollRef}>
+        <div
+          ref={scrollRef}
+          style={{
+            overflowY: 'auto', // scroll
+            height: '76vh',
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
           {chatLog &&
             chatLog.map((message, i) => (
               <ChatMessage message={message} key={i} />
             ))}
+          <InputFrom
+            setChatLog={setChatLog}
+            chatLog={chatLog}
+            assessmentId={assessmentId}
+            modalHandler={modalHandler}
+            mutateAssessments={mutateAssessments}
+            setErrorMessage={setErrorMessage}
+          />
         </div>
-        <InputFrom
-          setChatLog={setChatLog}
-          chatLog={chatLog}
-          assessmentId={assessmentId}
-          modalHandler={modalHandler}
-          mutateAssessments={mutateAssessments}
-          setErrorMessage={setErrorMessage}
-        />
       </Container>
     </>
   );

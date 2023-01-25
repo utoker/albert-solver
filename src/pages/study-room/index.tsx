@@ -37,6 +37,7 @@ import Head from 'next/head';
 import SpeechRecognition, {
   useSpeechRecognition,
 } from 'react-speech-recognition';
+import { dailyQuestionLimit } from '../../helpers/constants';
 // This is a workaround for hydration issues with Next.js
 const StudyNav = dynamic(() => import('../../components/StudyNav'), {
   ssr: false,
@@ -192,7 +193,7 @@ const StudyRoom: NextPage = () => {
         <Grid xs={12} sm={10} md={10.5}>
           <Container
             className={styles.chatbox}
-            css={{ mx: '$0', '@xs': { mx: '$18' } }}
+            css={{ position: 'relative', mx: '$0', '@xs': { mx: '$18' } }}
           >
             <div className={styles.chatLog}>
               <Examples examplePress={examplePress} />
@@ -291,8 +292,13 @@ const StudyRoom: NextPage = () => {
                 )}
                 {subscription === 'basic' && (
                   <Text size="$sm" css={{ ta: 'center' }}>
-                    Basic users can only send 10 questions per day. Remaining
-                    questions today: {10 - count}
+                    <Text hideIn="xs" span>
+                      Basic users can only send {dailyQuestionLimit} questions
+                      per day.{' '}
+                    </Text>
+                    <Text span>
+                      Remaining questions today: {dailyQuestionLimit - count}
+                    </Text>
                   </Text>
                 )}
               </form>

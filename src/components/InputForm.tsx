@@ -167,14 +167,25 @@ const InputForm: FC<Props> = ({
     }
   };
 
+  // position: 'absolute',
+  // bottom: '0',
+  // width: '100%',
+  // pb: '$8',
+  // pl: '$0',
+
   return (
     <Container
       css={{
+        pb: '$2',
+        pl: '$0',
+        pr: '$2',
         position: 'absolute',
         bottom: '0',
         width: '100%',
-        pb: '$8',
-        pl: '$0',
+        '@xs': {
+          pb: '$8',
+          pr: '$12',
+        },
       }}
     >
       <form
@@ -262,8 +273,12 @@ const InputForm: FC<Props> = ({
         )}
         {subscription === 'basic' && (
           <Text size="$sm" css={{ ta: 'center' }}>
-            Basic users can only send {dailyQuestionLimit} questions per day.
-            Remaining questions today: {dailyQuestionLimit - count}
+            <Text hideIn="xs" span>
+              Basic users can only send {dailyQuestionLimit} questions per day.{' '}
+            </Text>
+            <Text span>
+              Remaining questions today: {dailyQuestionLimit - count}
+            </Text>
           </Text>
         )}
       </form>
