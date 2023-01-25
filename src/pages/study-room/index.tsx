@@ -197,7 +197,15 @@ const StudyRoom: NextPage = () => {
             <div className={styles.chatLog}>
               <Examples examplePress={examplePress} />
             </div>
-            <div className={styles.chatInputHolder}>
+            <Container
+              css={{
+                position: 'absolute',
+                bottom: '0',
+                width: '100%',
+                pb: '$8',
+                pl: '$0',
+              }}
+            >
               <form
                 ref={formRef}
                 onSubmit={
@@ -205,14 +213,14 @@ const StudyRoom: NextPage = () => {
                     ? () => {
                         console.log(loading);
                       }
-                    : (e) => handleSubmit(e)
+                    : handleSubmit
                 }
               >
                 {authSession && (
                   <Row>
                     <Textarea
                       ref={inputRef}
-                      onKeyDown={(event) => onTextareaKeyDown(event)}
+                      onKeyDown={(e) => onTextareaKeyDown(e)}
                       initialValue=""
                       minRows={1}
                       maxRows={5}
@@ -281,15 +289,15 @@ const StudyRoom: NextPage = () => {
                     </Button>
                   </Row>
                 )}
+                {subscription === 'basic' && (
+                  <Text size="$sm" css={{ ta: 'center' }}>
+                    Basic users can only send 10 questions per day. Remaining
+                    questions today: {10 - count}
+                  </Text>
+                )}
               </form>
-              {subscription === 'basic' && (
-                <Text size="$sm" css={{ ta: 'center' }}>
-                  Basic users can only send 10 questions per day. Remaining
-                  questions today: {10 - count}
-                </Text>
-              )}
               <Spacer y={subscription === 'pro' ? 1 : 0} />
-            </div>
+            </Container>
           </Container>
         </Grid>
       </Grid.Container>
