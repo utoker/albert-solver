@@ -1,5 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+import {
+  faMicrophone,
+  faPaperPlane,
+  faRecordVinyl,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
@@ -29,6 +33,9 @@ import ErrorModal from './ErrorModal';
 import useSWR, { preload } from 'swr';
 import sendRequest from '../helpers/sendRequest';
 import { useRouter } from 'next/router';
+import SpeechRecognition, {
+  useSpeechRecognition,
+} from 'react-speech-recognition';
 
 type chatLog = {
   user: string;
@@ -43,11 +50,18 @@ const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 preload('/api/assessment/get-all', fetcher);
 preload('/api/post-counter/get-count', fetcher);
 
-// type Props = {
-//   assessmentId: string;
-// };
-
 const ChatBox: FC = () => {
+  const {
+    transcript,
+    listening,
+    // resetTranscript,
+    browserSupportsSpeechRecognition,
+  } = useSpeechRecognition();
+  const startListening = () => SpeechRecognition.startListening();
+  if (!browserSupportsSpeechRecognition) {
+    console.log("BROWSER DOESN'T SUPPORT SPEECH RECOGNITION");
+  }
+
   const [chatLog, setChatLog] = useState<chatLog>([]);
   const router = useRouter();
   const assessmentId = router.query.assessmentId as string;
@@ -62,6 +76,7 @@ const ChatBox: FC = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
   const count = messageCount?.count;
 
   const onTextareaKeyDown = useCallback(
@@ -168,6 +183,16 @@ const ChatBox: FC = () => {
     }
   }, [chatLog]);
 
+  useEffect(() => {
+    if (inputRef.current !== null) {
+      inputRef.current.value = transcript;
+    }
+  }, [transcript]);
+
+  useEffect(() => {
+    setInput(transcript);
+  }, [transcript]);
+
   return (
     <>
       <ErrorModal
@@ -203,6 +228,7 @@ const ChatBox: FC = () => {
             {authSession && (
               <Row align="center">
                 <Textarea
+                  ref={inputRef}
                   onKeyDown={(e) => onTextareaKeyDown(e)}
                   minRows={1}
                   maxRows={5}
@@ -240,7 +266,7 @@ const ChatBox: FC = () => {
                         {proInputLimit}/{input.length}
                       </Text>
                     )}
-                <Spacer x={1} />
+                <Spacer x={0.5} />
                 <Button
                   css={{ h: '37px' }}
                   auto
@@ -253,6 +279,21 @@ const ChatBox: FC = () => {
                     <Loading type="points" color="currentColor" size="sm" />
                   ) : (
                     <FontAwesomeIcon icon={faPaperPlane} />
+                  )}
+                </Button>
+                <Spacer x={0.5} />
+                <Button
+                  css={{ h: '37px' }}
+                  auto
+                  ghost
+                  id="microphone"
+                  disabled={loading}
+                  onPress={startListening}
+                >
+                  {listening ? (
+                    <FontAwesomeIcon icon={faRecordVinyl} />
+                  ) : (
+                    <FontAwesomeIcon icon={faMicrophone} />
                   )}
                 </Button>
               </Row>

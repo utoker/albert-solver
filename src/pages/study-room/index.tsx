@@ -20,7 +20,11 @@ import React, {
   useEffect,
   type FormEvent,
 } from 'react';
-import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+import {
+  faMicrophone,
+  faPaperPlane,
+  faRecordVinyl,
+} from '@fortawesome/free-solid-svg-icons';
 import styles from './study-room.module.css';
 import { useRouter } from 'next/router';
 import SideMenu from '../../components/SideMenu';
@@ -30,7 +34,9 @@ import Examples from '../../components/Examples';
 import useSWR from 'swr';
 import generate from '../../helpers/generate';
 import Head from 'next/head';
-
+import SpeechRecognition, {
+  useSpeechRecognition,
+} from 'react-speech-recognition';
 // This is a workaround for hydration issues with Next.js
 const StudyNav = dynamic(() => import('../../components/StudyNav'), {
   ssr: false,
@@ -39,6 +45,23 @@ const StudyNav = dynamic(() => import('../../components/StudyNav'), {
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
 const StudyRoom: NextPage = () => {
+  const {
+    transcript,
+    listening,
+    // resetTranscript,
+    browserSupportsSpeechRecognition,
+  } = useSpeechRecognition();
+
+  const startListening = () => SpeechRecognition.startListening();
+
+  if (!browserSupportsSpeechRecognition) {
+    console.log("BROWSER DOESN'T SUPPORT SPEECH RECOGNITION");
+  }
+
+  useEffect(() => {
+    setInput(transcript);
+  }, [transcript]);
+
   const { data: assessments, mutate } = useSWR(
     '/api/assessment/get-all',
     fetcher
@@ -129,6 +152,12 @@ const StudyRoom: NextPage = () => {
     }
   }, [exampleClicked, input]);
 
+  useEffect(() => {
+    if (inputRef.current !== null) {
+      inputRef.current.value = transcript;
+    }
+  }, [transcript]);
+
   const examplePress = (input: React.SetStateAction<string>) => {
     setExampleClicked(true);
     setInput(input);
@@ -182,7 +211,6 @@ const StudyRoom: NextPage = () => {
                 {authSession && (
                   <Row>
                     <Textarea
-                      // css={{ ml: '$18' }}
                       ref={inputRef}
                       onKeyDown={(event) => onTextareaKeyDown(event)}
                       initialValue=""
@@ -221,7 +249,7 @@ const StudyRoom: NextPage = () => {
                             {proInputLimit}/{input.length}
                           </Text>
                         )}
-                    <Spacer x={1} />
+                    <Spacer x={0.5} />
                     <Button
                       css={{ h: '37px' }}
                       auto
@@ -234,6 +262,21 @@ const StudyRoom: NextPage = () => {
                         <Loading type="points" color="currentColor" size="sm" />
                       ) : (
                         <FontAwesomeIcon icon={faPaperPlane} />
+                      )}
+                    </Button>
+                    <Spacer x={0.5} />
+                    <Button
+                      css={{ h: '37px' }}
+                      auto
+                      ghost
+                      id="microphone"
+                      disabled={loading}
+                      onPress={startListening}
+                    >
+                      {listening ? (
+                        <FontAwesomeIcon icon={faRecordVinyl} />
+                      ) : (
+                        <FontAwesomeIcon icon={faMicrophone} />
                       )}
                     </Button>
                   </Row>
