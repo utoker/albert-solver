@@ -1,28 +1,71 @@
-# Create T3 App
+<div id="top"></div>
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+[![LinkedIn][linkedin-shield]](https://www.linkedin.com/in/utoker/)
 
-## What's next? How do I make an app with this?
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+    <!-- TODO ADD GIF -->
+    <!-- <img src="assets/foodcheck.gif" alt="Gif"> -->
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+<h3 align="center">Welcome to the Albert Solver GitHub repository!</h3>
+    <br />
+    <a href="https://github.com/utoker/albert-solver/tree/main"><strong>Explore the docs »</strong></a>
+</div>
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+## About The Project
 
+This project aims to provide a comprehensive solution for expert assistance with essays and homework using cutting-edge AI technology, powered by OpenAI's GPT-3 language model. The AI model is integrated with a web application built using modern web technologies such as TypeScript, Next.js, NextAuth.js, NextUI, Prisma, SWR, Zod, React and Stripe for handling subscriptions.
+<br />
+<br />
+The website is live and available at <a href="https://www.albertsolver.com">https://www.albertsolver.com</a>. The website allow users to register, login and use the AI to write, check and get suggestions for their essays and homework. Users can also upgrade to a pro subscription for additional features, and Stripe is used to handle the subscription payments.
+<br />
+<br />
+The repository contains all the necessary code and resources to run the Albert Solver website on your local machine.
+<br />
+<br />
+To get started, you will need to have the following software installed on your machine:
+Node.js
+npm (Node Package Manager)
+Prisma CLI
+Once you have these installed, you can clone this repository and run the following commands in your terminal:
+
+```
+npm install
+npm run dev
+```
+
+This will start a development server on your local machine and you can view the website in your browser at http://localhost:3000.
+
+Please note that this is a work in progress and there may be bugs or unfinished features. If you encounter any issues, please feel free to open a GitHub issue and we will do our best to help.
+
+We welcome contributions and feedback to help improve the Albert Solver. Thank you for visiting our repository!
+
+### Built With
+
+- [TypeScript](https://www.typescriptlang.org/)
 - [Next.js](https://nextjs.org)
 - [NextAuth.js](https://next-auth.js.org)
+- [NextUI](https://nextui.org)
+- [SWR](https://swr.vercel.app)
 - [Prisma](https://prisma.io)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+- [Zod](https://zod.dev)
+- [Stripe](https://stripe.com)
+- [React](https://reactjs.org/)
 
-## Learn More
+<p align="right">(<a href="#top">back to top</a>)</p>
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+## Contact
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+Umut Toker - utoker@gmail.com
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+LinkedIn: [https://www.linkedin.com/in/utoker/](https://www.linkedin.com/in/utoker/)
 
-## How do I deploy this?
+<p align="right">(<a href="#top">back to top</a>)</p>
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+<!-- MARKDOWN LINKS & IMAGES -->
+<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+
+[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
+[linkedin-url]: https://linkedin.com/in/linkedin_username
+[product-screenshot]: src/public/card.png
