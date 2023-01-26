@@ -14,9 +14,9 @@ import React, { useEffect, useState } from 'react';
 import Footer from '../../components/Footer';
 import PriceCard from '../../components/PriceCard';
 import useSWR from 'swr';
-import axios from 'axios';
 import type Stripe from 'stripe';
 import Head from 'next/head';
+import fetcher from '../../helpers/fetcher';
 
 const Nav = dynamic(() => import('../../components/Nav'), {
   ssr: false,
@@ -34,34 +34,30 @@ type plan = {
   active: boolean;
 };
 
-const fetcher = (url: string) => axios.get(url).then((res) => res.data);
-
 const Index: NextPage = () => {
+  // data
   const { data: plans } = useSWR('/api/stripe/get-prices', fetcher);
-  const { data: authSession, status } = useSession();
+  const monthlyProPlan = plans?.find(
+    (p: plan) => p.id === 'price_1MUYDKDjAm7fiR6h4X6jjAm5'
+  );
+  const yearlyProPlan = plans?.find(
+    (p: plan) => p.id === 'price_1MUYDvDjAm7fiR6hrHhpTEbb'
+  );
+
+  // states
   const [isMonthly, setIsMonthly] = useState(true);
   const [proButton, setProButton] = useState('');
   const [basicButton, setBasicButton] = useState('');
 
-  const monthlyProPlan = plans?.find(
-    (plan: plan) => plan.interval === 'month' && plan.active === true
-  );
-  const yearlyProPlan = plans?.find(
-    (plan: plan) => plan.interval === 'year' && plan.active === true
-  );
+  // session
+  const { data: session, status } = useSession();
 
   useEffect(() => {
-    if (
-      status === 'authenticated' &&
-      authSession.user?.subscription === 'basic'
-    ) {
+    if (status === 'authenticated' && session.user?.subscription === 'basic') {
       setBasicButton('Start Studying');
       setProButton('Subscribe');
     }
-    if (
-      status === 'authenticated' &&
-      authSession.user?.subscription === 'pro'
-    ) {
+    if (status === 'authenticated' && session.user?.subscription === 'pro') {
       setProButton('Manage Subscription');
       setBasicButton('Manage Subscription');
     }
@@ -69,7 +65,7 @@ const Index: NextPage = () => {
       setProButton('Create Account');
       setBasicButton('Create Account');
     }
-  }, [authSession, status]);
+  }, [session, status]);
 
   return (
     <>
