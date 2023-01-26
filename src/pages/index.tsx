@@ -15,9 +15,14 @@ const Nav = dynamic(() => import('../components/Nav'), {
 });
 
 const Home: NextPage = () => {
+  // Next.js Router
   const route = useRouter();
+  // NextAuth Session
   const { data: session } = useSession();
+  // NextUI Theme
   const { isDark } = useTheme();
+
+  // Login Modal
   const [visible, setVisible] = useState(false);
   const closeHandler = () => {
     setVisible(false);

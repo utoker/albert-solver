@@ -5,28 +5,27 @@ import SideMenu from '../../components/SideMenu';
 import ChatBox from '../../components/ChatBox';
 import dynamic from 'next/dynamic';
 import useSWR from 'swr';
-import axios from 'axios';
 import Head from 'next/head';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
+import fetcher from '../../helpers/fetcher';
 
 // This is a workaround for hydration issues with Next.js
 const StudyNav = dynamic(() => import('../../components/StudyNav'), {
   ssr: false,
 });
 
-const fetcher = (url: string) => axios.get(url).then((res) => res.data);
-
 type Props = {
   assessmentId: string;
 };
 
 const StudyRoom: NextPage<Props> = () => {
-  // authentication
+  // Redirect to login page if not authenticated
   const route = useRouter();
   const { status } = useSession();
   if (status === 'unauthenticated') route.push('/');
 
+  // SWR for assessments
   const { data: assessments } = useSWR('/api/assessment/get-all', fetcher);
 
   return (

@@ -35,7 +35,7 @@ type plan = {
 };
 
 const Index: NextPage = () => {
-  // data
+  // SWR for Stripe Prices
   const { data: plans } = useSWR('/api/stripe/get-prices', fetcher);
   const monthlyProPlan = plans?.find(
     (p: plan) => p.id === 'price_1MUYDKDjAm7fiR6h4X6jjAm5'
@@ -44,12 +44,12 @@ const Index: NextPage = () => {
     (p: plan) => p.id === 'price_1MUYDvDjAm7fiR6hrHhpTEbb'
   );
 
-  // states
+  // States for Switch
   const [isMonthly, setIsMonthly] = useState(true);
   const [proButton, setProButton] = useState('');
   const [basicButton, setBasicButton] = useState('');
 
-  // session
+  // NextAuth Session
   const { data: session, status } = useSession();
 
   useEffect(() => {
