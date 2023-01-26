@@ -6,21 +6,7 @@
   flex-direction: column;
   justify-content: space-between;
   width: 240px;
-  /* background-color: #f1f3f5; */
   padding: 10px;
-}
-
-/* ChatBox */
-.chatbox {
-  flex: 1;
-  position: relative;
-}
-
-.chatLog {
-  height: 75vh;
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
 }
 
 /* Examples.tsx */

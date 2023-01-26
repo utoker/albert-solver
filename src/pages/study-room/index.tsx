@@ -25,7 +25,6 @@ import {
   faPaperPlane,
   faRecordVinyl,
 } from '@fortawesome/free-solid-svg-icons';
-import styles from './study-room.module.css';
 import { useRouter } from 'next/router';
 import SideMenu from '../../components/SideMenu';
 import dynamic from 'next/dynamic';
@@ -186,25 +185,33 @@ const StudyRoom: NextPage = () => {
         ModalCloseHandler={() => ModalCloseHandler()}
         visible={visible}
       />
-      <Grid.Container css={{ height: 'calc(100vh - 76px)', bg: '$qq' }}>
+      <Grid.Container css={{ height: 'calc(100vh - 76px)' }}>
         <Grid xs={0} sm={2} md={1.5}>
           <SideMenu assessments={assessments || []} />
         </Grid>
         <Grid xs={12} sm={10} md={10.5}>
           <Container
-            className={styles.chatbox}
-            css={{ position: 'relative', mx: '$0', '@xs': { mx: '$18' } }}
+            css={{
+              flex: '1', //
+              position: 'relative',
+              mx: '$0',
+              p: '0',
+              '@xs': { mx: '$18', pl: '$12' },
+            }}
           >
-            <div className={styles.chatLog}>
-              <Examples examplePress={examplePress} />
-            </div>
+            <Examples examplePress={examplePress} />
             <Container
               css={{
+                pb: '$2',
+                pl: '$0',
+                pr: '$2',
                 position: 'absolute',
                 bottom: '0',
                 width: '100%',
-                pb: '$8',
-                pl: '$0',
+                '@xs': {
+                  pb: '$8',
+                  pr: '$12',
+                },
               }}
             >
               <form

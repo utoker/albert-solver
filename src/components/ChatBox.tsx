@@ -70,7 +70,6 @@ const ChatBox: FC = () => {
       />
       <Container
         css={{
-          flex: '1', //
           position: 'relative',
           mx: '$0',
           p: '0',
@@ -80,7 +79,7 @@ const ChatBox: FC = () => {
         <div
           ref={scrollRef}
           style={{
-            overflowY: 'auto', // scroll
+            overflow: 'auto', // scroll
             height: '76vh',
             display: 'flex',
             flexDirection: 'column',

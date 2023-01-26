@@ -22,10 +22,13 @@ type Props = {
 };
 
 const StudyRoom: NextPage<Props> = () => {
+  // authentication
   const route = useRouter();
   const { status } = useSession();
   if (status === 'unauthenticated') route.push('/');
+
   const { data: assessments } = useSWR('/api/assessment/get-all', fetcher);
+
   return (
     <>
       <Head>
@@ -43,7 +46,7 @@ const StudyRoom: NextPage<Props> = () => {
         />
       </Head>
       <StudyNav assessments={assessments || []} />
-      <Grid.Container css={{ height: 'calc(100vh - 76px)', bc: '$qq' }}>
+      <Grid.Container css={{ height: 'calc(100vh - 76px)' }}>
         <Grid xs={0} sm={2} md={1.5}>
           <SideMenu assessments={assessments || []} />
         </Grid>

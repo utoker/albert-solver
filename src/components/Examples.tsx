@@ -1,4 +1,4 @@
-import { Card, Text } from '@nextui-org/react';
+import { Card, Container, Text } from '@nextui-org/react';
 import React, { type FC } from 'react';
 import styles from '../pages/study-room/study-room.module.css';
 
@@ -12,19 +12,24 @@ const Examples: FC<ExamplesProps> = ({ examplePress }) => {
     'Write a poem about the importance of family.',
   ];
   return (
-    <div
-      className={styles.mdChatLog}
+    <Container
       style={{
-        padding: '56px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         width: '100%',
         overflowY: 'auto',
       }}
+      css={{
+        p: '$0',
+        h: '76vh',
+        overflow: 'auto',
+        // display: 'flex',
+        // flexDirection: 'column',
+      }}
     >
       <div>
-        <Text h1 css={{ textAlign: 'center' }}>
+        <Text hideIn="xs" h1 css={{ ta: 'center' }}>
           Albert Solver
         </Text>
         <div
@@ -100,7 +105,7 @@ const Examples: FC<ExamplesProps> = ({ examplePress }) => {
           </div>
         </div>
       </div>
-    </div>
+    </Container>
   );
 };
 
