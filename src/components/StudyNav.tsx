@@ -18,16 +18,24 @@ import React, { type FC, type Key } from 'react';
 import AssessmentButton from './AssessmentButton';
 import { useTheme as useNextTheme } from 'next-themes';
 import { Switch, useTheme } from '@nextui-org/react';
+import { mutate } from 'swr';
 
 type Props = {
   assessments: Assessment[];
 };
 
 const StudyNav: FC<Props> = ({ assessments }) => {
+  // NextAuth
+  const { data: session } = useSession();
+
+  // NextUI Theme
   const { setTheme } = useNextTheme();
   const { isDark } = useTheme();
-  const { data: authData } = useSession();
+
+  // Next Router
   const router = useRouter();
+
+  // Handlers
   const handleNewAssessment = async () => {
     router.push('/study-room');
   };
@@ -35,11 +43,12 @@ const StudyNav: FC<Props> = ({ assessments }) => {
   const handleChangeAssessment = (assessmentId: string) => {
     router.push(`/study-room/${assessmentId}`);
   };
+
   const handleDeleteAssessment = async (assessmentId: string) => {
     await axios.post('/api/assessment/delete', {
       assessmentId,
     });
-    //mutate
+    mutate('/api/assessment/get-all');
     if (router.query.assessmentId === assessmentId) router.push('/study-room');
   };
 
@@ -62,8 +71,6 @@ const StudyNav: FC<Props> = ({ assessments }) => {
         break;
     }
   };
-
-  // const collapseItems = ['Help & Feedback', 'Log Out'];
 
   return (
     <Navbar maxWidth={'fluid'} variant={'sticky'}>
@@ -106,7 +113,7 @@ const StudyNav: FC<Props> = ({ assessments }) => {
         </Navbar.Link>
       </Navbar.Content>
       <Navbar.Content>
-        <Navbar.Item>
+        <Navbar.Item hideIn="xs">
           <Button
             flat
             auto
@@ -124,9 +131,7 @@ const StudyNav: FC<Props> = ({ assessments }) => {
                 color="secondary"
                 size="md"
                 src={
-                  authData?.user?.image
-                    ? authData.user.image
-                    : '/user-avatar.png'
+                  session?.user?.image ? session.user.image : '/user-avatar.png'
                 }
               />
             </Dropdown.Trigger>
@@ -146,13 +151,13 @@ const StudyNav: FC<Props> = ({ assessments }) => {
                 Signed in as
               </Text>
               <Text b color="inherit" css={{ d: 'flex' }}>
-                {authData?.user?.email}
+                {session?.user?.email}
               </Text>
             </Dropdown.Item>
             <Dropdown.Section
-              title={` ${authData?.user?.subscription.toUpperCase()} USER`}
+              title={` ${session?.user?.subscription.toUpperCase()} USER`}
             >
-              {authData?.user?.subscription === 'pro' ? (
+              {session?.user?.subscription === 'pro' ? (
                 <Dropdown.Item key={'pro'}>Manage Subscription</Dropdown.Item>
               ) : (
                 <Dropdown.Item key={'upgrade'}>Upgrade to Pro</Dropdown.Item>
@@ -182,16 +187,18 @@ const StudyNav: FC<Props> = ({ assessments }) => {
       </Navbar.Content>
 
       <Navbar.Collapse css={{ bg: '$bg' }}>
-        <Navbar.CollapseItem>
-          <Button
-            onPress={handleNewAssessment}
-            ghost
-            css={{ w: '220px' }}
-            icon={<FontAwesomeIcon icon={faPlus} />}
-          >
-            New Assessment
-          </Button>
-        </Navbar.CollapseItem>
+        {router.route !== '/study-room' && (
+          <Navbar.CollapseItem>
+            <Button
+              onPress={handleNewAssessment}
+              ghost
+              css={{ w: '220px' }}
+              icon={<FontAwesomeIcon icon={faPlus} />}
+            >
+              New Assessment
+            </Button>
+          </Navbar.CollapseItem>
+        )}
         {assessments &&
           assessments.map((assessment) => (
             <Navbar.CollapseItem key={assessment.id}>

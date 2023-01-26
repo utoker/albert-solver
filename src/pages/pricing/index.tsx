@@ -35,7 +35,7 @@ type plan = {
 };
 
 const Index: NextPage = () => {
-  // SWR for Stripe Prices
+  // SWR for fetching Stripe Prices
   const { data: plans } = useSWR('/api/stripe/get-prices', fetcher);
   const monthlyProPlan = plans?.find(
     (p: plan) => p.id === 'price_1MUYDKDjAm7fiR6h4X6jjAm5'
@@ -52,6 +52,7 @@ const Index: NextPage = () => {
   // NextAuth Session
   const { data: session, status } = useSession();
 
+  // Set Button Text
   useEffect(() => {
     if (status === 'authenticated' && session.user?.subscription === 'basic') {
       setBasicButton('Start Studying');

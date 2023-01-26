@@ -34,6 +34,7 @@ import generate from '../helpers/generate';
 import {
   basicInputLimit,
   dailyQuestionLimit,
+  minInputLength,
   proInputLimit,
 } from '../helpers/constants';
 
@@ -61,49 +62,28 @@ const InputForm: FC<Props> = ({
   mutateAssessments,
   assessmentId,
 }) => {
-  //
-
-  //swr
+  // SWR for fetching message count
   const { data: messageCount, mutate: mutateCount } = useSWR(
     '/api/post-counter/get-count',
     fetcher
   );
   const count = messageCount?.count;
 
-  //session
-  const { data: authSession } = useSession();
-  const subscription = authSession?.user?.subscription;
+  // Next Auth
+  const { data: session } = useSession();
+  const subscription = session?.user?.subscription;
 
-  //refs
+  // Refs
   const formRef = useRef<HTMLFormElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  //states
+  // States
   const [loading, setLoading] = useState(false);
   const [input, setInput] = useState('');
 
-  //callbacks
-  const onTextareaKeyDown = useCallback(
-    (e: KeyboardEvent<FormElement>) => {
-      if (e.keyCode === 13 && e.shiftKey === false && !loading) {
-        e.preventDefault();
-        formRef.current?.requestSubmit();
-      }
-    },
-    [loading]
-  );
-
-  const reset = useCallback(() => {
-    formRef.current?.reset();
-  }, [formRef]);
-
-  // voice recognition
-  const {
-    transcript,
-    listening,
-    // resetTranscript,
-    browserSupportsSpeechRecognition,
-  } = useSpeechRecognition();
+  // Speech Recognition
+  const { transcript, listening, browserSupportsSpeechRecognition } =
+    useSpeechRecognition();
   const startListening = () => SpeechRecognition.startListening();
   if (!browserSupportsSpeechRecognition) {
     console.log("BROWSER DOESN'T SUPPORT SPEECH RECOGNITION");
@@ -118,7 +98,22 @@ const InputForm: FC<Props> = ({
     setInput(transcript);
   }, [transcript]);
 
-  //submit handler
+  // Handlers
+  const onTextareaKeyDown = useCallback(
+    (e: KeyboardEvent<FormElement>) => {
+      if (e.keyCode === 13 && e.shiftKey === false && !loading) {
+        e.preventDefault();
+        formRef.current?.requestSubmit();
+      }
+    },
+    [loading]
+  );
+
+  const reset = useCallback(() => {
+    formRef.current?.reset();
+  }, [formRef]);
+
+  // Submit
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!input || loading) return;
@@ -127,19 +122,19 @@ const InputForm: FC<Props> = ({
     const messages = messagesArr.map((message) => message.message).join('\n');
     if (subscription === 'basic' && input.length > basicInputLimit) {
       setLoading(false);
-      setErrorMessage('Message too long! (max 500 characters)');
+      setErrorMessage(`Message too long! (max ${basicInputLimit} characters)`);
       modalHandler();
       return;
     }
     if (subscription === 'pro' && input.length > proInputLimit) {
       setLoading(false);
-      setErrorMessage('Message too long! (max 5000 characters)');
+      setErrorMessage(`Message too long! (max ${proInputLimit} characters)`);
       modalHandler();
       return;
     }
-    if (input.length < 3) {
+    if (input.length < minInputLength) {
       setLoading(false);
-      setErrorMessage('Message too short! (min 3 characters)');
+      setErrorMessage(`Message too short! (min ${minInputLength} characters)`);
       modalHandler();
       return;
     }
@@ -150,7 +145,7 @@ const InputForm: FC<Props> = ({
         { user: 'Student', message: input },
         { user: 'AI', message: 'Thinking...' },
       ]);
-      const res = await generate(messages, count, authSession);
+      const res = await generate(messages, count, session);
       const chatLogArr = [
         ...chatLog,
         { user: 'Student', message: input },
@@ -166,12 +161,6 @@ const InputForm: FC<Props> = ({
       setLoading(false);
     }
   };
-
-  // position: 'absolute',
-  // bottom: '0',
-  // width: '100%',
-  // pb: '$8',
-  // pl: '$0',
 
   return (
     <Container
@@ -198,7 +187,7 @@ const InputForm: FC<Props> = ({
             : handleSubmit
         }
       >
-        {authSession && (
+        {session && (
           <Row align="center">
             <Textarea
               ref={inputRef}

@@ -36,32 +36,39 @@ import Head from 'next/head';
 import SpeechRecognition, {
   useSpeechRecognition,
 } from 'react-speech-recognition';
-import { dailyQuestionLimit } from '../../helpers/constants';
+import {
+  basicInputLimit,
+  dailyQuestionLimit,
+  minInputLength,
+  proInputLimit,
+} from '../../helpers/constants';
+import fetcher from '../../helpers/fetcher';
+
 // This is a workaround for hydration issues with Next.js
 const StudyNav = dynamic(() => import('../../components/StudyNav'), {
   ssr: false,
 });
 
-const fetcher = (url: string) => axios.get(url).then((res) => res.data);
-
 const StudyRoom: NextPage = () => {
-  const {
-    transcript,
-    listening,
-    // resetTranscript,
-    browserSupportsSpeechRecognition,
-  } = useSpeechRecognition();
+  // Next Auth
+  const { data: session } = useSession();
+  const subscription = session?.user?.subscription;
 
+  // Next Router
+  const router = useRouter();
+
+  // Speech Recognition
+  const { transcript, listening, browserSupportsSpeechRecognition } =
+    useSpeechRecognition();
   const startListening = () => SpeechRecognition.startListening();
-
   if (!browserSupportsSpeechRecognition) {
     console.log("BROWSER DOESN'T SUPPORT SPEECH RECOGNITION");
   }
-
   useEffect(() => {
     setInput(transcript);
   }, [transcript]);
 
+  // SWR for fetching assessments and message count
   const { data: assessments, mutate } = useSWR(
     '/api/assessment/get-all',
     fetcher
@@ -71,16 +78,17 @@ const StudyRoom: NextPage = () => {
     fetcher
   );
   const count = messageCount?.count;
+
+  // States
   const [input, setInput] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
-  const { data: authSession } = useSession();
-  const router = useRouter();
-  const subscription = authSession?.user?.subscription;
-  const basicInputLimit = 500;
-  const proInputLimit = 5000;
+
+  // Refs
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
+
+  // Handlers
   const reset = useCallback(() => {
     formRef.current?.reset();
   }, [formRef]);
@@ -93,24 +101,24 @@ const StudyRoom: NextPage = () => {
     const messages = messagesArr.map((message) => message.message).join('\n');
     if (subscription === 'basic' && input.length > basicInputLimit) {
       setLoading(false);
-      setErrorMessage('Message too long! (max 500 characters)');
+      setErrorMessage('Message too long! (max {basicInputLimit} characters)');
       modalHandler();
       return;
     }
     if (subscription === 'pro' && input.length > proInputLimit) {
       setLoading(false);
-      setErrorMessage('Message too long! (max 5000 characters)');
+      setErrorMessage(`Message too long! (max ${proInputLimit} characters)`);
       modalHandler();
       return;
     }
-    if (input.length < 3) {
+    if (input.length < minInputLength) {
       setLoading(false);
-      setErrorMessage('Message too short! (min 3 characters)');
+      setErrorMessage(`Message too short! (min ${minInputLength} characters)`);
       modalHandler();
       return;
     }
     try {
-      const res = await generate(messages, count, authSession);
+      const res = await generate(messages, count, session);
       const chatLog = JSON.stringify([
         { user: 'Student', message: input },
         { user: 'AI', message: res },
@@ -224,7 +232,7 @@ const StudyRoom: NextPage = () => {
                     : handleSubmit
                 }
               >
-                {authSession && (
+                {session && (
                   <Row>
                     <Textarea
                       ref={inputRef}
