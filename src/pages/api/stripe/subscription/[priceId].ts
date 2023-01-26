@@ -28,6 +28,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         line_items: lineItems,
         success_url: `${env.NEXTAUTH_URL}/success`,
         cancel_url: `${env.NEXTAUTH_URL}/cancel`,
+        allow_promotion_codes: true,
       });
       if (!stripeSession.url) throw new Error('No stripe session url found');
       res.redirect(303, stripeSession.url);
