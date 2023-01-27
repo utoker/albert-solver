@@ -258,7 +258,13 @@ const InputForm: FC<Props> = ({
           </Row>
         )}
         {subscription === 'basic' && (
-          <Text size="$sm" css={{ ta: 'center', pt: '$2' }}>
+          <Text
+            size="$sm"
+            css={{
+              ta: 'center',
+              pt: '$2',
+            }}
+          >
             <Text hideIn="xs" span>
               Basic users can only send {basicDailyQuestionLimit} questions per
               day.{' '}

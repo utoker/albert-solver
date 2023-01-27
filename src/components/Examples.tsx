@@ -14,7 +14,7 @@ const Examples: FC<ExamplesProps> = ({ examplePress }) => {
   return (
     <Container
       css={{
-        h: '75vh',
+        h: '74vh',
         p: '$0',
         overflow: 'auto',
         jc: 'center',
