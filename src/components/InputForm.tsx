@@ -1,8 +1,4 @@
-import {
-  faMicrophone,
-  faPaperPlane,
-  faRecordVinyl,
-} from '@fortawesome/free-solid-svg-icons';
+import { faMicrophone, faRecordVinyl } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import useSWR, { type KeyedMutator } from 'swr';
 import {
@@ -37,6 +33,7 @@ import {
   minInputLength,
   proInputLimit,
 } from '../helpers/constants';
+import Send from './Icons/Send';
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
@@ -240,7 +237,7 @@ const InputForm: FC<Props> = ({
               {loading ? (
                 <Loading type="points" color="currentColor" size="sm" />
               ) : (
-                <FontAwesomeIcon icon={faPaperPlane} />
+                <Send />
               )}
             </Button>
             <Spacer x={0.5} />

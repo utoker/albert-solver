@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useState, type FC } from 'react';
 import { mutate } from 'swr';
+import TrashCheck from './Icons/TrashCheck';
 
 const AssessmentButton: FC<{
   changeAssessment: (id: string) => void;
@@ -13,13 +14,18 @@ const AssessmentButton: FC<{
   assessmentName: Assessment['assessmentName'];
   assessmentId: Assessment['id'];
 }> = ({ changeAssessment, deleteAssessment, assessmentName, assessmentId }) => {
+  // Next Router
   const router = useRouter();
+  const isActive = router.query.assessmentId === assessmentId;
+
+  // States
   const [isDeleteMode, setIsDeleteMode] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [newAssessmentName, setNewAssessmentName] = useState(
     assessmentName || ''
   );
-  const isActive = router.query.assessmentId === assessmentId;
+
+  // Handlers
   const changeAssessmentName = (e: string) => {
     if (e.length <= 19) {
       setNewAssessmentName(e);
@@ -92,7 +98,7 @@ const AssessmentButton: FC<{
         </Button>
       )}
       <Button onPress={handleDeleteAssessment} css={{ padding: '8px' }}>
-        <FontAwesomeIcon icon={isDeleteMode ? faCheck : faTrash} />
+        {isDeleteMode ? <TrashCheck /> : <FontAwesomeIcon icon={faTrash} />}
       </Button>
     </Button.Group>
   );

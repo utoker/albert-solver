@@ -20,11 +20,7 @@ import React, {
   useEffect,
   type FormEvent,
 } from 'react';
-import {
-  faMicrophone,
-  faPaperPlane,
-  faRecordVinyl,
-} from '@fortawesome/free-solid-svg-icons';
+import { faMicrophone, faRecordVinyl } from '@fortawesome/free-solid-svg-icons';
 import { useRouter } from 'next/router';
 import SideMenu from '../../components/SideMenu';
 import dynamic from 'next/dynamic';
@@ -43,6 +39,7 @@ import {
   proInputLimit,
 } from '../../helpers/constants';
 import fetcher from '../../helpers/fetcher';
+import Send from '../../components/Icons/Send';
 
 // This is a workaround for hydration issues with Next.js
 const StudyNav = dynamic(() => import('../../components/StudyNav'), {
@@ -285,7 +282,7 @@ const StudyRoom: NextPage = () => {
                       {loading ? (
                         <Loading type="points" color="currentColor" size="sm" />
                       ) : (
-                        <FontAwesomeIcon icon={faPaperPlane} />
+                        <Send />
                       )}
                     </Button>
                     <Spacer x={0.5} />

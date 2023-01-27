@@ -45,6 +45,9 @@ const SideMenu: FC<Props> = ({ assessments }) => {
     router.push('/study-room');
   };
 
+  const handleDiscord = () => {
+    window.open('https://discord.gg/H5ansmkk', '_blank');
+  };
   return (
     <Container className={styles.sidemenu} css={{ bc: '$accents0' }}>
       <div style={{ width: '220px' }}>
@@ -98,6 +101,7 @@ const SideMenu: FC<Props> = ({ assessments }) => {
           light
           css={{ width: '100%' }}
           icon={<FontAwesomeIcon icon={faDiscord} />}
+          onPress={handleDiscord}
         >
           Albert Solver Discord
         </Button>
