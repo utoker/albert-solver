@@ -13,13 +13,13 @@ type Props = {
   price: number | null;
   currency: string;
   interval: Stripe.Price.Recurring.Interval | undefined;
+  description0?: string | null;
   description1?: string | null;
-  description2?: string | null;
 };
 
 const PriceCard: NextPage<Props> = ({
+  description0,
   description1,
-  description2,
   name,
   price,
   interval,
@@ -154,7 +154,7 @@ const PriceCard: NextPage<Props> = ({
                 icon={faCheck}
                 style={{ paddingRight: '4px', color: '#7828c8' }}
               />
-              {description1}
+              {description0}
             </Text>
           </Row>
           <Row wrap="wrap" justify="space-between" align="center">
@@ -163,7 +163,7 @@ const PriceCard: NextPage<Props> = ({
                 icon={faCheck}
                 style={{ paddingRight: '4px', color: '#7828c8' }}
               />
-              {description2}
+              {description1}
             </Text>
           </Row>
         </Col>

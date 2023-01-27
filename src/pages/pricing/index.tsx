@@ -17,6 +17,12 @@ import useSWR from 'swr';
 import type Stripe from 'stripe';
 import Head from 'next/head';
 import fetcher from '../../helpers/fetcher';
+import {
+  basicDescription0,
+  basicDescription1,
+  proDescription0,
+  proDescription1,
+} from '../../helpers/constants';
 
 const Nav = dynamic(() => import('../../components/Nav'), {
   ssr: false,
@@ -131,13 +137,13 @@ const Index: NextPage = () => {
             {isMonthly && (
               <>
                 <Grid>
-                  <PriceCard
+                  <PriceCard //Basic
                     buttonText={basicButton}
                     currency="usd"
                     interval="month"
                     price={0.0}
-                    description1="10 questions per day"
-                    description2="500 characters per question"
+                    description0={basicDescription0}
+                    description1={basicDescription1}
                     name="Basic"
                     planId={'basic'}
                   />
@@ -148,13 +154,13 @@ const Index: NextPage = () => {
 
             {isMonthly && monthlyProPlan && (
               <Grid key={monthlyProPlan.id}>
-                <PriceCard
+                <PriceCard //Pro
                   buttonText={proButton}
                   currency={monthlyProPlan.currency}
                   interval={monthlyProPlan.interval}
                   price={monthlyProPlan.price}
-                  description1="50 questions per day"
-                  description2="5000 characters per question"
+                  description0={proDescription0}
+                  description1={proDescription1}
                   name={monthlyProPlan.name}
                   planId={monthlyProPlan.id}
                 />
@@ -163,13 +169,13 @@ const Index: NextPage = () => {
             {!isMonthly && (
               <>
                 <Grid>
-                  <PriceCard
+                  <PriceCard //Basic
                     buttonText={basicButton}
                     currency="usd"
                     interval="year"
                     price={0.0}
-                    description1="10 questions per day"
-                    description2="500 characters per question"
+                    description0={basicDescription0}
+                    description1={basicDescription1}
                     name="Basic"
                     planId={'basic'}
                   />
@@ -179,13 +185,13 @@ const Index: NextPage = () => {
             )}
             {!isMonthly && yearlyProPlan && (
               <Grid key={yearlyProPlan.id}>
-                <PriceCard
+                <PriceCard //Pro
                   buttonText={proButton}
                   currency={yearlyProPlan.currency}
                   interval={yearlyProPlan.interval}
                   price={yearlyProPlan.price}
-                  description1="50 questions per day"
-                  description2="5000 characters per question"
+                  description0={proDescription0}
+                  description1={proDescription1}
                   name={yearlyProPlan.name}
                   key={yearlyProPlan.id}
                   planId={yearlyProPlan.id}

@@ -76,7 +76,6 @@ const Nav: FC = () => {
               <Text
                 css={{
                   mt: '-36px',
-                  // ml: '43px',
                   fontSize: '$xs',
                   color: '$secondary',
                 }}
@@ -90,6 +89,7 @@ const Nav: FC = () => {
           enableCursorHighlight
           hideIn="xs"
           activeColor="secondary"
+          variant="highlight"
         >
           {/* <Navbar.Link isActive={router.route === '/'} href="/">
             Home

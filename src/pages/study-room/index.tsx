@@ -34,7 +34,7 @@ import SpeechRecognition, {
 } from 'react-speech-recognition';
 import {
   basicInputLimit,
-  dailyQuestionLimit,
+  basicDailyQuestionLimit,
   minInputLength,
   proInputLimit,
 } from '../../helpers/constants';
@@ -305,11 +305,12 @@ const StudyRoom: NextPage = () => {
                 {subscription === 'basic' && (
                   <Text size="$sm" css={{ ta: 'center' }}>
                     <Text hideIn="xs" span>
-                      Basic users can only send {dailyQuestionLimit} questions
-                      per day.{' '}
+                      Basic users can only send {basicDailyQuestionLimit}{' '}
+                      questions per day.{' '}
                     </Text>
                     <Text span>
-                      Remaining questions today: {dailyQuestionLimit - count}
+                      Remaining questions today:{' '}
+                      {basicDailyQuestionLimit - count}
                     </Text>
                   </Text>
                 )}

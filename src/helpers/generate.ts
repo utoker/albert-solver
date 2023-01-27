@@ -3,6 +3,7 @@ import { Configuration } from 'openai';
 import { env } from '../env/client.mjs';
 import axios from 'axios';
 import { type Session } from 'next-auth';
+import { basicDailyQuestionLimit, proDailyQuestionLimit } from './constants';
 
 const generate = async (
   messages: string,
@@ -12,6 +13,7 @@ const generate = async (
   const configuration = new Configuration({
     apiKey: env.NEXT_PUBLIC_OPENAI_API_KEY,
   });
+
   const openai = new OpenAIApi(configuration);
 
   const subscription = authSession?.user?.subscription;
@@ -19,11 +21,11 @@ const generate = async (
   if (messageCount === undefined) {
     return 'unexpected error: message count is undefined';
   }
-  if (subscription === 'basic' && messageCount && messageCount > 9) {
-    return 'You have reached your limit of 10 posts';
+  if (subscription === 'basic' && messageCount >= basicDailyQuestionLimit) {
+    return `You have reached your limit of dailyQuestionLimit posts`;
   }
-  if (subscription === 'pro' && messageCount && messageCount > 49) {
-    return 'You have reached your limit of 50 posts';
+  if (subscription === 'pro' && messageCount >= proDailyQuestionLimit) {
+    return `You have reached your limit of dailyQuestionLimitPro posts`;
   }
   try {
     // delay 1 second

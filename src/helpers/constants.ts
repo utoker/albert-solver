@@ -1,5 +1,9 @@
 export const basicInputLimit = 500;
 export const proInputLimit = 5000;
-export const dailyQuestionLimit = 10;
-export const dailyQuestionLimitPro = 50;
-export const minInputLength = 8;
+export const basicDailyQuestionLimit = 10;
+export const proDailyQuestionLimit = 100;
+export const minInputLength = 6;
+export const proDescription0 = `${proDailyQuestionLimit} questions per day`;
+export const proDescription1 = `${proInputLimit} characters per question`;
+export const basicDescription0 = `${basicDailyQuestionLimit} questions per day`;
+export const basicDescription1 = `${basicInputLimit} characters per question`;
