@@ -15,7 +15,8 @@
 
 ## About The Project
 
-This project aims to provide a comprehensive solution for expert assistance with essays and homework using cutting-edge AI technology, powered by OpenAI's GPT-3 language model. The AI model is integrated with a web application built using modern web technologies such as TypeScript, Next.js, NextAuth.js, NextUI, Prisma, SWR, Zod, React and Stripe for handling subscriptions.
+This project aims to provide a comprehensive solution for expert assistance with essays and homework using cutting-edge AI technology, powered by OpenAI's GPT-3 language model. The AI model is integrated with a web application built using modern web technologies such as TypeScript, Next.js, NextAuth.js, NextUI, Prisma, SWR, React and Stripe for handling subscriptions.
+// add Zod
 <br />
 <br />
 The website is live and available at <a href="https://www.albertsolver.com">https://www.albertsolver.com</a>. The website allow users to register, login and use the AI to write, check and get suggestions for their essays and homework. Users can also upgrade to a pro subscription for additional features, and Stripe is used to handle the subscription payments.
@@ -49,7 +50,7 @@ We welcome contributions and feedback to help improve the Albert Solver. Thank y
 - [NextUI](https://nextui.org)
 - [SWR](https://swr.vercel.app)
 - [Prisma](https://prisma.io)
-- [Zod](https://zod.dev)
+<!-- - [Zod](https://zod.dev) -->
 - [Stripe](https://stripe.com)
 - [React](https://reactjs.org/)
 
