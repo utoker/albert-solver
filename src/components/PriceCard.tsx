@@ -152,7 +152,7 @@ const PriceCard: NextPage<Props> = ({
             <Text>
               <FontAwesomeIcon
                 icon={faCheck}
-                style={{ paddingRight: '4px', color: '#7828c8' }}
+                style={{ paddingRight: '4px', color: '#9750DD' }}
               />
               {description0}
             </Text>

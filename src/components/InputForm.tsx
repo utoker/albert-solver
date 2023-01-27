@@ -162,7 +162,7 @@ const InputForm: FC<Props> = ({
   return (
     <Container
       css={{
-        pb: '$8',
+        pb: '$12',
         px: '$6',
         position: 'absolute',
         bottom: '0',
@@ -170,7 +170,7 @@ const InputForm: FC<Props> = ({
         '@xs': {
           pr: '$12',
           pl: '$0',
-          // pb: '$8',
+          pb: '$8',
         },
       }}
     >
