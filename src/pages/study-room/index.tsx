@@ -325,7 +325,7 @@ const StudyRoom: NextPage = () => {
                   </Text>
                 )}
               </form>
-              <Spacer y={subscription === 'pro' ? 1 : 0} />
+              <Spacer y={subscription === 'pro' ? 1.3 : 0} />
             </Container>
           </Container>
         </Grid>
