@@ -80,7 +80,7 @@ const ChatBox: FC = () => {
           ref={scrollRef}
           style={{
             overflow: 'auto', // scroll
-            height: '72vh',
+            height: '75vh',
             display: 'flex',
             flexDirection: 'column',
           }}
