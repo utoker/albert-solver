@@ -208,14 +208,14 @@ const StudyRoom: NextPage = () => {
             <Container
               css={{
                 pb: '$2',
-                pl: '$0',
-                pr: '$2',
+                px: '$6',
                 position: 'absolute',
                 bottom: '0',
                 width: '100%',
                 '@xs': {
-                  pb: '$8',
                   pr: '$12',
+                  pl: '$0',
+                  pb: '$8',
                 },
               }}
             >

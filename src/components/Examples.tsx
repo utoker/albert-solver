@@ -29,7 +29,7 @@ const Examples: FC<ExamplesProps> = ({ examplePress }) => {
       }}
     >
       <div>
-        <Text hideIn="xs" h1 css={{ ta: 'center' }}>
+        <Text h1 css={{ ta: 'center' }}>
           Albert Solver
         </Text>
         <div

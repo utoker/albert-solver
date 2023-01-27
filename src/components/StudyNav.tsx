@@ -111,9 +111,6 @@ const StudyNav: FC<Props> = ({ assessments }) => {
         activeColor="secondary"
         variant="highlight"
       >
-        <Navbar.Link hideIn="xs" href="/pricing">
-          Home
-        </Navbar.Link>
         <Navbar.Link href="/pricing">Pricing</Navbar.Link>
         <Navbar.Link isActive href="/study-room">
           Study Room
