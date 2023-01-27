@@ -162,7 +162,7 @@ const InputForm: FC<Props> = ({
   return (
     <Container
       css={{
-        pb: '$12',
+        pb: '$16',
         px: '$6',
         position: 'absolute',
         bottom: '0',
