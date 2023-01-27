@@ -57,7 +57,13 @@ const StudyRoom: NextPage = () => {
   // Speech Recognition
   const { transcript, listening, browserSupportsSpeechRecognition } =
     useSpeechRecognition();
-  const startListening = () => SpeechRecognition.startListening();
+
+  const startListening = () => {
+    // if (!listening) SpeechRecognition.startListening({ continuous: true }); // for continuous listening
+    if (!listening) SpeechRecognition.startListening();
+    if (listening) SpeechRecognition.stopListening();
+  };
+
   if (!browserSupportsSpeechRecognition) {
     console.log("BROWSER DOESN'T SUPPORT SPEECH RECOGNITION");
   }
@@ -294,9 +300,14 @@ const StudyRoom: NextPage = () => {
                       onPress={startListening}
                     >
                       {listening ? (
-                        <FontAwesomeIcon icon={faRecordVinyl} />
+                        <FontAwesomeIcon
+                          icon={faRecordVinyl}
+                          color="#5C0523"
+                          size="lg"
+                          beatFade
+                        />
                       ) : (
-                        <FontAwesomeIcon icon={faMicrophone} />
+                        <FontAwesomeIcon icon={faMicrophone} size="lg" />
                       )}
                     </Button>
                   </Row>

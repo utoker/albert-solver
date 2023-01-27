@@ -150,20 +150,12 @@ const PriceCard: NextPage<Props> = ({
           </Row>
           <Row wrap="wrap" justify="space-between" align="center">
             <Text>
-              <FontAwesomeIcon
-                icon={faCheck}
-                style={{ paddingRight: '4px', color: '#9750DD' }}
-              />
-              {description0}
+              <FontAwesomeIcon color="#9750DD" icon={faCheck} /> {description0}
             </Text>
           </Row>
           <Row wrap="wrap" justify="space-between" align="center">
             <Text>
-              <FontAwesomeIcon
-                icon={faCheck}
-                style={{ paddingRight: '4px', color: '#9750DD' }}
-              />
-              {description1}
+              <FontAwesomeIcon color="#9750DD" icon={faCheck} /> {description1}
             </Text>
           </Row>
         </Col>

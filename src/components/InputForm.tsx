@@ -81,7 +81,11 @@ const InputForm: FC<Props> = ({
   // Speech Recognition
   const { transcript, listening, browserSupportsSpeechRecognition } =
     useSpeechRecognition();
-  const startListening = () => SpeechRecognition.startListening();
+  const startListening = () => {
+    // if (!listening) SpeechRecognition.startListening({ continuous: true }); // for continuous listening
+    if (!listening) SpeechRecognition.startListening();
+    if (listening) SpeechRecognition.stopListening();
+  };
   if (!browserSupportsSpeechRecognition) {
     console.log("BROWSER DOESN'T SUPPORT SPEECH RECOGNITION");
   }
@@ -250,9 +254,14 @@ const InputForm: FC<Props> = ({
               onPress={startListening}
             >
               {listening ? (
-                <FontAwesomeIcon icon={faRecordVinyl} />
+                <FontAwesomeIcon
+                  color="#5C0523"
+                  icon={faRecordVinyl}
+                  size="lg"
+                  beatFade
+                />
               ) : (
-                <FontAwesomeIcon icon={faMicrophone} />
+                <FontAwesomeIcon icon={faMicrophone} size="lg" />
               )}
             </Button>
           </Row>
