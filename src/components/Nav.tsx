@@ -91,9 +91,9 @@ const Nav: FC = () => {
           activeColor="secondary"
           variant="highlight"
         >
-          {/* <Navbar.Link isActive={router.route === '/'} href="/">
+          <Navbar.Link isActive={router.route === '/'} href="/">
             Home
-          </Navbar.Link> */}
+          </Navbar.Link>
           <Navbar.Link href="/pricing" isActive={router.route === '/pricing'}>
             Pricing
           </Navbar.Link>
