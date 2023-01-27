@@ -106,7 +106,14 @@ const StudyNav: FC<Props> = ({ assessments }) => {
           </Text>
         </Link>
       </Navbar.Brand>
-      <Navbar.Content enableCursorHighlight activeColor="secondary">
+      <Navbar.Content
+        enableCursorHighlight
+        activeColor="secondary"
+        variant="highlight"
+      >
+        <Navbar.Link hideIn="xs" href="/pricing">
+          Home
+        </Navbar.Link>
         <Navbar.Link href="/pricing">Pricing</Navbar.Link>
         <Navbar.Link isActive href="/study-room">
           Study Room
