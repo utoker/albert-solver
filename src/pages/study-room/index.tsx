@@ -207,7 +207,7 @@ const StudyRoom: NextPage = () => {
             <Examples examplePress={examplePress} />
             <Container
               css={{
-                pb: '$16',
+                pb: '$17',
                 px: '$6',
                 position: 'absolute',
                 bottom: '0',
@@ -303,7 +303,7 @@ const StudyRoom: NextPage = () => {
                   </Row>
                 )}
                 {subscription === 'basic' && (
-                  <Text size="$sm" css={{ ta: 'center' }}>
+                  <Text size="$sm" css={{ ta: 'center', pt: '$2' }}>
                     <Text hideIn="xs" span>
                       Basic users can only send {basicDailyQuestionLimit}{' '}
                       questions per day.{' '}
