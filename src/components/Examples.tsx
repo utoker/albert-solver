@@ -13,19 +13,12 @@ const Examples: FC<ExamplesProps> = ({ examplePress }) => {
   ];
   return (
     <Container
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '100%',
-        overflowY: 'auto',
-      }}
       css={{
+        h: '75vh',
         p: '$0',
-        h: '76vh',
         overflow: 'auto',
-        // display: 'flex',
-        // flexDirection: 'column',
+        jc: 'center',
+        d: 'flex',
       }}
     >
       <div>

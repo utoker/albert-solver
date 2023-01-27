@@ -197,7 +197,6 @@ const StudyRoom: NextPage = () => {
         <Grid xs={12} sm={10} md={10.5}>
           <Container
             css={{
-              flex: '1', //
               position: 'relative',
               mx: '$0',
               p: '0',
