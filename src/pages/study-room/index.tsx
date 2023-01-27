@@ -207,7 +207,7 @@ const StudyRoom: NextPage = () => {
             <Examples examplePress={examplePress} />
             <Container
               css={{
-                pb: '$17',
+                pb: '$18',
                 px: '$6',
                 position: 'absolute',
                 bottom: '0',
@@ -215,7 +215,7 @@ const StudyRoom: NextPage = () => {
                 '@xs': {
                   pr: '$12',
                   pl: '$0',
-                  pb: '$8',
+                  pb: '$10',
                 },
               }}
             >

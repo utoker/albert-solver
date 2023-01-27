@@ -170,7 +170,7 @@ const InputForm: FC<Props> = ({
         '@xs': {
           pr: '$12',
           pl: '$0',
-          pb: '$8',
+          pb: '$10',
         },
       }}
     >
