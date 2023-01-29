@@ -15,7 +15,7 @@
 
 ## About The Project
 
-This project aims to provide a comprehensive solution for expert assistance with essays and homework using cutting-edge AI technology, powered by OpenAI's GPT-3 language model. The AI model is integrated with a web application built using modern web technologies such as TypeScript, Next.js, NextAuth.js, NextUI, Prisma, SWR, React and Stripe for handling subscriptions.
+This project aims to provide a comprehensive solution for expert assistance with essays and homework using cutting-edge AI technology, powered by OpenAI's GPT-3 language model. The AI model is integrated with a web application built using modern web technologies such as TypeScript, Next.js, NextAuth.js, NextUI, Prisma, SWR, React and Stripe for handling paid subscriptions.
 
 <!--  add Zod -->
 <br />
