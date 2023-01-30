@@ -93,7 +93,7 @@ const StudyNav: FC<Props> = ({ assessments }) => {
           )}
           <Text b color="inherit" hideIn="xs" css={{ mt: '$4' }}>
             Albert Solver
-            <Text
+            {/* <Text
               css={{
                 mt: '-36px',
                 // ml: '43px',
@@ -102,7 +102,7 @@ const StudyNav: FC<Props> = ({ assessments }) => {
               }}
             >
               OPEN BETA
-            </Text>
+            </Text> */}
           </Text>
         </Link>
       </Navbar.Brand>

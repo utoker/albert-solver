@@ -73,7 +73,7 @@ const Nav: FC = () => {
             )}
             <Text b color="inherit" hideIn="xs" css={{ mt: '$4' }}>
               Albert Solver
-              <Text
+              {/* <Text
                 css={{
                   mt: '-36px',
                   fontSize: '$xs',
@@ -81,7 +81,7 @@ const Nav: FC = () => {
                 }}
               >
                 OPEN BETA
-              </Text>
+              </Text> */}
             </Text>
           </Link>
         </Navbar.Brand>
