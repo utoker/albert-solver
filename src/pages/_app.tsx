@@ -7,6 +7,8 @@ import '@fortawesome/fontawesome-svg-core/styles.css';
 import AppHead from '../components/AppHead';
 import { createTheme, NextUIProvider } from '@nextui-org/react';
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
+import { useState } from 'react';
+import AppContext from '../components/AppContext';
 
 const lightTheme = createTheme({
   type: 'light',
@@ -31,24 +33,28 @@ const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
 }) => {
+  const [stream, setStream] = useState('');
+  const [prompt, setPrompt] = useState('');
   return (
-    <SSRProvider>
-      <SessionProvider session={session}>
-        <NextThemesProvider
-          defaultTheme="system"
-          attribute="class"
-          value={{
-            light: lightTheme.className,
-            dark: darkTheme.className,
-          }}
-        >
-          <NextUIProvider>
-            <AppHead />
-            <Component {...pageProps} />
-          </NextUIProvider>
-        </NextThemesProvider>
-      </SessionProvider>
-    </SSRProvider>
+    <NextUIProvider>
+      <SSRProvider>
+        <AppContext.Provider value={{ stream, setStream, prompt, setPrompt }}>
+          <SessionProvider session={session}>
+            <NextThemesProvider
+              defaultTheme="system"
+              attribute="class"
+              value={{
+                light: lightTheme.className,
+                dark: darkTheme.className,
+              }}
+            >
+              <AppHead />
+              <Component {...pageProps} />
+            </NextThemesProvider>
+          </SessionProvider>
+        </AppContext.Provider>
+      </SSRProvider>
+    </NextUIProvider>
   );
 };
 

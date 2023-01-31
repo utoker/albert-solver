@@ -19,6 +19,7 @@ import React, {
   useRef,
   useEffect,
   type FormEvent,
+  useContext,
 } from 'react';
 import { faMicrophone, faRecordVinyl } from '@fortawesome/free-solid-svg-icons';
 import { useRouter } from 'next/router';
@@ -27,7 +28,6 @@ import dynamic from 'next/dynamic';
 import ErrorModal from '../../components/ErrorModal';
 import Examples from '../../components/Examples';
 import useSWR from 'swr';
-import generate from '../../helpers/generate';
 import Head from 'next/head';
 import SpeechRecognition, {
   useSpeechRecognition,
@@ -37,9 +37,12 @@ import {
   basicDailyQuestionLimit,
   minInputLength,
   proInputLimit,
-} from '../../helpers/constants';
-import fetcher from '../../helpers/fetcher';
+  proDailyQuestionLimit,
+} from '../../utils/Constants';
+import fetcher from '../../utils/Fetcher';
 import Send from '../../components/Icons/Send';
+import AppContext from '../../components/AppContext';
+import sendRequest from '../../utils/SendRequest';
 
 // This is a workaround for hydration issues with Next.js
 const StudyNav = dynamic(() => import('../../components/StudyNav'), {
@@ -72,9 +75,20 @@ const StudyRoom: NextPage = () => {
   }, [transcript]);
 
   // SWR for fetching assessments and message count
-  const { data: assessments, mutate } = useSWR(
+  const { data: assessments, mutate: mutateAssessments } = useSWR(
     '/api/assessment/get-all',
     fetcher
+    // {
+    //   onSuccess: (assessments) => {
+    //     console.log('ONSUCCESS RUN INDEX');
+    //     const chatLogsObject: chatLogs = {};
+    //     assessments.forEach((assessment: { id: string; chatLog: string }) => {
+    //       chatLogsObject[assessment.id] = JSON.parse(assessment.chatLog);
+    //     });
+    //     setChatLog(chatLogsObject[assessmentId] || []);
+    //     setStreamResponse('');
+    //   },
+    // }
   );
   const { data: messageCount, mutate: mutateCount } = useSWR(
     '/api/post-counter/get-count',
@@ -96,21 +110,41 @@ const StudyRoom: NextPage = () => {
     formRef.current?.reset();
   }, [formRef]);
 
+  //
+  const context = useContext(AppContext);
+
+  // Submit handler
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!input || loading) return;
     setLoading(true);
     const messagesArr = [{ user: 'Student', message: input }];
-    const messages = messagesArr.map((message) => message.message).join('\n');
+    const prompt = messagesArr.map((message) => message.message).join('\n');
     if (subscription === 'basic' && input.length > basicInputLimit) {
       setLoading(false);
-      setErrorMessage('Message too long! (max {basicInputLimit} characters)');
+      setErrorMessage(`Message too long! (max ${basicInputLimit} characters)`);
       modalHandler();
       return;
     }
     if (subscription === 'pro' && input.length > proInputLimit) {
       setLoading(false);
       setErrorMessage(`Message too long! (max ${proInputLimit} characters)`);
+      modalHandler();
+      return;
+    }
+    if (subscription === 'basic' && count >= basicDailyQuestionLimit) {
+      setLoading(false);
+      setErrorMessage(
+        `You have reached your daily question limit! (max ${basicDailyQuestionLimit} questions)`
+      );
+      modalHandler();
+      return;
+    }
+    if (subscription === 'pro' && count >= proDailyQuestionLimit) {
+      setLoading(false);
+      setErrorMessage(
+        `You have reached your daily question limit! (max ${proDailyQuestionLimit} questions)`
+      );
       modalHandler();
       return;
     }
@@ -121,18 +155,53 @@ const StudyRoom: NextPage = () => {
       return;
     }
     try {
-      const res = await generate(messages, count, session);
-      const chatLog = JSON.stringify([
-        { user: 'Student', message: input },
-        { user: 'AI', message: res },
-      ]);
       const newAssessment = await axios.post('/api/assessment/create', {
         assessmentName: input.slice(0, 18),
-        chatLog,
+        chatLog: JSON.stringify([{ user: 'Student', message: input }]),
       });
-      mutate();
+      const assessmentId = newAssessment.data.newAssessment.id;
+      router.push(`/study-room/${assessmentId}`);
+      const response = await fetch('/api/openai/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          prompt,
+        }),
+      });
+      console.log('Edge function returned.');
+      if (!response.ok) {
+        throw new Error(response.statusText);
+      }
+      // This data is a ReadableStream
+      const data = response.body;
+      if (!data) {
+        return;
+      }
+      const reader = data.getReader();
+      const decoder = new TextDecoder();
+      let done = false;
+      let text = '';
+      while (!done) {
+        const { value, done: doneReading } = await reader.read();
+        done = doneReading;
+        const chunkValue = decoder.decode(value);
+        context.setStream((prev) => prev + chunkValue);
+        context.setPrompt(input);
+        // scrollToBottomCallback();
+        text += chunkValue;
+      }
+
+      const chatLogArr = [
+        { user: 'Student', message: input },
+        { user: 'AI', message: text },
+      ];
+      const url = '/api/assessment/chatLog/update';
+      const arg = { chatLog: JSON.stringify(chatLogArr), assessmentId };
+      mutateAssessments(sendRequest(url, { arg }));
       mutateCount();
-      router.push(`/study-room/${newAssessment.data.newAssessment.id}`);
+      await fetch('/api/post-counter/increase-count');
     } catch (error) {
       console.log(error);
     } finally {

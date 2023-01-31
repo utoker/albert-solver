@@ -3,7 +3,7 @@ import { Configuration } from 'openai';
 import { env } from '../env/client.mjs';
 import axios from 'axios';
 import { type Session } from 'next-auth';
-import { basicDailyQuestionLimit, proDailyQuestionLimit } from './constants';
+import { basicDailyQuestionLimit, proDailyQuestionLimit } from './Constants';
 
 const generate = async (
   messages: string,

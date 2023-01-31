@@ -8,7 +8,7 @@ import useSWR from 'swr';
 import Head from 'next/head';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import fetcher from '../../helpers/fetcher';
+import fetcher from '../../utils/Fetcher';
 
 // This is a workaround for hydration issues with Next.js
 const StudyNav = dynamic(() => import('../../components/StudyNav'), {

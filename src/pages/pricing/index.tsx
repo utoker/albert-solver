@@ -18,7 +18,7 @@ import {
   basicDescription1,
   proDescription0,
   proDescription1,
-} from '../../helpers/constants';
+} from '../../utils/Constants';
 
 const Nav = dynamic(() => import('../../components/Nav'), {
   ssr: false,

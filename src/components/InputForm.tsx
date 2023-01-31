@@ -20,22 +20,23 @@ import React, {
   type FormEvent,
   useState,
   useEffect,
+  useContext,
 } from 'react';
 import SpeechRecognition, {
   useSpeechRecognition,
 } from 'react-speech-recognition';
-import axios from 'axios';
-import sendRequest from '../helpers/sendRequest';
-import generate from '../helpers/generate';
+import sendRequest from '../utils/SendRequest';
+// import generate from '../utils/Generate';
 import {
   basicInputLimit,
   basicDailyQuestionLimit,
   minInputLength,
   proInputLimit,
-} from '../helpers/constants';
+  proDailyQuestionLimit,
+} from '../utils/Constants';
 import Send from './Icons/Send';
-
-const fetcher = (url: string) => axios.get(url).then((res) => res.data);
+import AppContext from './AppContext';
+import fetcher from '../utils/Fetcher';
 
 type chatLog = {
   user: string;
@@ -44,20 +45,24 @@ type chatLog = {
 
 type Props = {
   chatLog: chatLog;
-  setChatLog: React.Dispatch<React.SetStateAction<chatLog>>;
   setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
+  // setStreamResponse: React.Dispatch<React.SetStateAction<string>>;
   modalHandler: () => void;
   mutateAssessments: KeyedMutator<chatLog>;
   assessmentId: string;
+  // setPrompt: React.Dispatch<React.SetStateAction<string>>;
+  scrollToBottomCallback: () => void;
 };
 
 const InputForm: FC<Props> = ({
+  // setStreamResponse,
+  // setPrompt,
   chatLog,
-  setChatLog,
   setErrorMessage,
   modalHandler,
   mutateAssessments,
   assessmentId,
+  scrollToBottomCallback,
 }) => {
   // SWR for fetching message count
   const { data: messageCount, mutate: mutateCount } = useSWR(
@@ -99,6 +104,9 @@ const InputForm: FC<Props> = ({
     setInput(transcript);
   }, [transcript]);
 
+  //
+  const context = useContext(AppContext);
+
   // Handlers
   const onTextareaKeyDown = useCallback(
     (e: KeyboardEvent<FormElement>) => {
@@ -114,13 +122,13 @@ const InputForm: FC<Props> = ({
     formRef.current?.reset();
   }, [formRef]);
 
-  // Submit
+  // Submit handler
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!input || loading) return;
     setLoading(true);
     const messagesArr = [...chatLog, { user: 'Student', message: input }];
-    const messages = messagesArr.map((message) => message.message).join('\n');
+    const prompt = messagesArr.map((message) => message.message).join('\n');
     if (subscription === 'basic' && input.length > basicInputLimit) {
       setLoading(false);
       setErrorMessage(`Message too long! (max ${basicInputLimit} characters)`);
@@ -133,6 +141,22 @@ const InputForm: FC<Props> = ({
       modalHandler();
       return;
     }
+    if (subscription === 'basic' && count >= basicDailyQuestionLimit) {
+      setLoading(false);
+      setErrorMessage(
+        `You have reached your daily question limit! (max ${basicDailyQuestionLimit} questions)`
+      );
+      modalHandler();
+      return;
+    }
+    if (subscription === 'pro' && count >= proDailyQuestionLimit) {
+      setLoading(false);
+      setErrorMessage(
+        `You have reached your daily question limit! (max ${proDailyQuestionLimit} questions)`
+      );
+      modalHandler();
+      return;
+    }
     if (input.length < minInputLength) {
       setLoading(false);
       setErrorMessage(`Message too short! (min ${minInputLength} characters)`);
@@ -141,21 +165,48 @@ const InputForm: FC<Props> = ({
     }
     try {
       reset();
-      setChatLog((prev) => [
-        ...prev,
-        { user: 'Student', message: input },
-        { user: 'AI', message: 'Thinking...' },
-      ]);
-      const res = await generate(messages, count, session);
+      const response = await fetch('/api/openai/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          prompt,
+        }),
+      });
+      console.log('Edge function returned.');
+      if (!response.ok) {
+        throw new Error(response.statusText);
+      }
+
+      // This data is a ReadableStream
+      const data = response.body;
+      if (!data) {
+        return;
+      }
+      const reader = data.getReader();
+      const decoder = new TextDecoder();
+      let done = false;
+      let text = '';
+      while (!done) {
+        const { value, done: doneReading } = await reader.read();
+        done = doneReading;
+        const chunkValue = decoder.decode(value);
+        context.setStream((prev) => prev + chunkValue);
+        context.setPrompt(input);
+        scrollToBottomCallback();
+        text += chunkValue;
+      }
       const chatLogArr = [
         ...chatLog,
         { user: 'Student', message: input },
-        { user: 'AI', message: res },
+        { user: 'AI', message: text },
       ];
       const url = '/api/assessment/chatLog/update';
       const arg = { chatLog: JSON.stringify(chatLogArr), assessmentId };
       mutateAssessments(sendRequest(url, { arg }));
       mutateCount();
+      await fetch('/api/post-counter/increase-count');
     } catch (error) {
       console.log(error);
     } finally {

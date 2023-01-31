@@ -1,11 +1,19 @@
 import { Container } from '@nextui-org/react';
-import axios from 'axios';
-import React, { type FC, useRef, useState, useEffect } from 'react';
+import React, {
+  type FC,
+  useRef,
+  useState,
+  useEffect,
+  useCallback,
+  useContext,
+} from 'react';
 import InputFrom from './InputForm';
 import ChatMessage from './ChatMessage';
 import ErrorModal from './ErrorModal';
 import useSWR from 'swr';
 import { useRouter } from 'next/router';
+import fetcher from '../utils/Fetcher';
+import AppContext from './AppContext';
 
 type chatLog = {
   user: string;
@@ -15,13 +23,14 @@ type chatLogs = {
   [key: string]: chatLog;
 };
 
-const fetcher = (url: string) => axios.get(url).then((res) => res.data);
-
 const ChatBox: FC = () => {
-  const [chatLog, setChatLog] = useState<chatLog>([]);
   const router = useRouter();
   const assessmentId = router.query.assessmentId as string;
+  const [chatLog, setChatLog] = useState<chatLog>([]);
   const [errorMessage, setErrorMessage] = useState('');
+
+  //
+  const context = useContext(AppContext);
 
   const { data: assessments, mutate: mutateAssessments } = useSWR(
     '/api/assessment/get-all',
@@ -34,6 +43,7 @@ const ChatBox: FC = () => {
           chatLogsObject[assessment.id] = JSON.parse(assessment.chatLog);
         });
         setChatLog(chatLogsObject[assessmentId] || []);
+        context.setStream('');
       },
     }
   );
@@ -55,11 +65,15 @@ const ChatBox: FC = () => {
   };
 
   const scrollRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
+  const scrollToBottomCallback = useCallback(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [chatLog]);
+  }, []);
+
+  useEffect(() => {
+    scrollToBottomCallback();
+  }, [chatLog, scrollToBottomCallback]);
 
   return (
     <>
@@ -89,8 +103,18 @@ const ChatBox: FC = () => {
             chatLog.map((message, i) => (
               <ChatMessage message={message} key={i} />
             ))}
+          {context.stream && (
+            <>
+              <ChatMessage
+                message={{ user: 'Student', message: context.prompt }}
+              />
+              <ChatMessage message={{ user: 'AI', message: context.stream }} />
+            </>
+          )}
           <InputFrom
-            setChatLog={setChatLog}
+            scrollToBottomCallback={scrollToBottomCallback}
+            // setPrompt={setPrompt}
+            // setStreamResponse={setStreamResponse}
             chatLog={chatLog}
             assessmentId={assessmentId}
             modalHandler={modalHandler}
