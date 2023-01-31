@@ -4,15 +4,13 @@ import { Card, Col, Row, Button, Text, Spacer } from '@nextui-org/react';
 import { type NextPage } from 'next';
 import { signIn } from 'next-auth/react';
 import NextLink from 'next/link';
-import type Stripe from 'stripe';
 
 type Props = {
   planId?: string;
   buttonText: string;
   name: string;
   price: number | null;
-  currency: string;
-  interval: Stripe.Price.Recurring.Interval | undefined;
+  interval: string;
   description0?: string | null;
   description1?: string | null;
 };

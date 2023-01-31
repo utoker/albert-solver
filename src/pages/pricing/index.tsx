@@ -13,10 +13,6 @@ import dynamic from 'next/dynamic';
 import React, { useEffect, useState } from 'react';
 import Footer from '../../components/Footer';
 import PriceCard from '../../components/PriceCard';
-import useSWR from 'swr';
-import type Stripe from 'stripe';
-import Head from 'next/head';
-import fetcher from '../../helpers/fetcher';
 import {
   basicDescription0,
   basicDescription1,
@@ -28,27 +24,20 @@ const Nav = dynamic(() => import('../../components/Nav'), {
   ssr: false,
 });
 
-type plan = {
-  id: string;
-  name: string;
-  price: number | null;
-  currency: string;
-  interval: Stripe.Price.Recurring.Interval | undefined;
-  interval_count: number | undefined;
-  description: string | null;
-  metadata: Stripe.Metadata;
-  active: boolean;
-};
-
 const Index: NextPage = () => {
-  // SWR for fetching Stripe Prices
-  const { data: plans } = useSWR('/api/stripe/get-prices', fetcher);
-  const monthlyProPlan = plans?.find(
-    (p: plan) => p.id === 'price_1MUYDKDjAm7fiR6h4X6jjAm5'
-  );
-  const yearlyProPlan = plans?.find(
-    (p: plan) => p.id === 'price_1MUYDvDjAm7fiR6hrHhpTEbb'
-  );
+  // Plans
+  const monthlyProPlan = {
+    id: 'price_1MUYDKDjAm7fiR6h4X6jjAm5',
+    name: 'Pro',
+    price: 699,
+    interval: 'month',
+  };
+  const yearlyProPlan = {
+    id: 'price_1MUYDvDjAm7fiR6hrHhpTEbb',
+    name: 'Pro',
+    price: 6999,
+    interval: 'year',
+  };
 
   // States for Switch
   const [isMonthly, setIsMonthly] = useState(true);
@@ -76,14 +65,6 @@ const Index: NextPage = () => {
 
   return (
     <>
-      <Head>
-        <link
-          rel="preload"
-          href="/api/stripe/get-prices"
-          as="fetch"
-          crossOrigin="anonymous"
-        />
-      </Head>
       <Nav />
       <Spacer y={1} />
       <Container fluid>
@@ -139,7 +120,6 @@ const Index: NextPage = () => {
                 <Grid>
                   <PriceCard //Basic
                     buttonText={basicButton}
-                    currency="usd"
                     interval="month"
                     price={0.0}
                     description0={basicDescription0}
@@ -156,7 +136,6 @@ const Index: NextPage = () => {
               <Grid key={monthlyProPlan.id}>
                 <PriceCard //Pro
                   buttonText={proButton}
-                  currency={monthlyProPlan.currency}
                   interval={monthlyProPlan.interval}
                   price={monthlyProPlan.price}
                   description0={proDescription0}
@@ -171,7 +150,6 @@ const Index: NextPage = () => {
                 <Grid>
                   <PriceCard //Basic
                     buttonText={basicButton}
-                    currency="usd"
                     interval="year"
                     price={0.0}
                     description0={basicDescription0}
@@ -187,7 +165,6 @@ const Index: NextPage = () => {
               <Grid key={yearlyProPlan.id}>
                 <PriceCard //Pro
                   buttonText={proButton}
-                  currency={yearlyProPlan.currency}
                   interval={yearlyProPlan.interval}
                   price={yearlyProPlan.price}
                   description0={proDescription0}
