@@ -3,7 +3,7 @@ import type { OpenAIStreamPayload } from '../../../utils/OpenAIStream';
 import { OpenAIStream } from '../../../utils/OpenAIStream';
 
 export const config = {
-  runtime: 'edge',
+  runtime: 'experimental-edge',
 };
 
 const handler = async (req: NextRequest): Promise<Response> => {
@@ -16,7 +16,7 @@ const handler = async (req: NextRequest): Promise<Response> => {
   }
 
   const payload: OpenAIStreamPayload = {
-    model: 'text-davinci-003',
+    model: 'gpt-3.5-turbo',
     prompt: `The following is a conversation with an AI assistant named Albert Solver. The assistant is helpful, creative, clever, and very friendly. The assistant answers in the language of the question. \n${prompt}`,
     temperature: 0.7,
     top_p: 1,
