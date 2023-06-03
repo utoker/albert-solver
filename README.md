@@ -51,7 +51,6 @@ We welcome contributions and feedback to help improve the Albert Solver. Thank y
 - [NextUI](https://nextui.org)
 - [SWR](https://swr.vercel.app)
 - [Prisma](https://prisma.io)
-<!-- - [Zod](https://zod.dev) -->
 - [Stripe](https://stripe.com)
 - [React](https://reactjs.org/)
 
